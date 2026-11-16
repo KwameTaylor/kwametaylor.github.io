@@ -4,9 +4,9 @@ Personal site for Kwame V. Taylor, PMP. Live at https://kwametaylor.github.io.
 
 Plain HTML, CSS and JavaScript. There is no build step: edit a file, commit, push, and GitHub Pages serves it.
 
-## Where things are
+## Repo structure
 
-| File | What it holds |
+| File | Content |
 |---|---|
 | `assets/js/content.js` | Services, projects, design pieces, organizations, the rotating phrases, the portrait path and the contact form address. Most edits happen here. |
 | `index.html` | Home page: the name, tagline and the five windows. |
