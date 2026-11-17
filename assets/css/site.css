@@ -370,3 +370,6 @@ body.burninate .desk .win:not(.min) { animation: burn 1.4s ease-out; }
 .hero h1 em { display: inline-block; transition: transform .5s cubic-bezier(.3, 1.6, .5, 1), color .3s; }
 body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(--sel); -webkit-text-stroke: 2px var(--ink); }
 @media (prefers-reduced-motion: reduce) { body.burninate .desk .win { animation: none; } }
+
+/* rm -rf / : a fake wipe */
+.wipe { position: fixed; inset: 0; z-index: 200; background: #000; color: #efede7; display: grid; place-items: center; font: 15px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }

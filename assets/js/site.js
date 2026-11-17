@@ -328,6 +328,19 @@
       if (v === "sbemail" || v === "check email" || v === "strong bad" || v === "strongbad") { say(esc(hs.sbemail)); return true; }
       if (v === "fhqwhgads" || v === "everybody to the limit") { say(esc(hs.fhqwhgads)); return true; }
       if (v === "the cheat") { say(esc(hs.cheat)); return true; }
+      if (/^sudo hire kwame/.test(v)) { say("[sudo] password for visitor: ********\nPermission granted. Opening contact.html..."); setTimeout(function () { location.href = "contact.html"; }, 1400); return true; }
+      if (v === "xyzzy") {
+        if (Math.random() < .5) { say("Nothing happens."); return true; }
+        var dest = pages[Math.floor(Math.random() * pages.length)];
+        say("A hollow voice says \"plugh\". You are teleported to " + dest + ".html..."); setTimeout(function () { location.href = dest + ".html"; }, 1400); return true;
+      }
+      if (v === "rm -rf /" || v === "rm -rf" || v === "sudo rm -rf /" || v === "rm -rf /*") {
+        var wipe = document.createElement("div"); wipe.className = "wipe"; wipe.textContent = "Deleting everything...";
+        document.body.appendChild(wipe);
+        setTimeout(function () { wipe.remove(); say("Nice try."); ti.focus(); }, reduce ? 600 : 1800);
+        return true;
+      }
+      if (v === "coffee" || v === "make coffee" || v === "brew coffee" || v === "brew") { say("Error 418: I'm a teapot."); return true; }
       if (v === "exit" || v === "quit") { say("Bye."); setTimeout(function () { $('section[aria-label="Terminal"] .x').click(); }, 400); return true; }
       return false;
     };

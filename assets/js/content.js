@@ -163,7 +163,7 @@ window.SITE = {
   afrofuturism: {
     intro: "Afrofuturism: Black futures imagined through art, music, fiction and technology. It shapes how Kwame thinks about design. Try: sun ra, octavia.",
     sunra: "Space is the place. · Sun Ra",
-    octavia: "All that you touch you change. · Octavia E. Butler, Parable of the Sower"
+    octavia: "All that you touch / You Change. / All that you Change / Changes you. · Octavia E. Butler, Parable of the Sower"
   },
 
   champions: [
