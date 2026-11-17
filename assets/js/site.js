@@ -168,20 +168,29 @@
 
     /* Terminal */
     var tout = $("#tout"), ti = $("#ti"), pages = ["services", "projects", "design", "about", "contact"];
-    var say = function (t) { var p = document.createElement("p"); p.innerHTML = t; tout.appendChild(p); tout.parentNode.scrollTop = 1e6; };
+    var say = function (t) { var p = document.createElement("p"); p.innerHTML = t; tout.appendChild(p); tout.scrollTop = 1e6; };
+    var stop = "a an the is are was were do does did i you he his him what whats who where when how which can could tell me about of in on at for to and or with has have kwame kwames s".split(" ");
+    var words = function (t) { return t.toLowerCase().replace(/[^a-z0-9$+ ]/g, " ").split(/\s+/).filter(function (x) { return x && stop.indexOf(x) < 0; }); };
+    var answer = function (q) {
+      var qw = words(q), best = null, bestScore = 0;
+      (S.facts || []).forEach(function (f) {
+        var score = 0;
+        f.keys.forEach(function (k) { k.split(" ").every(function (p) { return qw.some(function (w) { return w === p || (p.length > 4 && w.indexOf(p) === 0); }); }) && (score += k.split(" ").length); });
+        if (score > bestScore) { bestScore = score; best = f; }
+      });
+      return best ? best.a : "I don't have that on file. Ask him yourself: type open contact.";
+    };
     $("#tf").addEventListener("submit", function (e) {
       e.preventDefault();
       var v = ti.value.trim(), w = v.toLowerCase().split(/\s+/); ti.value = "";
       if (!v) return;
       say("<b>kwame $</b> " + esc(v));
-      if (w[0] === "help") say("Commands: ls, open &lt;page&gt;, hello, whoami, clear. Pages: " + pages.join(", ") + ".");
+      if (w[0] === "help") say("This is Kwame's desktop. Ask me about him in plain words, for example: what did he do at GiveDirectly? What does he build? Commands: ls, open &lt;page&gt;, clear.");
       else if (w[0] === "ls") say(pages.map(function (p) { return p + ".html"; }).join("  "));
       else if (w[0] === "open" && pages.indexOf(w[1]) > -1) { say("Opening " + w[1] + "..."); location.href = w[1] + ".html"; }
       else if (w[0] === "open") say("No page called " + esc(w[1] || "") + ". Try ls.");
-      else if (w[0] === "hello" || w[0] === "hi") say("Hello. The contact form is at open contact.");
-      else if (w[0] === "whoami") say("Kwame V. Taylor, PMP. Technical program manager and designer, Los Angeles.");
       else if (w[0] === "clear") tout.innerHTML = "";
-      else say("Unknown command: " + esc(w[0]) + ". Try help.");
+      else say(esc(answer(v)));
     });
     $("#term").addEventListener("click", function (e) { if (!e.target.closest("a")) ti.focus(); });
 
@@ -222,7 +231,6 @@
       x.addEventListener("click", function () { minimize(true); });
       if (w.dataset.start === "min") { minimize(false); w.style.animation = "none"; }
     });
-    dragify($("#note"), $("#note"), true);
     addEventListener("resize", function () {
       if (innerWidth <= 900) $$(".desk .win, .note").forEach(function (w) { w.style.left = ""; w.style.top = ""; });
     });
