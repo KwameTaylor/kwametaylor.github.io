@@ -366,13 +366,16 @@ body.konami { animation: konami .9s steps(2) 2; }
 
 /* Trogdor burninates the windows; the V in the name gets consummated */
 body.burninate .desk .win:not(.min) { animation: burn 1s ease-out 3; }
-.flames { position: absolute; height: 0; pointer-events: none; z-index: 45; }
-.flame { position: absolute; bottom: -6px; width: 26px; height: 46px; margin-left: -13px; transform-origin: 50% 100%; animation: burnin 3s ease-out forwards; animation-delay: var(--d); opacity: 0; }
-.flame::before, .flame::after { content: ""; position: absolute; inset: 0; border-radius: 50% 50% 46% 46% / 64% 64% 36% 36%; transform-origin: 50% 100%; animation: flick .28s ease-in-out infinite alternate; animation-delay: var(--f); }
-.flame::before { background: radial-gradient(ellipse 50% 60% at 50% 72%, #ffb300 0 45%, #ff5a00 70%, rgba(255, 61, 0, 0) 72%); }
-.flame::after { inset: 34% 28% 0; background: radial-gradient(ellipse 50% 60% at 50% 70%, #fff6c2 0 35%, #ffd000 65%, rgba(255, 208, 0, 0) 70%); animation-duration: .22s; }
-@keyframes burnin { 0% { opacity: 0; transform: scale(var(--s)) translateY(10px); } 12% { opacity: 1; transform: scale(var(--s)) translateY(0); } 80% { opacity: 1; } 100% { opacity: 0; transform: scale(calc(var(--s) * .4)) translateY(-14px); } }
-@keyframes flick { from { transform: scaleY(.9) scaleX(1.05) skewX(-3deg); } to { transform: scaleY(1.18) scaleX(.9) skewX(4deg); } }
+.flames { position: absolute; height: 0; pointer-events: none; z-index: 59; }
+.flame { position: absolute; bottom: 0; overflow: visible; transform-origin: 50% 100%; animation: fin .35s cubic-bezier(.2, .8, .2, 1) both; }
+.flame.out { animation: fout .5s ease-in forwards; }
+.flame g { transform-box: fill-box; transform-origin: 50% 100%; animation: flick var(--fd) ease-in-out infinite alternate; }
+@keyframes fin { from { transform: scale(0); } }
+@keyframes fout { to { transform: scale(0) translateY(-6px); opacity: 0; } }
+@keyframes flick { from { transform: scaleY(.9) scaleX(1.05) skewX(-2deg); } to { transform: scaleY(1.1) scaleX(.94) skewX(3deg); } }
+canvas.sparks { position: fixed; left: 0; top: 0; pointer-events: none; z-index: 58; }
+.term .again { margin-top: 4px; border: 1px solid var(--sel); background: none; color: var(--sel); font: inherit; padding: 1px 8px; cursor: pointer; }
+.term .again:hover, .term .again:focus-visible { background: var(--sel); color: #111; outline: 0; }
 @keyframes burn { 0%, 100% { box-shadow: 5px 5px 0 var(--shadow); } 20%, 60% { box-shadow: 0 0 0 3px #ff6a00, 0 -10px 28px 6px #ff3d00; transform: translateY(-2px); } 40%, 80% { box-shadow: 0 0 0 3px #ffb300, 0 -16px 36px 10px #ff6a00; transform: translateY(1px); } }
 .hero h1 em { display: inline-block; transition: transform .5s cubic-bezier(.3, 1.6, .5, 1), color .3s; }
 body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(--sel); -webkit-text-stroke: 2px var(--ink); }

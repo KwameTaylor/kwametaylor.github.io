@@ -321,6 +321,81 @@
       $(".x", w).addEventListener("click", function () { w.remove(); });
       fit(w);
     };
+
+    /* Trogdor: outlined vector flames along the top of every open window, with sparks rising behind them */
+    var FL = ["M20 63C8 63 2 54 4 44C6 35 13 31 12 20C17 25 20 31 19 37C23 31 25 22 22 8C31 17 38 31 36 45C35 56 29 63 20 63Z",
+      "M20 63C8 63 3 53 5 43C7 34 15 30 15 18C19 24 21 30 20 36C25 29 28 19 27 4C34 15 38 30 36 44C35 56 29 63 20 63Z",
+      "M20 63C9 63 2 55 3 45C4 36 10 32 8 22C14 26 18 32 18 38C21 32 21 22 17 10C27 18 37 30 36 45C35 56 30 63 20 63Z"];
+    var sprites = null, burning = false;
+    var makeSprites = function () {
+      return [[255, 248, 214], [255, 214, 92], [255, 150, 20], [245, 90, 0], [200, 40, 0], [120, 20, 0]].map(function (c) {
+        var cv = document.createElement("canvas"); cv.width = cv.height = 64;
+        var g = cv.getContext("2d"), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+        gr.addColorStop(0, "rgba(" + c + ",1)"); gr.addColorStop(.4, "rgba(" + c + ",.55)"); gr.addColorStop(1, "rgba(" + c + ",0)");
+        g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return cv;
+      });
+    };
+    var flamesOn = function (w) {
+      var W = w.offsetWidth, box = document.createElement("div"), n = Math.max(5, Math.round(W / 19)), html = "";
+      box.className = "flames"; box.style.left = w.offsetLeft + "px"; box.style.top = (w.offsetTop + 10) + "px"; box.style.width = W + "px";
+      for (var i = 0; i < n; i++) {
+        var fw = Math.round(26 + Math.random() * 28), fh = Math.round(fw * 1.6), k = i % 3;
+        var vals = [FL[k], FL[(k + 1) % 3], FL[(k + 2) % 3], FL[k]].join(";");
+        var dur = (.45 + Math.random() * .35).toFixed(2), beg = (-Math.random()).toFixed(2);
+        var layer = function (c, sc, stroke) {
+          return '<path fill="' + c + '"' + (stroke ? ' stroke="#111111" stroke-width="1.6" stroke-linejoin="round" vector-effect="non-scaling-stroke"' : "") +
+            ' transform="translate(20 63) scale(' + sc + ') translate(-20 -63)" d="' + FL[k] + '"><animate attributeName="d" values="' + vals + '" dur="' + dur + 's" begin="' + beg + 's" repeatCount="indefinite"/></path>';
+        };
+        html += '<svg class="flame" viewBox="0 0 40 64" width="' + fw + '" height="' + fh + '" aria-hidden="true" style="left:calc(' + ((i + .5) / n * 100).toFixed(2) + "% - " + fw / 2 + "px);animation-delay:" + Math.round(Math.random() * 260) + 'ms"><g style="--fd:' + (.24 + Math.random() * .2).toFixed(2) + 's">' +
+          layer("#ff4a1c", 1, true) + layer("#ff9f1a", .68, false) + layer("#ffe14a", .4, false) + "</g></svg>";
+      }
+      box.innerHTML = html; desk.appendChild(box);
+      setTimeout(function () { $$(".flame", box).forEach(function (f) { setTimeout(function () { f.classList.add("out"); }, Math.random() * 300); }); }, 2600);
+      setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 3500);
+    };
+    var sparks = function (rects) {
+      sprites = sprites || makeSprites();
+      var dpr = Math.min(2, window.devicePixelRatio || 1), cv = document.createElement("canvas"), VW = innerWidth, VH = innerHeight;
+      cv.className = "sparks"; cv.width = VW * dpr; cv.height = VH * dpr; cv.style.width = VW + "px"; cv.style.height = VH + "px";
+      document.body.appendChild(cv);
+      var cx = cv.getContext("2d"); cx.scale(dpr, dpr);
+      var total = rects.reduce(function (a, r) { return a + r.width; }, 0), ps = [], t0 = performance.now(), last = t0, acc = 0;
+      var add = function () {
+        var pick = Math.random() * total, r = rects[0];
+        for (var i = 0; i < rects.length; i++) { if (pick < rects[i].width) { r = rects[i]; break; } pick -= rects[i].width; }
+        var ember = Math.random() < .3;
+        ps.push({ x: r.left + Math.random() * r.width, y: r.top - 14, vx: (Math.random() - .5) * 24, vy: -(ember ? 110 + Math.random() * 120 : 55 + Math.random() * 95),
+          age: 0, life: ember ? 1.1 + Math.random() * .8 : .4 + Math.random() * .5, size: ember ? 2 + Math.random() * 2 : 9 + Math.random() * 15, seed: Math.random() * 99, ember: ember });
+      };
+      var frame = function (now) {
+        var dt = Math.min(.05, (now - last) / 1000), el = (now - t0) / 1000; last = now;
+        if (el < 2.6) {
+          acc += total * .9 * dt * Math.min(1, el / .3) * (el > 2.1 ? (2.6 - el) / .5 : 1);
+          while (acc >= 1) { acc--; add(); }
+        }
+        cx.clearRect(0, 0, VW, VH);
+        for (var i = ps.length - 1; i >= 0; i--) {
+          var p = ps[i]; p.age += dt; var t = p.age / p.life;
+          if (t >= 1) { ps.splice(i, 1); continue; }
+          p.vy -= 40 * dt; p.x += (p.vx + Math.sin(now * .007 + p.seed) * 26) * dt; p.y += p.vy * dt;
+          var ci = p.ember ? 1 + (t > .6 ? 1 : 0) : Math.min(5, 1 + Math.floor(t * 5)), a = (t < .1 ? t / .1 : 1 - (t - .1) / .9) * (p.ember ? 1 : .6), sz = p.size * (p.ember ? 1 : 1 - t * .65);
+          cx.globalAlpha = Math.max(0, a); cx.drawImage(sprites[ci], p.x - sz, p.y - sz * 1.4, sz * 2, sz * 2.8);
+        }
+        if (el < 2.6 || ps.length) requestAnimationFrame(frame); else document.body.removeChild(cv);
+      };
+      requestAnimationFrame(frame);
+    };
+    var burninate = function () {
+      if (burning) return;
+      flash("burninate", 3100);
+      if (reduce) return;
+      burning = true; setTimeout(function () { burning = false; }, 3600);
+      var wins = $$(".desk .win:not(.min)");
+      wins.forEach(flamesOn);
+      sparks(wins.map(function (w) { return w.getBoundingClientRect(); }));
+    };
+    var flash = function (cls, ms) { document.body.classList.remove(cls); void document.body.offsetWidth; document.body.classList.add(cls); setTimeout(function () { document.body.classList.remove(cls); }, ms); };
+    tout.addEventListener("click", function (e) { if (e.target.closest(".again")) burninate(); });
     var egg = function (raw) {
       var v = raw.toLowerCase().replace(/[\u2019']/g, "").replace(/[!.?]+$/, "").trim();
       if (comicPending) {
@@ -352,16 +427,8 @@
       var hs = S.homestar || {};
       var flash = function (cls, ms) { document.body.classList.remove(cls); void document.body.offsetWidth; document.body.classList.add(cls); setTimeout(function () { document.body.classList.remove(cls); }, ms); };
       if (v === "trogdor" || v === "burninate" || v === "burninator") {
-        say(esc(hs.trogdor));
-        if (reduce) return true;
-        flash("burninate", 3100);
-        $$(".desk .win:not(.min)").forEach(function (w) {
-          var f = document.createElement("div"), n = Math.max(4, Math.round(w.offsetWidth / 24)), html = "";
-          f.className = "flames"; f.style.left = w.offsetLeft + "px"; f.style.top = w.offsetTop + "px"; f.style.width = w.offsetWidth + "px";
-          for (var i = 0; i < n; i++) html += '<i class="flame" style="left:' + ((i + .5) / n * 100) + "%;--s:" + (.7 + Math.random() * .7).toFixed(2) + ";--d:" + Math.round(Math.random() * 350) + "ms;--f:-" + Math.round(Math.random() * 280) + 'ms"></i>';
-          f.innerHTML = html; desk.appendChild(f);
-          setTimeout(function () { desk.removeChild(f); }, 3500);
-        });
+        say(esc(hs.trogdor) + '\n<button class="again" type="button">Burninate again</button>');
+        burninate();
         return true;
       }
       if (v === "consummate v" || v === "consummate vs" || v === "consummate v's") { say(esc(hs.consummate)); flash("consummate", 2400); return true; }
