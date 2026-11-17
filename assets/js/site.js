@@ -109,6 +109,25 @@
 
   }
 
+  /* Full screen. A page can only enter it from a click, and it ends when the visitor opens another page. */
+  var de = document.documentElement;
+  var fsEnter = de.requestFullscreen || de.webkitRequestFullscreen;
+  var fsExit = document.exitFullscreen || document.webkitExitFullscreen;
+  var fsOn = function () { return !!(document.fullscreenElement || document.webkitFullscreenElement); };
+  var fsToggle = function () {
+    try { var r = fsOn() ? fsExit.call(document) : fsEnter.call(de); if (r && r.catch) r.catch(function () {}); } catch (e) {}
+  };
+  var fsBtn = $("#fsbtn");
+  if (fsEnter && fsBtn) {
+    fsBtn.hidden = false;
+    fsBtn.addEventListener("click", fsToggle);
+    var fsSync = function () {
+      var on = fsOn();
+      fsBtn.setAttribute("aria-pressed", on); fsBtn.setAttribute("aria-label", on ? "Exit full screen" : "Full screen");
+      setTimeout(function () { window.dispatchEvent(new Event("resize")); }, 120);
+    };
+    document.addEventListener("fullscreenchange", fsSync); document.addEventListener("webkitfullscreenchange", fsSync);
+  }
   /* Start menu on the home taskbar */
   var sb = $("#startbtn"), sm = $("#startmenu");
   if (sb) {
@@ -322,25 +341,6 @@
       fit(w);
     };
 
-    /* Full screen. A page can only enter it from a click, and it ends when the visitor opens another page. */
-    var de = document.documentElement;
-    var fsEnter = de.requestFullscreen || de.webkitRequestFullscreen;
-    var fsExit = document.exitFullscreen || document.webkitExitFullscreen;
-    var fsOn = function () { return !!(document.fullscreenElement || document.webkitFullscreenElement); };
-    var fsToggle = function () {
-      try { var r = fsOn() ? fsExit.call(document) : fsEnter.call(de); if (r && r.catch) r.catch(function () {}); } catch (e) {}
-    };
-    var fsBtn = $("#fsbtn");
-    if (fsEnter && fsBtn) {
-      fsBtn.hidden = false;
-      fsBtn.addEventListener("click", fsToggle);
-      var fsSync = function () {
-        var on = fsOn();
-        fsBtn.setAttribute("aria-pressed", on); fsBtn.setAttribute("aria-label", on ? "Exit full screen" : "Full screen");
-        setTimeout(fitAll, 120);
-      };
-      document.addEventListener("fullscreenchange", fsSync); document.addEventListener("webkitfullscreenchange", fsSync);
-    }
     /* Suggest it once, on a computer, when the browser's own bars leave the desktop short of room. */
     var seen = null;
     try { seen = localStorage.getItem("fsNudge"); } catch (e) {}
