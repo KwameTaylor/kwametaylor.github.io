@@ -321,6 +321,13 @@
       if (v === "afrofuturism") { say(esc(S.afrofuturism.intro)); return true; }
       if (v === "sun ra") { say(esc(S.afrofuturism.sunra)); return true; }
       if (v === "octavia" || v === "octavia butler" || v === "parable") { say(esc(S.afrofuturism.octavia)); return true; }
+      var hs = S.homestar || {};
+      var flash = function (cls, ms) { document.body.classList.remove(cls); void document.body.offsetWidth; document.body.classList.add(cls); setTimeout(function () { document.body.classList.remove(cls); }, ms); };
+      if (v === "trogdor" || v === "burninate" || v === "burninator") { say(esc(hs.trogdor)); flash("burninate", 1500); return true; }
+      if (v === "consummate v" || v === "consummate vs" || v === "consummate v's") { say(esc(hs.consummate)); flash("consummate", 2400); return true; }
+      if (v === "sbemail" || v === "check email" || v === "strong bad" || v === "strongbad") { say(esc(hs.sbemail)); return true; }
+      if (v === "fhqwhgads" || v === "everybody to the limit") { say(esc(hs.fhqwhgads)); return true; }
+      if (v === "the cheat") { say(esc(hs.cheat)); return true; }
       if (v === "exit" || v === "quit") { say("Bye."); setTimeout(function () { $('section[aria-label="Terminal"] .x').click(); }, 400); return true; }
       return false;
     };

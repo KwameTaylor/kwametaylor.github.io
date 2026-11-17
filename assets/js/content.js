@@ -151,6 +151,15 @@ window.SITE = {
     ["Developers on GitHub in the U.S.: 9.8M → 32.4M", "GitHub Innovation Graph, quarterly"]
   ],
 
+  /* Homestar Runner references */
+  homestar: {
+    trogdor: "TROGDOR! Burninating the countryside. Burninating the peasants. Burninating all the windows on this desktop.",
+    consummate: "Consummate V's. Kwame keeps one in his name.",
+    sbemail: "From: a visitor\nSubject: this desktop\n\"Dear Strong Bad, how do I get in touch with the guy who made this?\"\n\nStrong Bad: Ugh. Use the contact form, it's right there. Type open contact.\n\n{{DELETED}}",
+    fhqwhgads: "Come on, fhqwhgads. Everybody, to the limit.",
+    cheat: "The Cheat is not dead! The Cheat is, however, unavailable for freelance work."
+  },
+
   afrofuturism: {
     intro: "Afrofuturism: Black futures imagined through art, music, fiction and technology. It shapes how Kwame thinks about design. Try: sun ra, octavia.",
     sunra: "Space is the place. · Sun Ra",

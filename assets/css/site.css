@@ -363,3 +363,10 @@ body.konami { animation: konami .9s steps(2) 2; }
 .vid iframe { width: 100%; height: 100%; border: 0; display: block; }
 .slot.you { background: var(--win); border-style: solid; }
 @media (prefers-reduced-motion: reduce) { body.konami { animation: none; } }
+
+/* Trogdor burninates the windows; the V in the name gets consummated */
+body.burninate .desk .win:not(.min) { animation: burn 1.4s ease-out; }
+@keyframes burn { 0%, 100% { box-shadow: 5px 5px 0 var(--shadow); } 20%, 60% { box-shadow: 0 0 0 3px #ff6a00, 0 -10px 28px 6px #ff3d00; transform: translateY(-2px); } 40%, 80% { box-shadow: 0 0 0 3px #ffb300, 0 -16px 36px 10px #ff6a00; transform: translateY(1px); } }
+.hero h1 em { display: inline-block; transition: transform .5s cubic-bezier(.3, 1.6, .5, 1), color .3s; }
+body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(--sel); -webkit-text-stroke: 2px var(--ink); }
+@media (prefers-reduced-motion: reduce) { body.burninate .desk .win { animation: none; } }
