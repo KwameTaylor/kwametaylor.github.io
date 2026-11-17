@@ -109,6 +109,15 @@
 
   }
 
+  /* Start menu on the home taskbar */
+  var sb = $("#startbtn"), sm = $("#startmenu");
+  if (sb) {
+    var setMenu = function (open) { sm.hidden = !open; sb.setAttribute("aria-expanded", open); };
+    sb.addEventListener("click", function (e) { e.stopPropagation(); setMenu(sm.hidden); if (!sm.hidden) $("a", sm).focus(); });
+    document.addEventListener("click", function (e) { if (!e.target.closest(".start")) setMenu(false); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && !sm.hidden) { setMenu(false); sb.focus(); } });
+  }
+
   /* Home */
   if (page === "home") {
     var svc = $("#svc");
@@ -223,10 +232,10 @@
         tab.type = "button"; tab.innerHTML = "<i aria-hidden=\"true\">" + esc(title.charAt(0)) + "</i><span>" + esc(title.replace("Kwame V. Taylor / ", "")) + "</span>"; tab.setAttribute("aria-label", "Restore " + title);
         tab.addEventListener("click", function () {
           w.classList.remove("min"); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
-          tab.remove(); if (!dock.children.length) { dock.hidden = true; document.body.classList.remove("docked"); }
+          tab.remove();
           $(".x", w).focus();
         });
-        dock.appendChild(tab); dock.hidden = false; document.body.classList.add("docked"); if (focusTab) tab.focus();
+        dock.appendChild(tab); if (focusTab) tab.focus();
       };
       x.addEventListener("click", function () { minimize(true); });
       if (w.dataset.start === "min") { minimize(false); w.style.animation = "none"; }

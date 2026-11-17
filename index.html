@@ -16,7 +16,7 @@
 <a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <nav aria-label="Pages"><a class="me" href="index.html">Kwame V. Taylor, PMP</a><a href="services.html">Services</a><a href="projects.html">Projects</a><a href="design.html">Design</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
-  <div class="r"><button id="theme" type="button">Dark</button><span id="clock">Los Angeles</span></div>
+  <div class="r"><button id="theme" type="button">Dark</button></div>
 </header>
 <main id="main" class="desk">
   <div class="hero">
@@ -25,8 +25,8 @@
   </div>
   <section class="win p" style="--x:52;--y:6;--w:19;--k:1" aria-label="Portrait"><div class="tb"><span>Portrait</span><button class="x" type="button" aria-label="Minimize Portrait">×</button></div><div class="photo" role="img" aria-label="Portrait placeholder"></div></section>
   <section class="win" style="--x:76;--y:13;--w:21;--k:2" aria-label="Services"><div class="tb"><span>Services</span><button class="x" type="button" aria-label="Minimize Services">×</button></div><ul class="svc" id="svc"></ul><a class="more" href="services.html">All services →</a></section>
-  <section class="win figs" style="--x:78;--y:56;--w:19;--k:3" aria-label="Fig. 1"><div class="tb"><span>Fig. 1</span><button class="x" type="button" aria-label="Minimize Fig. 1">×</button></div><div class="fig"><div class="bars" id="bars" aria-hidden="true"></div><p><b id="figtitle">Designing since 2011</b><span id="figcap">Years of practice</span></p></div><div class="st"><span id="fign">Fig. 1 of 3</span><span>Changes every few seconds</span></div></section>
-  <section class="win" style="--x:40;--y:59;--w:34;--k:4" aria-label="Kwame V. Taylor / Site"><div class="tb"><span>Kwame V. Taylor / Site</span><button class="x" type="button" aria-label="Minimize Kwame V. Taylor / Site">×</button></div>
+  <section class="win figs" style="--x:72;--y:30;--w:22;--k:3" aria-label="Fig. 1" data-start="min"><div class="tb"><span>Fig. 1</span><button class="x" type="button" aria-label="Minimize Fig. 1">×</button></div><div class="fig"><div class="bars" id="bars" aria-hidden="true"></div><p><b id="figtitle">Designing since 2011</b><span id="figcap">Years of practice</span></p></div><div class="st"><span id="fign">Fig. 1 of 3</span><span>Changes every few seconds</span></div></section>
+  <section class="win" style="--x:37;--y:57;--w:31;--k:4" aria-label="Kwame V. Taylor / Site"><div class="tb"><span>Kwame V. Taylor / Site</span><button class="x" type="button" aria-label="Minimize Kwame V. Taylor / Site">×</button></div>
     <nav class="files" id="files" aria-label="Pages, as files">
       <a href="services.html" class="cur"><span>Services</span><small>What I can do for you</small></a>
       <a href="projects.html"><span>Projects</span><small id="pcount">Code and data</small></a>
@@ -38,10 +38,18 @@
   <section class="win" style="--x:7;--y:72;--w:24;--k:5" aria-label="Message"><div class="tb"><span>Message</span><button class="x" type="button" aria-label="Minimize Message">×</button></div><a class="hello" href="contact.html">Say hello <b>→</b></a></section>
   <section class="win" style="--x:44;--y:20;--w:26;--k:6" aria-label="Design work" data-start="min"><div class="tb"><span>Design work</span><button class="x" type="button" aria-label="Minimize Design work">×</button></div><div class="body"><div class="folder" id="folder"></div></div><div class="st"><a href="design.html">Open the gallery →</a><span>Since 2011</span></div></section>
   <section class="win" style="--x:40;--y:78;--w:23;--k:7" aria-label="Swatches" data-start="min"><div class="tb"><span>Swatches</span><button class="x" type="button" aria-label="Minimize Swatches">×</button></div><div class="body"><div class="sw" id="sw" role="group" aria-label="Accent colour"></div><p class="k">Pick a colour. The site remembers it.</p></div></section>
-  <section class="win termwin" style="--x:3;--y:47;--w:30;--k:8" aria-label="Terminal"><div class="tb"><span>Terminal</span><button class="x" type="button" aria-label="Minimize Terminal">×</button></div><div class="term" id="term"><div id="tout"><p>This is Kwame's desktop. Ask me about him, or type <b>help</b>.</p></div><form id="tf"><label for="ti">kwame $</label><input id="ti" autocomplete="off" spellcheck="false" aria-label="Terminal command"></form></div></section>
+  <section class="win termwin" style="--x:71;--y:56;--w:26;--k:8" aria-label="Terminal"><div class="tb"><span>Terminal</span><button class="x" type="button" aria-label="Minimize Terminal">×</button></div><div class="term" id="term"><div id="tout"><p>This is Kwame's desktop. Ask me about him, or type <b>help</b>.</p></div><form id="tf"><label for="ti">kwame $</label><input id="ti" autocomplete="off" spellcheck="false" aria-label="Terminal command"></form></div></section>
   <section class="win" style="--x:44;--y:30;--w:24;--k:9" aria-label="Save file" data-start="min"><div class="tb"><span>Save file</span><button class="x" type="button" aria-label="Minimize Save file">×</button></div><div class="body"><div class="slot on"><b>Slot 1 · Kwame</b><span class="k">Class</span><span>Program manager, PMP</span><span class="k">Play time</span><span id="playtime">15 years of design</span><span class="k">Location</span><span>Los Angeles</span></div><div class="slot e"><b>Slot 2 · Empty</b></div></div><div class="st"><span>About, as a save screen</span><a href="about.html">Continue →</a></div></section>
 </main>
-<div class="dock" id="dock" aria-label="Minimized windows" hidden></div>
+<div class="taskbar" role="toolbar" aria-label="Taskbar">
+  <div class="start"><button id="startbtn" type="button" aria-expanded="false" aria-controls="startmenu">Kwame</button>
+    <nav class="startmenu" id="startmenu" aria-label="Start menu" hidden>
+      <a href="services.html">Services</a><a href="projects.html">Projects</a><a href="design.html">Design work</a><a href="about.html">About</a><a href="contact.html">Contact</a>
+      <hr><a href="https://www.linkedin.com/in/kwame-v-taylor" target="_blank" rel="noopener">LinkedIn ↗</a><a href="https://github.com/KwameTaylor" target="_blank" rel="noopener">GitHub ↗</a>
+    </nav></div>
+  <div class="dock" id="dock" aria-label="Minimized windows"></div>
+  <span class="tclock" id="clock">Los Angeles</span>
+</div>
 <footer class="foot">
   <span>Kwame V. Taylor, PMP · Los Angeles, CA</span>
   <span><a href="https://www.linkedin.com/in/kwame-v-taylor" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/KwameTaylor" target="_blank" rel="noopener">GitHub</a><a href="contact.html">Say hello</a></span>

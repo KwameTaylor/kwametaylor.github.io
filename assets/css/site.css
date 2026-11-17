@@ -77,13 +77,24 @@ kbd { font: inherit; border: 1px solid; padding: 0 4px; margin-right: 3px; }
 .tb .x { order: 2; border: 1.5px solid var(--chrome); background: none; width: 18px; height: 18px; line-height: 1; padding: 0; cursor: pointer; font-size: 15px; display: grid; place-items: center; flex: none; }
 .tb .x:hover, .tb .x:focus-visible { background: var(--sel); color: var(--on-sel); }
 .win.min { display: none; }
-.dock { position: fixed; right: var(--gut); bottom: 54px; z-index: 60; display: flex; gap: 10px; align-items: flex-end; padding: 8px 12px; border: 1.5px solid var(--line); background: var(--win); box-shadow: 4px 4px 0 var(--shadow); max-width: calc(100vw - 2 * var(--gut)); }
-.dock[hidden] { display: none; }
-.dock button { border: 0; background: none; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 12px; color: var(--mute); width: 64px; animation: pop .25s both; }
-.dock button i { width: 44px; height: 44px; border: 1.5px solid var(--line); display: grid; place-items: center; font: italic 400 26px/1 var(--serif); color: var(--ink); background: var(--win); transition: transform .15s, background .15s; }
-.dock button:hover i, .dock button:focus-visible i { background: var(--sel); color: var(--on-sel); transform: translateY(-4px); }
-.dock button span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 64px; }
-body.docked { padding-bottom: 0; }
+/* Taskbar on the home page: start menu, minimized windows, clock */
+body[data-page="home"] .foot { display: none; }
+body[data-page="home"] .desk { min-height: max(calc(100vh - 42px - 44px), 560px); margin-bottom: 44px; }
+.taskbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 var(--gut); border-top: 1.5px solid var(--line); background: var(--win); color: var(--win-ink); --ink: var(--win-ink); --mute: var(--win-mute); }
+.start { position: relative; flex: none; }
+#startbtn { border: 0; background: var(--ink); color: var(--win); font: 600 16px/1 var(--serif); padding: 8px 14px; cursor: pointer; }
+#startbtn:hover, #startbtn[aria-expanded="true"] { background: var(--sel); color: var(--on-sel); }
+.startmenu { position: absolute; left: 0; bottom: calc(100% + 8px); min-width: 210px; background: var(--win); border: 1.5px solid var(--line); box-shadow: 5px 5px 0 var(--shadow); padding: 6px 0; display: flex; flex-direction: column; }
+.startmenu[hidden] { display: none; }
+.startmenu a { padding: 6px 16px; font-size: 18px; }
+.startmenu a:hover, .startmenu a:focus-visible { background: var(--sel); color: var(--on-sel); outline: 0; }
+.startmenu hr { border: 0; border-top: 1px solid var(--win-rule); margin: 6px 0; }
+.dock { flex: 1; min-width: 0; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+.dock button { flex: none; border: 1.5px solid var(--line); background: var(--win); color: var(--ink); padding: 4px 12px; font-size: 15px; cursor: pointer; display: flex; align-items: center; gap: 8px; animation: pop .25s both; }
+.dock button i { display: none; }
+.dock button::before { content: ""; width: 9px; height: 9px; border: 1.5px solid currentColor; flex: none; }
+.dock button:hover, .dock button:focus-visible { background: var(--sel); color: var(--on-sel); outline: 0; }
+.tclock { flex: none; color: var(--mute); font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .st a:hover { background: var(--sel); color: var(--on-sel); }
 .st { border-top: 1.5px solid var(--line); padding: 5px 12px; font-size: 14px; color: var(--mute); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .photo { aspect-ratio: 4 / 5; background: var(--photo); position: relative; overflow: hidden; }
@@ -318,7 +329,7 @@ dialog .big img { position: absolute; inset: 0; width: 100%; height: 100%; objec
 
 /* Tablet and phone: windows stack in reading order */
 @media (max-width: 900px) {
-  .bar .r #clock { display: none; }
+  .tclock { display: none; }
   .desk { display: flex; flex-direction: column; gap: 20px; padding: 20px var(--gut) 28px; min-height: 0; }
   .hero { position: static; margin-bottom: 4px; }
   .hero h1 { font-size: clamp(52px, 17vw, 120px); }
