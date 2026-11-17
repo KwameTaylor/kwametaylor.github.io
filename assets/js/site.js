@@ -322,6 +322,47 @@
       fit(w);
     };
 
+    /* Full screen. A page can only enter it from a click, and it ends when the visitor opens another page. */
+    var de = document.documentElement;
+    var fsEnter = de.requestFullscreen || de.webkitRequestFullscreen;
+    var fsExit = document.exitFullscreen || document.webkitExitFullscreen;
+    var fsOn = function () { return !!(document.fullscreenElement || document.webkitFullscreenElement); };
+    var fsToggle = function () {
+      try { var r = fsOn() ? fsExit.call(document) : fsEnter.call(de); if (r && r.catch) r.catch(function () {}); } catch (e) {}
+    };
+    var fsBtn = $("#fsbtn");
+    if (fsEnter && fsBtn) {
+      fsBtn.hidden = false;
+      fsBtn.addEventListener("click", fsToggle);
+      var fsSync = function () {
+        var on = fsOn();
+        fsBtn.setAttribute("aria-pressed", on); fsBtn.setAttribute("aria-label", on ? "Exit full screen" : "Full screen");
+        setTimeout(fitAll, 120);
+      };
+      document.addEventListener("fullscreenchange", fsSync); document.addEventListener("webkitfullscreenchange", fsSync);
+    }
+    /* Suggest it once, on a computer, when the browser's own bars leave the desktop short of room. */
+    var seen = null;
+    try { seen = localStorage.getItem("fsNudge"); } catch (e) {}
+    var cramped = innerHeight < 860 && (screen.height - innerHeight) > 90;
+    if (fsEnter && !seen && innerWidth > 900 && cramped && !fsOn()) {
+      var mac = /Mac/.test(navigator.platform || navigator.userAgent);
+      var nw = document.createElement("section");
+      nw.className = "win nudge"; nw.setAttribute("aria-label", "Full screen tip");
+      nw.style.cssText = "--x:34;--y:22;--w:30;--k:6;z-index:" + (++z);
+      nw.innerHTML = '<div class="tb"><span>Tip</span><button class="x" type="button" aria-label="Close tip">×</button></div>' +
+        '<div class="body"><p>This desktop looks best full screen.</p><div class="row"><button class="btn" type="button" data-fs="go">Go full screen <b>→</b></button><button class="ghost" type="button" data-fs="no">No thanks</button></div>' +
+        "<small>To stay full screen on every page, use your browser's own: " + (mac ? "Control + Command + F" : "F11") + ". The button in the taskbar works too.</small></div>";
+      desk.appendChild(nw);
+      dragify(nw, $(".tb", nw)); fit(nw);
+      var closeNudge = function (val) { try { localStorage.setItem("fsNudge", val); } catch (e) {} if (nw.parentNode) nw.parentNode.removeChild(nw); };
+      nw.addEventListener("click", function (e) {
+        var b = e.target.closest("button"); if (!b) return;
+        if (b.dataset.fs === "go") { fsToggle(); closeNudge("yes"); }
+        else closeNudge("no");
+      });
+    }
+
     /* Trogdor: outlined vector flames along the top of every open window, with sparks rising behind them */
     var FL = ["M20 63C8 63 2 54 4 44C6 35 13 31 12 20C17 25 20 31 19 37C23 31 25 22 22 8C31 17 38 31 36 45C35 56 29 63 20 63Z",
       "M20 63C8 63 3 53 5 43C7 34 15 30 15 18C19 24 21 30 20 36C25 29 28 19 27 4C34 15 38 30 36 44C35 56 29 63 20 63Z",
