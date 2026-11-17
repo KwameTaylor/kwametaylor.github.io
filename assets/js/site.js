@@ -89,15 +89,29 @@
     if (svc && S.services) svc.innerHTML = S.services.slice(0, 4).map(function (s) {
       return '<li><a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a></li>";
     }).join("");
+    if (S.projects) $("#pcount").textContent = S.projects.length + " items";
+    var year = new Date().getFullYear(), yrs = year - 2011 + 1;
+    $("#playtime").textContent = yrs + " years of design";
 
-    var bars = $("#bars"), year = new Date().getFullYear(), n = Math.max(2, year - 2011 + 1);
-    if (bars) {
-      var out = "";
-      for (var i = 0; i < n; i++) out += '<i style="--h:' + ((i + 1) / n * 100) + ";--i:" + i + '"></i>';
-      bars.innerHTML = out;
-      $("#figcap").textContent = "Years of practice, 2011 to " + year;
-    }
+    /* Figures that change every few seconds */
+    var bars = $("#bars");
+    var figs = [
+      ["Designing since 2011", "Years of practice, 2011 to " + year, Array.apply(null, Array(yrs)).map(function (_, i) { return (i + 1) / yrs * 100; })],
+      ["Items on this site", "Services, projects, design pieces, organizations", [S.services.length, S.projects.length, S.design.length, S.champions.length].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })],
+      ["Pages: 5", "Links in the Site window, by item count", [4, S.projects.length, S.design.length, 1, 1].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })]
+    ];
+    var f = 0;
+    var fig = function () {
+      var d = figs[f % figs.length];
+      bars.innerHTML = d[2].map(function (h, i) { return '<i style="--h:' + h + ";--i:" + i + '"></i>'; }).join("");
+      $("#figtitle").textContent = d[0]; $("#figcap").textContent = d[1];
+      $("#fign").textContent = "Fig. " + (f % figs.length + 1) + " of " + figs.length;
+      f++;
+    };
+    fig();
+    if (!reduce) setInterval(fig, 4500);
 
+    /* Site window: arrow keys */
     var files = $$("#files a");
     var fl = arrowList(files.length, function (c) {
       files.forEach(function (a, j) { a.classList.toggle("cur", j === c); });
@@ -107,24 +121,92 @@
       a.addEventListener("focus", function () { fl.go(j); });
     });
 
-    /* Windows can be dragged by their title bars on wide screens. */
-    var z = 10;
-    $$(".desk .win").forEach(function (w) {
-      var bar = $(".tb", w), sx, sy, ox, oy, down = false;
-      bar.addEventListener("pointerdown", function (e) {
-        if (innerWidth <= 900) return;
-        down = true; sx = e.clientX; sy = e.clientY; ox = w.offsetLeft; oy = w.offsetTop;
-        bar.setPointerCapture(e.pointerId); w.classList.add("drag"); w.style.zIndex = ++z;
+    /* Card preview */
+    var flip = $("#flip");
+    flip.addEventListener("click", function () { flip.setAttribute("aria-pressed", flip.getAttribute("aria-pressed") !== "true"); });
+
+    /* Specimen */
+    $("#wr").addEventListener("input", function (e) { $("#aa").style.setProperty("--w", e.target.value); $("#wv").textContent = "Weight " + e.target.value; });
+
+    /* Design folder */
+    if (S.design) $("#folder").innerHTML = S.design.slice(0, 6).map(function (d) {
+      return '<a href="design.html"><i class="' + (d.tone === "k" ? "k" : "") + '" aria-hidden="true">' + esc(d.glyph || "") + "</i>" + esc(d.type) + "</a>";
+    }).join("");
+
+    /* Swatches: the accent colour, remembered */
+    var colours = [["#ffe24a", "Yellow"], ["#35d4c4", "Turquoise"], ["#ff8fc0", "Pink"], ["#b79cff", "Purple"], ["#ff6b5e", "Red"], ["#8fb4ff", "Blue"]];
+    var current = (getComputedStyle(document.documentElement).getPropertyValue("--sel") || "").trim().toLowerCase();
+    var sw = $("#sw");
+    sw.innerHTML = colours.map(function (c) {
+      return '<button type="button" style="--c:' + c[0] + '" data-c="' + c[0] + '" aria-label="' + c[1] + '" aria-pressed="' + (c[0] === current) + '"></button>';
+    }).join("");
+    sw.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      document.documentElement.style.setProperty("--sel", b.dataset.c);
+      try { localStorage.setItem("accent", b.dataset.c); } catch (err) {}
+      $$("button", sw).forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
+    });
+
+    /* Before and after */
+    $("#bar").addEventListener("input", function (e) { $("#ba").style.setProperty("--p", e.target.value); });
+
+    /* Terminal */
+    var tout = $("#tout"), ti = $("#ti"), pages = ["services", "projects", "design", "about", "contact"];
+    var say = function (t) { var p = document.createElement("p"); p.innerHTML = t; tout.appendChild(p); tout.parentNode.scrollTop = 1e6; };
+    $("#tf").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var v = ti.value.trim(), w = v.toLowerCase().split(/\s+/); ti.value = "";
+      if (!v) return;
+      say("<b>kwame $</b> " + esc(v));
+      if (w[0] === "help") say("Commands: ls, open &lt;page&gt;, hello, whoami, clear. Pages: " + pages.join(", ") + ".");
+      else if (w[0] === "ls") say(pages.map(function (p) { return p + ".html"; }).join("  "));
+      else if (w[0] === "open" && pages.indexOf(w[1]) > -1) { say("Opening " + w[1] + "..."); location.href = w[1] + ".html"; }
+      else if (w[0] === "open") say("No page called " + esc(w[1] || "") + ". Try ls.");
+      else if (w[0] === "hello" || w[0] === "hi") say("Hello. The contact form is at open contact.");
+      else if (w[0] === "whoami") say("Kwame V. Taylor, PMP. Technical program manager and designer, Los Angeles.");
+      else if (w[0] === "clear") tout.innerHTML = "";
+      else say("Unknown command: " + esc(w[0]) + ". Try help.");
+    });
+    $("#term").addEventListener("click", function (e) { if (!e.target.closest("a")) ti.focus(); });
+
+    /* Windows: drag by the title bar, minimize to the dock, restore from it */
+    var z = 10, dock = $("#dock");
+    var dragify = function (w, handle, isLink) {
+      var sx, sy, ox, oy, down = false, moved = false;
+      handle.addEventListener("pointerdown", function (e) {
+        if (innerWidth <= 900 || e.target.closest(".x")) return;
+        down = true; moved = false; sx = e.clientX; sy = e.clientY; ox = w.offsetLeft; oy = w.offsetTop;
+        handle.setPointerCapture(e.pointerId); w.classList.add("drag"); w.style.zIndex = ++z;
       });
-      bar.addEventListener("pointermove", function (e) {
+      handle.addEventListener("pointermove", function (e) {
         if (!down) return;
-        w.style.left = ox + e.clientX - sx + "px"; w.style.top = oy + e.clientY - sy + "px";
+        var dx = e.clientX - sx, dy = e.clientY - sy;
+        if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
+        w.style.left = ox + dx + "px"; w.style.top = oy + dy + "px";
       });
       var up = function () { down = false; w.classList.remove("drag"); };
-      bar.addEventListener("pointerup", up); bar.addEventListener("pointercancel", up);
+      handle.addEventListener("pointerup", up); handle.addEventListener("pointercancel", up);
+      if (isLink) w.addEventListener("click", function (e) { if (moved) e.preventDefault(); });
+    };
+    $$(".desk .win").forEach(function (w) {
+      dragify(w, $(".tb", w));
+      w.addEventListener("pointerdown", function () { if (!w.classList.contains("termwin")) return; w.style.zIndex = ++z; });
+      var x = $(".x", w), title = $(".tb span", w).textContent;
+      x.addEventListener("click", function () {
+        w.classList.add("min");
+        var tab = document.createElement("button");
+        tab.type = "button"; tab.textContent = title; tab.setAttribute("aria-label", "Restore " + title);
+        tab.addEventListener("click", function () {
+          w.classList.remove("min"); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
+          tab.remove(); if (!dock.children.length) { dock.hidden = true; document.body.classList.remove("docked"); }
+          $(".x", w).focus();
+        });
+        dock.appendChild(tab); dock.hidden = false; document.body.classList.add("docked"); tab.focus();
+      });
     });
+    dragify($("#note"), $("#note"), true);
     addEventListener("resize", function () {
-      if (innerWidth <= 900) $$(".desk .win").forEach(function (w) { w.style.left = ""; w.style.top = ""; });
+      if (innerWidth <= 900) $$(".desk .win, .note").forEach(function (w) { w.style.left = ""; w.style.top = ""; });
     });
   }
 

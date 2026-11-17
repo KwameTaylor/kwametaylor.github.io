@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&display=swap">
 <link rel="stylesheet" href="assets/css/site.css">
-<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>try{var t=localStorage.getItem("theme");if(t)document.documentElement.dataset.theme=t;var a=localStorage.getItem("accent");if(/^#[0-9a-f]{6}$/i.test(a))document.documentElement.style.setProperty("--sel",a)}catch(e){}</script>
 </head>
 <body data-page="home">
 <a class="skip" href="#main">Skip to content</a>
@@ -23,20 +23,34 @@
     <h1>Kwame <em>V.</em> Taylor<small> PMP</small></h1>
     <p class="lead">Technical program manager and designer. I build <span class="swap">data models.</span></p>
   </div>
-  <section class="win p" style="--x:52;--y:6;--w:19;--k:1" aria-label="Portrait"><div class="tb">Portrait</div><div class="photo" role="img" aria-label="Portrait placeholder"></div></section>
-  <section class="win" style="--x:76;--y:13;--w:21;--k:2" aria-label="Services"><div class="tb">Services</div><ul class="svc" id="svc"></ul><a class="more" href="services.html">All services →</a></section>
-  <section class="win" style="--x:40;--y:58;--w:34;--k:3" aria-label="Site"><div class="tb">Kwame V. Taylor / Site</div>
+  <section class="win p" style="--x:44;--y:3;--w:17;--k:1" aria-label="Portrait"><div class="tb"><span>Portrait</span><button class="x" type="button" aria-label="Minimize Portrait">×</button></div><div class="photo" role="img" aria-label="Portrait placeholder"></div></section>
+  <section class="win" style="--x:72;--y:4;--w:25;--k:2" aria-label="Services"><div class="tb"><span>Services</span><button class="x" type="button" aria-label="Minimize Services">×</button></div><ul class="svc" id="svc"></ul><a class="more" href="services.html">All services →</a></section>
+  <section class="win figs" style="--x:75;--y:23;--w:22;--k:3" aria-label="Fig. 1"><div class="tb"><span>Fig. 1</span><button class="x" type="button" aria-label="Minimize Fig. 1">×</button></div><div class="fig"><div class="bars" id="bars" aria-hidden="true"></div><p><b id="figtitle">Designing since 2011</b><span id="figcap">Years of practice</span></p></div><div class="st"><span id="fign">Fig. 1 of 3</span><span>Changes every few seconds</span></div></section>
+  <section class="win" style="--x:44;--y:29;--w:27;--k:4" aria-label="Kwame V. Taylor / Site"><div class="tb"><span>Kwame V. Taylor / Site</span><button class="x" type="button" aria-label="Minimize Kwame V. Taylor / Site">×</button></div>
     <nav class="files" id="files" aria-label="Pages, as files">
       <a href="services.html" class="cur"><span>Services</span><small>What I can do for you</small></a>
-      <a href="projects.html"><span>Projects</span><small>6 items</small></a>
+      <a href="projects.html"><span>Projects</span><small id="pcount">Code and data</small></a>
       <a href="design.html"><span>Design work</span><small>Since 2011</small></a>
       <a href="about.html"><span>About</span><small>1 portrait</small></a>
       <a href="contact.html"><span>Contact</span><small>1 form</small></a>
     </nav>
     <div class="st"><span>5 items</span><span class="keys"><kbd>↑</kbd><kbd>↓</kbd>move <kbd>Enter</kbd>open</span></div></section>
-  <section class="win" style="--x:78;--y:56;--w:19;--k:4" aria-label="Figure 1"><div class="tb">Fig. 1</div><div class="fig"><div class="bars" id="bars" aria-hidden="true"></div><p><b>Designing since 2011</b><span id="figcap">Years of practice</span></p></div></section>
-  <section class="win" style="--x:7;--y:77;--w:24;--k:5" aria-label="Message"><div class="tb">Message</div><a class="hello" href="contact.html">Say hello <b>→</b></a></section>
+  <a class="note" id="note" href="contact.html" style="--x:24;--y:38;--w:14;--k:5"><small>To: Kwame</small><span>Say hello <b>→</b></span></a>
+  <section class="win" style="--x:74;--y:38;--w:23;--k:6" aria-label="Card preview"><div class="tb"><span>Card preview</span><button class="x" type="button" aria-label="Minimize Card preview">×</button></div><div class="body cardwrap"><button class="flip" id="flip" type="button" aria-pressed="false" aria-label="Flip the business card"><span class="card"><span class="face f"><b>Kwame V. Taylor</b><small>Technical Program Management</small></span><span class="face b" aria-hidden="true"><span class="mini"><i style="--h:20"></i><i style="--h:35"></i><i style="--h:55"></i><i style="--h:100"></i></span><span class="mini"><i style="--h:100"></i><i style="--h:60"></i><i style="--h:30"></i><i style="--h:12"></i></span><span class="mini"><i style="--h:40"></i><i style="--h:45"></i><i style="--h:60"></i><i style="--h:80"></i></span></span></span></button></div><div class="st"><a href="services.html#business-cards-with-charts">Business cards with charts</a><span>Click to flip</span></div></section>
+  <section class="win" style="--x:3;--y:56;--w:28;--k:7" aria-label="Specimen"><div class="tb"><span>Specimen</span><button class="x" type="button" aria-label="Minimize Specimen">×</button></div><div class="body"><div class="aa" id="aa">Kk Aa</div><input type="range" id="wr" min="300" max="700" value="400" aria-label="Weight of the type specimen"></div><div class="st"><span>Newsreader</span><span id="wv">Weight 400</span></div></section>
+  <section class="win" style="--x:35;--y:52;--w:27;--k:8" aria-label="Design work"><div class="tb"><span>Design work</span><button class="x" type="button" aria-label="Minimize Design work">×</button></div><div class="body"><div class="folder" id="folder"></div></div><div class="st"><a href="design.html">Open the gallery →</a><span>Since 2011</span></div></section>
+  <section class="win" style="--x:74;--y:60;--w:23;--k:9" aria-label="Swatches"><div class="tb"><span>Swatches</span><button class="x" type="button" aria-label="Minimize Swatches">×</button></div><div class="body"><div class="sw" id="sw" role="group" aria-label="Accent colour"></div><p class="k">Pick a colour. The site remembers it.</p></div></section>
+  <section class="win" style="--x:74;--y:73;--w:23;--k:10" aria-label="Save file"><div class="tb"><span>Save file</span><button class="x" type="button" aria-label="Minimize Save file">×</button></div><div class="body"><div class="slot on"><b>Slot 1 · Kwame</b><span class="k">Class</span><span>Program manager, PMP</span><span class="k">Play time</span><span id="playtime">15 years of design</span><span class="k">Location</span><span>Los Angeles</span></div><div class="slot e"><b>Slot 2 · Empty</b></div></div><div class="st"><span>About, as a save screen</span><a href="about.html">Continue →</a></div></section>
+  <section class="win" style="--x:3;--y:77;--w:30;--k:11" aria-label="Before / After"><div class="tb"><span>Before / After</span><button class="x" type="button" aria-label="Minimize Before / After">×</button></div><div class="ba" id="ba"><pre class="before">date            amount        status
+jan 5            12,00        done
+1/7/26          1200.0        DONE
+Jan-09            n/a         Done </pre><pre class="after" aria-hidden="true">date            amount        status
+2026-01-05        1200        done
+2026-01-07        1200        done
+2026-01-09                    done</pre></div><div class="body"><input type="range" id="bar" min="0" max="100" value="50" aria-label="Drag to compare before and after"></div><div class="st"><a href="services.html#spreadsheet-cleanup">Spreadsheet cleanup</a><span>Drag</span></div></section>
+  <section class="win termwin" style="--x:35;--y:81;--w:30;--k:12" aria-label="Terminal"><div class="tb"><span>Terminal</span><button class="x" type="button" aria-label="Minimize Terminal">×</button></div><div class="term" id="term"><div id="tout"><p>Type <b>help</b> and press Enter.</p></div><form id="tf"><label for="ti">kwame $</label><input id="ti" autocomplete="off" spellcheck="false" aria-label="Terminal command"></form></div></section>
 </main>
+<div class="dock" id="dock" aria-label="Minimized windows" hidden></div>
 <footer class="foot">
   <span>Kwame V. Taylor, PMP · Los Angeles, CA</span>
   <span><a href="https://www.linkedin.com/in/kwame-v-taylor" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/KwameTaylor" target="_blank" rel="noopener">GitHub</a><a href="contact.html">Say hello</a></span>
