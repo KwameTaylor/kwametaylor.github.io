@@ -199,7 +199,7 @@
       else if (w[0] === "open" && pages.indexOf(w[1]) > -1) { say("Opening " + w[1] + "..."); location.href = w[1] + ".html"; }
       else if (w[0] === "open") say("No page called " + esc(w[1] || "") + ". Try ls.");
       else if (w[0] === "clear") tout.innerHTML = "";
-      else say(esc(answer(v)));
+      else if (!egg(v)) say(esc(answer(v)));
     });
     $("#term").addEventListener("click", function (e) { if (!e.target.closest("a")) ti.focus(); });
 
@@ -255,6 +255,89 @@
     });
     fitAll();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+
+    /* Hidden commands */
+    var restore = function (title) {
+      var t = $('#dock button[aria-label="Restore ' + title + '"]');
+      if (t) t.click();
+    };
+    var loadSave = function () { try { return JSON.parse(localStorage.getItem("save2")) || null; } catch (e) { return null; } };
+    var storeSave = function (sv) { try { localStorage.setItem("save2", JSON.stringify(sv)); } catch (e) {} };
+    var mins = function (sec) { var m = Math.floor(sec / 60), s = Math.round(sec % 60); return (m ? m + "m " : "") + s + "s"; };
+    var started = Date.now();
+    var drawSlot = function () {
+      var sv = loadSave(), el = $("#slot2");
+      if (!sv || !el) return;
+      el.className = "slot you";
+      el.innerHTML = "<b>Slot 2 · You</b><span class=\"k\">Play time</span><span>" + mins(sv.play) + " on this site</span><span class=\"k\">Location</span><span>Kwame's desktop</span>" +
+        (sv.lives ? "<span class=\"k\">Lives</span><span>" + sv.lives + "</span>" : "");
+    };
+    drawSlot();
+    var saveGame = function (extra) {
+      var sv = loadSave() || { play: 0 };
+      sv.play = (sv.base || 0) + (Date.now() - started) / 1000;
+      sv.base = sv.base || 0;
+      for (var k in extra) sv[k] = extra[k];
+      storeSave(sv); drawSlot();
+    };
+    var comicPending = false;
+    var openVideo = function () {
+      if ($("#rick")) { restore("never-gonna.mp4"); return; }
+      var w = document.createElement("section");
+      w.className = "win"; w.id = "rick"; w.setAttribute("aria-label", "never-gonna.mp4");
+      w.style.cssText = "--x:36;--y:12;--w:30;--k:0;z-index:" + (++z);
+      w.innerHTML = '<div class="tb"><span>never-gonna.mp4</span><button class="x" type="button" aria-label="Close video">×</button></div>' +
+        '<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1" title="Never Gonna Give You Up" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
+      desk.appendChild(w);
+      dragify(w, $(".tb", w));
+      $(".x", w).addEventListener("click", function () { w.remove(); });
+      fit(w);
+    };
+    var egg = function (raw) {
+      var v = raw.toLowerCase().replace(/[\u2019']/g, "").replace(/[!.?]+$/, "").trim();
+      if (comicPending) {
+        comicPending = false;
+        if (v === "yes" || v === "y" || v === "comic sans") { document.documentElement.classList.add("comic"); say("You asked for this. Type serif to undo."); return true; }
+        if (v === "no" || v === "n") { say("Good call."); return true; }
+      }
+      if (v === "comic sans") { comicPending = true; say("Are you sure? That doesn't sound like a good idea. (yes / no)"); return true; }
+      if (v === "serif") { document.documentElement.classList.remove("comic"); say("Order restored."); return true; }
+      if (v === "save") { saveGame({}); restore("Save file"); say("Game saved to Slot 2."); return true; }
+      if (v === "draw") { var cs = S.cards || []; say("You drew: " + esc(cs[Math.floor(Math.random() * cs.length)])); return true; }
+      if (v === "its time to duel") { say("Kwame draws Duel Magician, a deckbuilding companion for Yu-Gi-Oh! Duel Links. It's still in his hand: in progress. Type draw to play a card."); return true; }
+      if (v === "fig" || v === "figure") { var fs = S.figures || [], n = Math.floor(Math.random() * fs.length); say("Fig. " + (n + 1) + " of 7 · " + esc(fs[n][0]) + "\nSource: " + esc(fs[n][1])); return true; }
+      if (v === "rickroll" || v === "rick roll" || v === "rick astley") {
+        var f1 = (S.figures || [])[0];
+        if (f1) say("Fig. 1 of 7 · " + esc(f1[0]) + "\nSource: " + esc(f1[1]));
+        say("Never gonna give you up.");
+        openVideo();
+        return true;
+      }
+      if (v === "kern") {
+        var t = $("#term"); t.classList.add("kern"); say("Tightening...");
+        setTimeout(function () { t.classList.remove("kern"); say("Better."); }, 3000);
+        return true;
+      }
+      if (v === "afrofuturism") { say(esc(S.afrofuturism.intro)); return true; }
+      if (v === "sun ra") { say(esc(S.afrofuturism.sunra)); return true; }
+      if (v === "octavia" || v === "octavia butler" || v === "parable") { say(esc(S.afrofuturism.octavia)); return true; }
+      if (v === "exit" || v === "quit") { say("Bye."); setTimeout(function () { $('section[aria-label="Terminal"] .x').click(); }, 400); return true; }
+      return false;
+    };
+
+    /* Konami code, anywhere on the page */
+    var seq = ["arrowup", "arrowup", "arrowdown", "arrowdown", "arrowleft", "arrowright", "arrowleft", "arrowright", "b", "a"], pos = 0;
+    addEventListener("keydown", function (e) {
+      var k = (e.key || "").toLowerCase();
+      pos = k === seq[pos] ? pos + 1 : (k === seq[0] ? 1 : 0);
+      if (pos < seq.length) return;
+      pos = 0;
+      document.body.classList.remove("konami"); void document.body.offsetWidth; document.body.classList.add("konami");
+      saveGame({ lives: 30 });
+      restore("Terminal");
+      say("↑ ↑ ↓ ↓ ← → ← → B A · 30 lives granted and saved to Slot 2. You still have to use the contact form.");
+    });
+
   }
 
   /* Services */

@@ -200,8 +200,8 @@ input[type="range"] { width: 100%; accent-color: var(--ink); margin: 0; }
 .ba .after { position: absolute; inset: 0; background: var(--sel); color: var(--on-sel); clip-path: inset(0 calc(100% - var(--p, 50) * 1%) 0 0); }
 .ba::after { content: ""; position: absolute; top: 0; bottom: 0; left: calc(var(--p, 50) * 1%); width: 2px; margin-left: -1px; background: var(--ink); }
 /* Terminal */
-.termwin { resize: both; overflow: hidden; min-width: 240px; min-height: 160px; display: flex; flex-direction: column; }
-.term { background: #111111; color: #efede7; font: 13px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; padding: 12px 14px; flex: 1; min-height: 0; height: 190px; overflow: hidden; display: flex; flex-direction: column; }
+.termwin { resize: both; overflow: hidden; min-width: 240px; min-height: 160px; height: 232px; display: flex; flex-direction: column; }
+.term { background: #111111; color: #efede7; font: 13px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; padding: 12px 14px; flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
 #tout { flex: 1; overflow-y: auto; min-height: 0; }
 .term p { margin: 0; white-space: pre-wrap; word-break: break-word; }
 .term p b { color: var(--sel); font-weight: 400; }
@@ -339,7 +339,7 @@ dialog .big img { position: absolute; inset: 0; width: 100%; height: 100%; objec
   .desk .win.p { width: min(72%, 320px); }
   .desk .tb { cursor: default; }
   .note { position: relative; left: auto; top: auto; width: 56%; transform: rotate(-2deg); margin: 6px 0 10px; cursor: default; }
-  .termwin { resize: none; }
+  .termwin { resize: none; height: 260px; }
   .folder a i { font-size: 28px; }
   .split, .panes, .view, .cols { grid-template-columns: 1fr; }
   .side { border-right: 0; border-bottom: 1.5px solid var(--line); }
@@ -352,3 +352,14 @@ dialog .big img { position: absolute; inset: 0; width: 100%; height: 100%; objec
   *, *::before, *::after { animation: none !important; transition: none !important; }
   @view-transition { navigation: none; }
 }
+
+/* Hidden terminal commands */
+.term.kern p, .term.kern input { letter-spacing: -.09em; transition: letter-spacing .4s; }
+.term p, .term input { transition: letter-spacing .4s; }
+html.comic, html.comic * { font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive !important; }
+body.konami { animation: konami .9s steps(2) 2; }
+@keyframes konami { 50% { filter: invert(1) hue-rotate(180deg); } }
+.vid { aspect-ratio: 16 / 9; background: #000; }
+.vid iframe { width: 100%; height: 100%; border: 0; display: block; }
+.slot.you { background: var(--win); border-style: solid; }
+@media (prefers-reduced-motion: reduce) { body.konami { animation: none; } }
