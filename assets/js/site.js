@@ -86,9 +86,19 @@
   /* Small widgets, on whichever page they appear */
   if ($("#playtime")) $("#playtime").textContent = (new Date().getFullYear() - 2011 + 1) + " years of design";
   if ($("#flip")) {
-    var flip = $("#flip");
-    flip.addEventListener("click", function () { flip.setAttribute("aria-pressed", flip.getAttribute("aria-pressed") !== "true"); });
-
+    /* Seven figures on the back, one per flip. Placeholder charts until the real ones are drawn. */
+    var flip = $("#flip"), back = $("#cardback"), fi = 0;
+    var drawBack = function () {
+      var bars = [];
+      for (var b = 0; b < 12; b++) bars.push('<i style="--h:' + (15 + ((fi * 31 + b * 47) % 85)) + '"></i>');
+      back.innerHTML = '<span class="cap">Fig. ' + (fi + 1) + ' of 7</span><span class="mini">' + bars.join("") + "</span>";
+    };
+    drawBack();
+    flip.addEventListener("click", function () {
+      var showingBack = flip.getAttribute("aria-pressed") === "true";
+      flip.setAttribute("aria-pressed", !showingBack);
+      if (showingBack) setTimeout(function () { fi = (fi + 1) % 7; drawBack(); }, 350);
+    });
   }
   if ($("#wr")) {
     $("#wr").addEventListener("input", function (e) { $("#aa").style.setProperty("--w", e.target.value); $("#wv").textContent = "Weight " + e.target.value; });
@@ -201,7 +211,7 @@
       var minimize = function (focusTab) {
         w.classList.add("min");
         var tab = document.createElement("button");
-        tab.type = "button"; tab.textContent = title; tab.setAttribute("aria-label", "Restore " + title);
+        tab.type = "button"; tab.innerHTML = "<i aria-hidden=\"true\">" + esc(title.charAt(0)) + "</i><span>" + esc(title.replace("Kwame V. Taylor / ", "")) + "</span>"; tab.setAttribute("aria-label", "Restore " + title);
         tab.addEventListener("click", function () {
           w.classList.remove("min"); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
           tab.remove(); if (!dock.children.length) { dock.hidden = true; document.body.classList.remove("docked"); }
