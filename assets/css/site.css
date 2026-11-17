@@ -373,3 +373,8 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 
 /* rm -rf / : a fake wipe */
 .wipe { position: fixed; inset: 0; z-index: 200; background: #000; color: #efede7; display: grid; place-items: center; font: 15px/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+
+.slot .hint { grid-column: 1 / 3; font-size: 14px; color: var(--mute); }
+.term .tip { color: #9b9890; }
+.termwin.anim { transition: width .22s cubic-bezier(.2, .8, .2, 1), height .22s cubic-bezier(.2, .8, .2, 1), left .22s cubic-bezier(.2, .8, .2, 1), top .22s cubic-bezier(.2, .8, .2, 1); }
+.termwin .tb { cursor: grab; }

@@ -130,6 +130,22 @@ window.SITE = {
   ],
 
 
+  /* One of these is shown in the terminal's welcome line, a different one each visit. */
+  tips: [
+    "Try: draw",
+    "Some old cheat codes still work here.",
+    "Ask me about Trogdor.",
+    "Try: fig",
+    "Try: save",
+    "Try: kern",
+    "Try: it's time to duel",
+    "Try: xyzzy",
+    "Real programmers try ls -a."
+  ],
+
+  /* What "cat .secrets" prints. A few commands, never all of them. */
+  secrets: ["draw", "fig", "save", "kern", "rickroll", "comic sans", "trogdor", "coffee"],
+
   /* Hidden terminal commands. Not listed in help; people find them. */
   cards: [
     "KWAME, PMP · Level 8 · Effect: once per program, turn chaos into a Gantt chart.",

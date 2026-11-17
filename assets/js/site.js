@@ -177,6 +177,11 @@
 
     /* Terminal */
     var tout = $("#tout"), ti = $("#ti"), pages = ["services", "projects", "design", "about", "contact"];
+    if (S.tips && S.tips.length) {
+      var tp = document.createElement("p"); tp.className = "tip";
+      tp.textContent = S.tips[Math.floor(Math.random() * S.tips.length)];
+      tout.appendChild(tp);
+    }
     var say = function (t) { var p = document.createElement("p"); p.innerHTML = t; tout.appendChild(p); tout.scrollTop = 1e6; };
     var stop = "a an the is are was were do does did i you he his him what whats who where when how which can could tell me about of in on at for to and or with has have kwame kwames s".split(" ");
     var words = function (t) { return t.toLowerCase().replace(/[^a-z0-9$+ ]/g, " ").split(/\s+/).filter(function (x) { return x && stop.indexOf(x) < 0; }); };
@@ -195,7 +200,10 @@
       if (!v) return;
       say("<b>kwame $</b> " + esc(v));
       if (w[0] === "help") say("This is Kwame's desktop. Ask me about him in plain words, for example: what did he do at GiveDirectly? What does he build? Commands: ls, open &lt;page&gt;, clear.");
+      else if (w[0] === "ls" && (w[1] === "-a" || w[1] === "-la" || w[1] === "-al")) say(".  ..  .secrets  " + pages.map(function (p) { return p + ".html"; }).join("  "));
       else if (w[0] === "ls") say(pages.map(function (p) { return p + ".html"; }).join("  "));
+      else if (w[0] === "cat" && w[1] === ".secrets") say("Things this terminal understands that help won't tell you:\n" + (S.secrets || []).join(", ") + "\n...and a few more.");
+      else if (w[0] === "cat") say("cat: " + esc(w[1] || "") + ": No such file. Try ls -a.");
       else if (w[0] === "open" && pages.indexOf(w[1]) > -1) { say("Opening " + w[1] + "..."); location.href = w[1] + ".html"; }
       else if (w[0] === "open") say("No page called " + esc(w[1] || "") + ". Try ls.");
       else if (w[0] === "clear") tout.innerHTML = "";
@@ -255,6 +263,26 @@
     });
     fitAll();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
+
+    /* Double-click the Terminal's title bar to make it bigger; double-click again to put it back. */
+    var tw = $('section[aria-label="Terminal"]');
+    if (tw) $(".tb", tw).addEventListener("dblclick", function (e) {
+      if (innerWidth <= 900 || e.target.closest(".x")) return;
+      tw.classList.add("anim");
+      setTimeout(function () { tw.classList.remove("anim"); }, 260);
+      if (tw.hasAttribute("data-big")) {
+        var was = JSON.parse(tw.getAttribute("data-big"));
+        tw.style.left = was.l; tw.style.top = was.t; tw.style.width = was.w; tw.style.height = was.h;
+        tw.removeAttribute("data-big");
+        return;
+      }
+      tw.setAttribute("data-big", JSON.stringify({ l: tw.style.left, t: tw.style.top, w: tw.style.width, h: tw.style.height }));
+      var bar = $(".taskbar"), room = (bar ? bar.getBoundingClientRect().top : innerHeight) - desk.getBoundingClientRect().top - 28;
+      var W = Math.min(Math.round(desk.clientWidth * .52), 760), H = Math.min(Math.round(room * .72), 560);
+      var L = Math.max(16, Math.min(tw.offsetLeft, desk.clientWidth - W - 24)), T = Math.max(8, Math.min(tw.offsetTop, room - H));
+      tw.style.width = W + "px"; tw.style.height = H + "px"; tw.style.left = L + "px"; tw.style.top = T + "px";
+      tw.style.zIndex = ++z; tw.setAttribute("data-moved", "1");
+    });
 
     /* Hidden commands */
     var restore = function (title) {
