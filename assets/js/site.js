@@ -83,6 +83,22 @@
     return { go: go, cur: function () { return cur; } };
   }
 
+  /* Small widgets, on whichever page they appear */
+  if ($("#playtime")) $("#playtime").textContent = (new Date().getFullYear() - 2011 + 1) + " years of design";
+  if ($("#flip")) {
+    var flip = $("#flip");
+    flip.addEventListener("click", function () { flip.setAttribute("aria-pressed", flip.getAttribute("aria-pressed") !== "true"); });
+
+  }
+  if ($("#wr")) {
+    $("#wr").addEventListener("input", function (e) { $("#aa").style.setProperty("--w", e.target.value); $("#wv").textContent = "Weight " + e.target.value; });
+
+  }
+  if ($("#bar")) {
+    $("#bar").addEventListener("input", function (e) { $("#ba").style.setProperty("--p", e.target.value); });
+
+  }
+
   /* Home */
   if (page === "home") {
     var svc = $("#svc");
@@ -91,7 +107,7 @@
     }).join("");
     if (S.projects) $("#pcount").textContent = S.projects.length + " items";
     var year = new Date().getFullYear(), yrs = year - 2011 + 1;
-    $("#playtime").textContent = yrs + " years of design";
+
 
     /* Figures that change every few seconds */
     var bars = $("#bars");
@@ -121,13 +137,6 @@
       a.addEventListener("focus", function () { fl.go(j); });
     });
 
-    /* Card preview */
-    var flip = $("#flip");
-    flip.addEventListener("click", function () { flip.setAttribute("aria-pressed", flip.getAttribute("aria-pressed") !== "true"); });
-
-    /* Specimen */
-    $("#wr").addEventListener("input", function (e) { $("#aa").style.setProperty("--w", e.target.value); $("#wv").textContent = "Weight " + e.target.value; });
-
     /* Design folder */
     if (S.design) $("#folder").innerHTML = S.design.slice(0, 6).map(function (d) {
       return '<a href="design.html"><i class="' + (d.tone === "k" ? "k" : "") + '" aria-hidden="true">' + esc(d.glyph || "") + "</i>" + esc(d.type) + "</a>";
@@ -146,9 +155,6 @@
       try { localStorage.setItem("accent", b.dataset.c); } catch (err) {}
       $$("button", sw).forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
     });
-
-    /* Before and after */
-    $("#bar").addEventListener("input", function (e) { $("#ba").style.setProperty("--p", e.target.value); });
 
     /* Terminal */
     var tout = $("#tout"), ti = $("#ti"), pages = ["services", "projects", "design", "about", "contact"];
@@ -192,7 +198,7 @@
       dragify(w, $(".tb", w));
       w.addEventListener("pointerdown", function () { if (!w.classList.contains("termwin")) return; w.style.zIndex = ++z; });
       var x = $(".x", w), title = $(".tb span", w).textContent;
-      x.addEventListener("click", function () {
+      var minimize = function (focusTab) {
         w.classList.add("min");
         var tab = document.createElement("button");
         tab.type = "button"; tab.textContent = title; tab.setAttribute("aria-label", "Restore " + title);
@@ -201,8 +207,10 @@
           tab.remove(); if (!dock.children.length) { dock.hidden = true; document.body.classList.remove("docked"); }
           $(".x", w).focus();
         });
-        dock.appendChild(tab); dock.hidden = false; document.body.classList.add("docked"); tab.focus();
-      });
+        dock.appendChild(tab); dock.hidden = false; document.body.classList.add("docked"); if (focusTab) tab.focus();
+      };
+      x.addEventListener("click", function () { minimize(true); });
+      if (w.dataset.start === "min") { minimize(false); w.style.animation = "none"; }
     });
     dragify($("#note"), $("#note"), true);
     addEventListener("resize", function () {
