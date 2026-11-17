@@ -204,7 +204,15 @@
     $("#term").addEventListener("click", function (e) { if (!e.target.closest("a")) ti.focus(); });
 
     /* Windows: drag by the title bar, minimize to the dock, restore from it */
-    var z = 10, dock = $("#dock");
+    var z = 10, dock = $("#dock"), desk = $(".desk");
+    /* Keep a window's bottom edge inside the desktop so the page never scrolls on a laptop screen. */
+    var fit = function (w) {
+      if (innerWidth <= 900 || w.classList.contains("min") || w.hasAttribute("data-moved")) return;
+      w.style.top = "";
+      var room = desk.clientHeight - 16;
+      if (w.offsetTop + w.offsetHeight > room) w.style.top = Math.max(8, room - w.offsetHeight) + "px";
+    };
+    var fitAll = function () { $$(".desk .win").forEach(fit); };
     var dragify = function (w, handle, isLink) {
       var sx, sy, ox, oy, down = false, moved = false;
       handle.addEventListener("pointerdown", function (e) {
@@ -216,7 +224,7 @@
         if (!down) return;
         var dx = e.clientX - sx, dy = e.clientY - sy;
         if (Math.abs(dx) + Math.abs(dy) > 4) moved = true;
-        w.style.left = ox + dx + "px"; w.style.top = oy + dy + "px";
+        w.style.left = ox + dx + "px"; w.style.top = oy + dy + "px"; if (moved) w.setAttribute("data-moved", "1");
       });
       var up = function () { down = false; w.classList.remove("drag"); };
       handle.addEventListener("pointerup", up); handle.addEventListener("pointercancel", up);
@@ -231,7 +239,7 @@
         var tab = document.createElement("button");
         tab.type = "button"; tab.innerHTML = "<i aria-hidden=\"true\">" + esc(title.charAt(0)) + "</i><span>" + esc(title.replace("Kwame V. Taylor / ", "")) + "</span>"; tab.setAttribute("aria-label", "Restore " + title);
         tab.addEventListener("click", function () {
-          w.classList.remove("min"); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
+          w.classList.remove("min"); fit(w); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
           tab.remove();
           $(".x", w).focus();
         });
@@ -241,8 +249,11 @@
       if (w.dataset.start === "min") { minimize(false); w.style.animation = "none"; }
     });
     addEventListener("resize", function () {
-      if (innerWidth <= 900) $$(".desk .win, .note").forEach(function (w) { w.style.left = ""; w.style.top = ""; });
+      if (innerWidth <= 900) $$(".desk .win").forEach(function (w) { w.style.left = ""; w.style.top = ""; w.removeAttribute("data-moved"); });
+      else fitAll();
     });
+    fitAll();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
   }
 
   /* Services */

@@ -79,7 +79,7 @@ kbd { font: inherit; border: 1px solid; padding: 0 4px; margin-right: 3px; }
 .win.min { display: none; }
 /* Taskbar on the home page: start menu, minimized windows, clock */
 body[data-page="home"] .foot { display: none; }
-body[data-page="home"] .desk { min-height: max(calc(100vh - 42px - 44px), 560px); margin-bottom: 44px; }
+body[data-page="home"] .desk { min-height: calc(100vh - 42px - 44px); margin-bottom: 44px; overflow: clip; }
 .taskbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; height: 44px; display: flex; align-items: center; gap: 10px; padding: 0 var(--gut); border-top: 1.5px solid var(--line); background: var(--win); color: var(--win-ink); --ink: var(--win-ink); --mute: var(--win-mute); }
 .start { position: relative; flex: none; }
 #startbtn { border: 0; background: var(--ink); color: var(--win); font: 600 16px/1 var(--serif); padding: 8px 14px; cursor: pointer; }
@@ -94,7 +94,6 @@ body[data-page="home"] .desk { min-height: max(calc(100vh - 42px - 44px), 560px)
 .dock button i { display: none; }
 .dock button::before { content: ""; width: 9px; height: 9px; border: 1.5px solid currentColor; flex: none; }
 .dock button:hover, .dock button:focus-visible { background: var(--sel); color: var(--on-sel); outline: 0; }
-.tclock { flex: none; color: var(--mute); font-size: 15px; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .st a:hover { background: var(--sel); color: var(--on-sel); }
 .st { border-top: 1.5px solid var(--line); padding: 5px 12px; font-size: 14px; color: var(--mute); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
 .photo { aspect-ratio: 4 / 5; background: var(--photo); position: relative; overflow: hidden; }
@@ -329,7 +328,8 @@ dialog .big img { position: absolute; inset: 0; width: 100%; height: 100%; objec
 
 /* Tablet and phone: windows stack in reading order */
 @media (max-width: 900px) {
-  .tclock { display: none; }
+  .bar .r #clock { display: none; }
+  body[data-page="home"] .desk { overflow: visible; }
   .desk { display: flex; flex-direction: column; gap: 20px; padding: 20px var(--gut) 28px; min-height: 0; }
   .hero { position: static; margin-bottom: 4px; }
   .hero h1 { font-size: clamp(52px, 17vw, 120px); }
