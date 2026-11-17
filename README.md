@@ -9,7 +9,7 @@ Plain HTML, CSS and JavaScript. There is no build step: edit a file, commit, pus
 | File | Content |
 |---|---|
 | `assets/js/content.js` | Services, projects, design pieces, organizations, the rotating phrases, the portrait path and the contact form address. Most edits happen here. |
-| `index.html` | Home page: the name, tagline and the five windows. |
+| `index.html` | Home page: the name, tagline and the desktop windows. Each window is a `<section class="win">`; its position is the `--x`, `--y` and `--w` values on it. |
 | `about.html` | About text, work history and training, written directly in the page. |
 | `services.html`, `projects.html`, `design.html`, `contact.html` | Page frames. Their lists are filled from `content.js`. |
 | `404.html` | Shown for addresses that do not exist. |
