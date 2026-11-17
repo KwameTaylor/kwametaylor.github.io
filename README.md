@@ -76,3 +76,7 @@ The site follows the visitor's device setting and has a switch in the menu bar. 
 ## Previewing locally
 
 Open `index.html` in a browser, or run `python3 -m http.server` in this folder and visit `http://localhost:8000`.
+
+## After an update
+
+Each page loads its stylesheet and scripts with `?v=` and a short code on the end, for example `assets/css/site.css?v=f5453ee`. Browsers cache files by their full address, so changing that code makes every visitor fetch the new version instead of an old copy. After editing `site.css`, `site.js` or `content.js`, change the code on all the pages to anything new (the latest commit's short ID is a good choice).
