@@ -402,6 +402,6 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .nudge .row { display: flex; gap: 10px; flex-wrap: wrap; }
 .nudge .ghost { border: 1.5px solid var(--line); background: var(--win); color: var(--ink); padding: 4px 14px; font-size: 18px; cursor: pointer; }
 .nudge .ghost:hover, .nudge .ghost:focus-visible { background: var(--sel); color: var(--on-sel); outline: 0; }
-.bar .fsbtn { width: 26px; height: 22px; border: 1px solid var(--mute); color: var(--mute); background: none; align-self: center; }
+.bar .fsbtn { width: 24px; height: 24px; padding: 0; border: 1px solid var(--mute); color: var(--mute); background: none; align-self: center; }
 .bar .fsbtn svg { width: 13px; height: 13px; }
 .bar .fsbtn:hover, .bar .fsbtn:focus-visible, .bar .fsbtn[aria-pressed="true"] { background: var(--sel); color: var(--on-sel); border-color: var(--on-sel); }
