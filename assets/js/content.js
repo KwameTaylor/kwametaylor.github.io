@@ -169,6 +169,8 @@ window.SITE = {
 
   /* Homestar Runner references */
   homestar: {
+    homestar: "Everybody! Everybody! Homestar Runner says hi, and says you should hire Kwame. He's not sure for what.",
+    homsar: "DaAaAaAaAa! Welcome to the website, which is also a desktop, which is also a website.",
     trogdor: "TROGDOR! Burninating the countryside. Burninating the peasants. Burninating all the windows on this desktop.",
     consummate: "Consummate V's. Kwame keeps one in his name.",
     sbemail: "From: a visitor\nSubject: this desktop\n\"Dear Strong Bad, how do I get in touch with the guy who made this?\"\n\nStrong Bad: Ugh. Use the contact form, it's right there. Type open contact.\n\n{{DELETED}}",

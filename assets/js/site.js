@@ -351,9 +351,30 @@
       if (v === "octavia" || v === "octavia butler" || v === "parable") { say(esc(S.afrofuturism.octavia)); return true; }
       var hs = S.homestar || {};
       var flash = function (cls, ms) { document.body.classList.remove(cls); void document.body.offsetWidth; document.body.classList.add(cls); setTimeout(function () { document.body.classList.remove(cls); }, ms); };
-      if (v === "trogdor" || v === "burninate" || v === "burninator") { say(esc(hs.trogdor)); flash("burninate", 1500); return true; }
+      if (v === "trogdor" || v === "burninate" || v === "burninator") {
+        say(esc(hs.trogdor));
+        if (reduce) return true;
+        flash("burninate", 3100);
+        $$(".desk .win:not(.min)").forEach(function (w) {
+          var f = document.createElement("div"), n = Math.max(4, Math.round(w.offsetWidth / 24)), html = "";
+          f.className = "flames"; f.style.left = w.offsetLeft + "px"; f.style.top = w.offsetTop + "px"; f.style.width = w.offsetWidth + "px";
+          for (var i = 0; i < n; i++) html += '<i class="flame" style="left:' + ((i + .5) / n * 100) + "%;--s:" + (.7 + Math.random() * .7).toFixed(2) + ";--d:" + Math.round(Math.random() * 350) + "ms;--f:-" + Math.round(Math.random() * 280) + 'ms"></i>';
+          f.innerHTML = html; desk.appendChild(f);
+          setTimeout(function () { desk.removeChild(f); }, 3500);
+        });
+        return true;
+      }
       if (v === "consummate v" || v === "consummate vs" || v === "consummate v's") { say(esc(hs.consummate)); flash("consummate", 2400); return true; }
       if (v === "sbemail" || v === "check email" || v === "strong bad" || v === "strongbad") { say(esc(hs.sbemail)); return true; }
+      if (v === "homestar" || v === "homestar runner" || v === "home star" || v === "home star runner" || v === "everybody everybody") {
+        say(esc(hs.homestar));
+        if (!reduce) {
+          var r = document.createElement("div"); r.className = "runner"; r.textContent = "Everybody! Everybody!";
+          desk.appendChild(r); setTimeout(function () { desk.removeChild(r); }, 2700);
+        }
+        return true;
+      }
+      if (v === "homsar") { say(esc(hs.homsar)); return true; }
       if (v === "fhqwhgads" || v === "everybody to the limit") { say(esc(hs.fhqwhgads)); return true; }
       if (v === "the cheat") { say(esc(hs.cheat)); return true; }
       if (/^sudo hire kwame/.test(v)) { say("[sudo] password for visitor: ********\nPermission granted. Opening contact.html..."); setTimeout(function () { location.href = "contact.html"; }, 1400); return true; }
