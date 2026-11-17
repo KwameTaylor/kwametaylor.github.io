@@ -133,7 +133,7 @@ body[data-page="home"] .desk { min-height: calc(100vh - 42px - 44px); margin-bot
 .desk .win { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); width: calc(var(--w) * 1%); animation: pop .35s both cubic-bezier(.2, .8, .2, 1); animation-delay: calc(var(--k) * 90ms); }
 .desk .win.drag { box-shadow: 10px 10px 0 var(--shadow); z-index: 40; }
 .desk .tb { cursor: grab; touch-action: none; }
-.files a { display: grid; grid-template-columns: 1.4em minmax(0, 1fr) auto; gap: 8px; padding: 5px 12px; font-size: clamp(20px, 1.9vw, 28px); align-items: baseline; }
+.files a { display: grid; grid-template-columns: 1.4em minmax(0, 1fr) auto; gap: 8px; padding: 4px 12px; font-size: clamp(18px, 1.6vw, 24px); align-items: baseline; }
 .files a small { font-size: 14px; color: var(--mute); }
 .files a::before { content: ""; width: .62em; height: .74em; border: 1.5px solid currentColor; align-self: center; background: linear-gradient(225deg, currentColor 0 22%, transparent 22%); }
 .files a.cur { background: var(--sel); color: var(--on-sel); }

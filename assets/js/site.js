@@ -209,7 +209,8 @@
     var fit = function (w) {
       if (innerWidth <= 900 || w.classList.contains("min") || w.hasAttribute("data-moved")) return;
       w.style.top = "";
-      var room = desk.clientHeight - 16;
+      var bar = $(".taskbar"), limit = bar ? bar.getBoundingClientRect().top : innerHeight;
+      var room = limit - desk.getBoundingClientRect().top - 28;
       if (w.offsetTop + w.offsetHeight > room) w.style.top = Math.max(8, room - w.offsetHeight) + "px";
     };
     var fitAll = function () { $$(".desk .win").forEach(fit); };
