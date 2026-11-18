@@ -73,33 +73,35 @@
   /* Up and down arrows move through a list; Enter opens the current item. */
   function arrowList(count, set, open) {
     var cur = 0;
-    function go(i) { cur = (i + count) % count; set(cur); }
+    function go(i, byKey) { cur = (i + count) % count; set(cur, !!byKey); }
     addEventListener("keydown", function (e) {
       if (e.target.matches("input, textarea, select")) return;
-      if (e.key === "ArrowDown") { go(cur + 1); e.preventDefault(); }
-      else if (e.key === "ArrowUp") { go(cur - 1); e.preventDefault(); }
+      if (e.key === "ArrowDown") { go(cur + 1, true); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { go(cur - 1, true); e.preventDefault(); }
       else if (e.key === "Enter" && document.activeElement === document.body && open) open(cur);
     });
     return { go: go, cur: function () { return cur; } };
   }
 
   /* Small widgets, on whichever page they appear */
-  if ($("#playtime")) $("#playtime").textContent = (new Date().getFullYear() - 2011 + 1) + " years of design";
-  if ($("#flip")) {
-    /* Seven figures on the back, one per flip. Placeholder charts until the real ones are drawn. */
-    var flip = $("#flip"), back = $("#cardback"), fi = 0;
-    var drawBack = function () {
-      var bars = [];
-      for (var b = 0; b < 12; b++) bars.push('<i style="--h:' + (15 + ((fi * 31 + b * 47) % 85)) + '"></i>');
-      back.innerHTML = '<span class="cap">Fig. ' + (fi + 1) + ' of 7</span><span class="mini">' + bars.join("") + "</span>";
+  /* Business card: the front, then a different figure from the back on each flip */
+  var cards = $$(".flip").map(function (btn) {
+    var img = $(".face.b img", btn), win = btn.closest(".win"), label = win && $(".figno", win), fi = 0, F = S.figures || [];
+    var draw = function () {
+      img.src = "assets/img/card/fig-" + (fi + 1) + ".png";
+      img.alt = "Fig. " + (fi + 1) + " of 7 from the back of the card" + (F[fi] ? ": " + F[fi][0] + ". Source: " + F[fi][1] + "." : ".");
     };
-    drawBack();
-    flip.addEventListener("click", function () {
-      var showingBack = flip.getAttribute("aria-pressed") === "true";
-      flip.setAttribute("aria-pressed", !showingBack);
-      if (showingBack) setTimeout(function () { fi = (fi + 1) % 7; drawBack(); }, 350);
+    var showing = function () { return btn.getAttribute("aria-pressed") === "true"; };
+    var sync = function () { if (label) label.textContent = showing() ? "Fig. " + (fi + 1) + " of 7" : "Front"; };
+    draw();
+    btn.addEventListener("click", function () {
+      var back = showing();
+      btn.setAttribute("aria-pressed", !back);
+      if (back) setTimeout(function () { fi = (fi + 1) % 7; draw(); }, 350);
+      sync();
     });
-  }
+    return { show: function (n) { fi = n; draw(); btn.setAttribute("aria-pressed", "true"); sync(); } };
+  });
   if ($("#wr")) {
     $("#wr").addEventListener("input", function (e) { $("#aa").style.setProperty("--w", e.target.value); $("#wv").textContent = "Weight " + e.target.value; });
 
@@ -149,26 +151,7 @@
       return '<li><a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a></li>";
     }).join("");
     if (S.projects) $("#pcount").textContent = S.projects.length + " items";
-    var year = new Date().getFullYear(), yrs = year - 2011 + 1;
 
-
-    /* Figures that change every few seconds */
-    var bars = $("#bars");
-    var figs = [
-      ["Designing since 2011", "Years of practice, 2011 to " + year, Array.apply(null, Array(yrs)).map(function (_, i) { return (i + 1) / yrs * 100; })],
-      ["Items on this site", "Services, projects, design pieces, organizations", [(S.services || []).length, (S.projects || []).length, (S.design || []).length, (S.champions || []).length].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })],
-      ["Pages: 5", "Links in the Site window, by item count", [4, (S.projects || []).length, (S.design || []).length, 1, 1].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })]
-    ];
-    var f = 0;
-    var fig = function () {
-      var d = figs[f % figs.length];
-      bars.innerHTML = d[2].map(function (h, i) { return '<i style="--h:' + h + ";--i:" + i + '"></i>'; }).join("");
-      $("#figtitle").textContent = d[0]; $("#figcap").textContent = d[1];
-      $("#fign").textContent = "Fig. " + (f % figs.length + 1) + " of " + figs.length;
-      f++;
-    };
-    fig();
-    if (!reduce) setInterval(fig, 4500);
 
     /* Site window: arrow keys */
     var files = $$("#files a");
@@ -455,10 +438,16 @@
       if (v === "save") { saveGame({}); restore("Save file"); say("Game saved to Slot 2."); return true; }
       if (v === "draw") { var cs = S.cards || []; say("You drew: " + esc(cs[Math.floor(Math.random() * cs.length)])); return true; }
       if (v === "its time to duel") { say("Kwame draws Duel Magician, a deckbuilding companion for Yu-Gi-Oh! Duel Links. It's still in their hand: in progress. Type draw to play a card."); return true; }
-      if (v === "fig" || v === "figure") { var fs = S.figures || [], n = Math.floor(Math.random() * fs.length); say("Fig. " + (n + 1) + " of 7 · " + esc(fs[n][0]) + "\nSource: " + esc(fs[n][1])); return true; }
+      if (v === "fig" || v === "figure") {
+        var fs = S.figures || [], n = Math.floor(Math.random() * fs.length);
+        restore("Business card"); if (cards[0]) cards[0].show(n);
+        say("Fig. " + (n + 1) + " of 7 · " + esc(fs[n][0]) + "\nSource: " + esc(fs[n][1]) + "\nIt's on the back of Kwame's business card.");
+        return true;
+      }
       if (v === "rickroll" || v === "rick roll" || v === "rick astley") {
         var f1 = (S.figures || [])[0];
-        if (f1) say("Fig. 1 of 7 · " + esc(f1[0]) + "\nSource: " + esc(f1[1]));
+        restore("Business card"); if (cards[0]) cards[0].show(0);
+        if (f1) say("Fig. 1 of 7 · " + esc(f1[0]) + "\nSource: " + esc(f1[1]) + "\nIt's on the back of Kwame's business card.");
         say("Never gonna give you up.");
         openVideo();
         return true;
@@ -540,8 +529,9 @@
         $("button", li).setAttribute("aria-expanded", open);
       });
     };
-    var sl = arrowList(lis.length, function (c) {
+    var sl = arrowList(lis.length, function (c, byKey) {
       lis.forEach(function (li, j) { li.classList.toggle("cur", j === c); });
+      if (byKey) $("button", lis[c]).focus();
     }, function (c) { toggle(c); });
     lis.forEach(function (li, j) {
       var b = $("button", li);
@@ -559,6 +549,14 @@
     });
   }
 
+  /* Button text for a project link, from its site: "View on GitHub", "View on Streamlit" */
+  function linkName(url) {
+    var host = ""; try { host = new URL(url).hostname.replace(/^www\./, ""); } catch (e) {}
+    var known = { "github.com": "GitHub", "streamlit.app": "Streamlit", "givedirectly.org": "GiveDirectly" };
+    for (var k in known) if (host === k || host.slice(-k.length - 1) === "." + k) return "View on " + known[k];
+    return host ? "View on " + host : "Visit";
+  }
+
   /* Projects */
   if (page === "projects" && S.projects) {
     var list = $("#plist"), P = S.projects;
@@ -574,7 +572,7 @@
       $("#ptext").textContent = p.text || "";
       $("#ppath").textContent = "Projects / " + p.name;
       $("#pgo").innerHTML = p.link
-        ? '<a class="cta" href="' + esc(p.link) + '" target="_blank" rel="noopener">View on GitHub <b>↗</b></a>'
+        ? '<a class="cta" href="' + esc(p.link) + '" target="_blank" rel="noopener">' + esc(p.linkLabel || linkName(p.link)) + ' <b>↗</b></a>'
         : '<span class="mute">' + (p.status === "In progress" ? "In progress. No link yet." : "Link to come.") + "</span>";
       var shot = $("#pshot");
       if (p.image) shot.innerHTML = '<img src="' + esc(p.image) + '" alt="Screenshot of ' + esc(p.name) + '">';
@@ -584,7 +582,7 @@
       }
       try { history.replaceState(null, "", "#" + slug(p.name)); } catch (e) {}
     };
-    var pl = arrowList(P.length, show);
+    var pl = arrowList(P.length, function (c, byKey) { show(c); if (byKey) btns[c].focus(); });
     btns.forEach(function (b, j) { b.addEventListener("click", function () { pl.go(j); }); });
     var pat = P.findIndex(function (p) { return "#" + slug(p.name) === location.hash; });
     pl.go(pat > -1 ? pat : 0);
@@ -620,6 +618,42 @@
     });
     $("#vclose").addEventListener("click", function () { dlg.close(); });
     dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+  }
+
+  /* Design page: a five-color palette. Shuffle with the button or the space bar; click a color to lock it. */
+  var pal = $("#pal");
+  if (pal) {
+    var hsl = function (h, s, l) {
+      s /= 100; l /= 100;
+      var f = function (n) { var k = (n + h / 30) % 12, a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); };
+      return "#" + [f(0), f(8), f(4)].map(function (v) { return ("0" + v.toString(16)).slice(-2); }).join("");
+    };
+    var ink = function (hex) {
+      var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+      return (r * 299 + g * 587 + b * 114) / 1000 > 140 ? "#111111" : "#ffffff";
+    };
+    var swatches = [];
+    for (var i = 0; i < 5; i++) {
+      var b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", "false");
+      b.addEventListener("click", function () { this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") !== "true"); this.querySelector("i").textContent = this.getAttribute("aria-pressed") === "true" ? "Locked" : "Lock"; });
+      pal.appendChild(b); swatches.push(b);
+    }
+    var shuffle = function () {
+      var base = Math.random() * 360, scheme = Math.floor(Math.random() * 3);
+      var hues = scheme === 0 ? [0, 25, 50, 180, 205] : scheme === 1 ? [0, 120, 240, 30, 150] : [0, 15, 30, 45, 200];
+      swatches.forEach(function (b, k) {
+        if (b.getAttribute("aria-pressed") === "true") return;
+        var c = hsl((base + hues[k]) % 360, 45 + Math.random() * 45, k === 0 ? 18 + Math.random() * 12 : k === 4 ? 85 + Math.random() * 8 : 45 + Math.random() * 25);
+        b.style.setProperty("--c", c); b.style.setProperty("--t", ink(c));
+        b.innerHTML = "<span>" + c.toUpperCase() + "</span><i>" + (b.getAttribute("aria-pressed") === "true" ? "Locked" : "Lock") + "</i>";
+        b.setAttribute("aria-label", c.toUpperCase());
+      });
+    };
+    shuffle();
+    $("#shuffle").addEventListener("click", shuffle);
+    addEventListener("keydown", function (e) {
+      if (e.key === " " && !e.target.closest("button, input, textarea, select, a")) { e.preventDefault(); shuffle(); }
+    });
   }
 
   /* About: organizations */

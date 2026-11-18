@@ -42,10 +42,11 @@ window.SITE = {
   ],
 
   /* status, year and stack are optional. link is optional; without one the page says a link is coming.
+     linkLabel is optional: the button text for the link. Without it the button names the site, e.g. "View on GitHub".
      image is optional: a screenshot path such as "assets/img/queue-tip.png". */
   projects: [
     { name: "Queue Tip", status: "Python, Spotify API, Streamlit, Postgres",
-      text: "Queue Tip is a personal web application I built to help me clear the 10,000 podcast episode backlog I have saved in my Spotify library. By automating this, I avoid decision fatigue and save time. I tell it what time of day it is, how much time I have, how I’m feeling, and what’s on my mind. It picks episodes that fit those preferences and generates a playlist automatically pushed to my Spotify for my morning and night listening routines. It prioritizes episodes I’ve had saved the longest or shows I’ve neglected, in addition to prioritizing new episodes for categories such as News or Stocks. A free local embedded model matches my plain-language requests to episode descriptions. Built in Python with Streamlit, the Spotify Web API, and Postgres with pgvector.", link: "https://queue-tip.streamlit.app/", image: "" },
+      text: "Queue Tip is a personal web application I built to help me clear the 10,000 podcast episode backlog I have saved in my Spotify library. By automating this, I avoid decision fatigue and save time. I tell it what time of day it is, how much time I have, how I’m feeling, and what’s on my mind. It picks episodes that fit those preferences and generates a playlist automatically pushed to my Spotify for my morning and night listening routines. It prioritizes episodes I’ve had saved the longest or shows I’ve neglected, in addition to prioritizing new episodes for categories such as News or Stocks. A free local embedded model matches my plain-language requests to episode descriptions. Built in Python with Streamlit, the Spotify Web API, and Postgres with pgvector.", link: "https://queue-tip.streamlit.app/", linkLabel: "View on Streamlit", image: "" },
     { name: "Duel Magician", status: "In progress", stack: "Python, scikit-learn",
       text: "A deckbuilding companion for Yu-Gi-Oh! Duel Links.", link: "", image: "" },
     { name: "One million households", status: "GiveDirectly", year: "2021",
@@ -123,7 +124,7 @@ window.SITE = {
     { keys: ["fundraising", "raised", "money"],
       a: "At FIERCE! Kwame raised $32K net on a $0 budget using donated space, products and services." },
     { keys: ["design", "designer", "graphic", "logo", "branding", "print"],
-      a: "Kwame has been a graphic designer since 2011: visual identities, logos, business cards, web graphics, and production-ready print files. See open design." },
+      a: "Kwame is a graphic designer: visual identities, logos, business cards, web graphics, and production-ready print files. See open design." },
     { keys: ["services", "hire", "freelance", "available", "work with"],
       a: "Kwame takes on freelance data and design work: spreadsheet cleanup, data consolidation, business cards with data viz, graphic design and visual identity. Type open services, or open contact to ask." },
     { keys: ["skills", "stack", "languages", "python", "code", "programming", "technical", "git", "numpy", "html", "css", "nlp", "etl", "data model", "dashboard"],
