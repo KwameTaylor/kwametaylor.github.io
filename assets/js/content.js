@@ -23,6 +23,7 @@ window.SITE = {
   "prompt libraries.",
   "metrics frameworks.",
   "machine learning models.",
+  "strategic plans.",
   "infographics.",
   "training programs.",
   "web apps.",
@@ -31,6 +32,8 @@ window.SITE = {
 ],
 
   services: [
+    { name: "Automation tools and workflows", line: "Repetitive tasks handled in the background so you don't have to.",
+      includes: ["Custom connections between your existing apps", "Automated data entry, alerts, and handoffs", "Documentation and walkthrough for your team"] },
     { name: "Spreadsheet cleanup", line: "Your file, tidied and made consistent.",
       includes: ["One file, any size", "A change log", "One round of cleaning"] },
     { name: "Data consolidation", line: "Scattered data brought into one place you can easily use.",
