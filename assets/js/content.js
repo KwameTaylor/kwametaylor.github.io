@@ -8,7 +8,7 @@ window.SITE = {
 
   /* Contact form endpoint from your form service, for example "https://formspree.io/f/abcdwxyz".
      Leave it empty until the form is set up. */
-  formEndpoint: "",
+  formEndpoint: "https://formspree.io/f/xppddnyl",
 
   /* The phrase that rotates after "I build" on the home page. */
   phrases: [
