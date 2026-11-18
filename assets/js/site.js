@@ -346,7 +346,7 @@
       nw.className = "win nudge"; nw.setAttribute("aria-label", "Full screen tip");
       nw.style.cssText = "--x:34;--y:22;--w:30;--k:6;z-index:" + (++z);
       nw.innerHTML = '<div class="tb"><span>Tip</span><button class="x" type="button" aria-label="Close tip">×</button></div>' +
-        '<div class="body"><p>This desktop looks best full screen.</p><div class="row"><button class="btn" type="button" data-fs="go">Go full screen <b>→</b></button><button class="ghost" type="button" data-fs="no">No thanks</button></div>' +
+        '<div class="body"><p>This desktop looks best full screen.</p><div class="row"><button class="btn" type="button" data-fs="go">Go full screen <b>→︎</b></button><button class="ghost" type="button" data-fs="no">No thanks</button></div>' +
         "<small>To stay full screen on every page, use your browser's own: " + (mac ? "Control + Command + F" : "F11") + ". The button in the taskbar works too.</small></div>";
       desk.appendChild(nw);
       dragify(nw, $(".tb", nw)); fit(nw);
@@ -513,7 +513,7 @@
       document.body.classList.remove("konami"); void document.body.offsetWidth; document.body.classList.add("konami");
       saveGame({ lives: 30 });
       restore("Terminal");
-      say("↑ ↑ ↓ ↓ ← → ← → B A · 30 lives granted and saved to Slot 2. You still have to use the contact form.");
+      say("↑︎ ↑︎ ↓︎ ↓︎ ←︎ →︎ ←︎ →︎ B A · 30 lives granted and saved to Slot 2. You still have to use the contact form.");
     });
 
   }
@@ -523,9 +523,9 @@
     var rows = $("#rows");
     rows.innerHTML = S.services.map(function (s, k) {
       return '<li id="' + slug(s.name) + '"><button aria-expanded="false"><small>' + num(k) + "</small><span><b>" + esc(s.name) +
-        "</b><span>" + esc(s.line) + '</span></span><i aria-hidden="true">→</i></button><div class="inc"><ul>' +
+        "</b><span>" + esc(s.line) + '</span></span><i aria-hidden="true">→︎</i></button><div class="inc"><ul>' +
         (s.includes || []).map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") +
-        '</ul><a class="link" href="contact.html?about=' + encodeURIComponent(s.name) + '">Ask about this →</a></div></li>';
+        '</ul><a class="link" href="contact.html?about=' + encodeURIComponent(s.name) + '">Ask about this →︎</a></div></li>';
     }).join("");
     var lis = $$("#rows > li");
     var toggle = function (c, force) {
@@ -578,7 +578,7 @@
       $("#ptext").textContent = p.text || "";
       $("#ppath").textContent = "Projects / " + p.name;
       $("#pgo").innerHTML = p.link
-        ? '<a class="cta" href="' + esc(p.link) + '" target="_blank" rel="noopener">' + esc(p.linkLabel || linkName(p.link)) + ' <b>↗</b></a>'
+        ? '<a class="cta" href="' + esc(p.link) + '" target="_blank" rel="noopener">' + esc(p.linkLabel || linkName(p.link)) + ' <b>↗︎</b></a>'
         : '<span class="mute">' + (p.status === "In progress" ? "In progress. No link yet." : "Link to come.") + "</span>";
       var shot = $("#pshot");
       if (p.image) shot.innerHTML = '<img src="' + esc(p.image) + '" alt="Screenshot of ' + esc(p.name) + '">';
@@ -661,7 +661,7 @@
   /* About: organizations */
   if (page === "about" && S.champions) {
     $("#bm").innerHTML = S.champions.map(function (c) {
-      return '<li><a href="' + esc(c.url) + '" target="_blank" rel="noopener"><span>' + esc(c.name) + '</span><span aria-hidden="true">↗</span></a></li>';
+      return '<li><a href="' + esc(c.url) + '" target="_blank" rel="noopener"><span>' + esc(c.name) + '</span><span aria-hidden="true">↗︎</span></a></li>';
     }).join("") + '<li class="mute">More to come</li>';
   }
 

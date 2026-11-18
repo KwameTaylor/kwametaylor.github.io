@@ -180,12 +180,12 @@ window.SITE = {
   /* The seven figures from the back of Kwame's business card. */
   figures: [
     ["Worldwide Google searches for \"rickroll\": peaked April 2008", "Google Trends, monthly, peak month = 100"],
-    ["Bitcoin price, every quarter: $0.06 → $68,215", "Coin Metrics community data, Sept. 2010 to March 2026"],
-    ["Films passing the Bechdel test: 52% → 66%", "BechdelTest.com (user-submitted), 7,000+ films"],
-    ["Solar panel price per watt: $106 → $0.38", "Lafond et al. & IRENA, via Our World in Data"],
+    ["Bitcoin price, every quarter: $0.06 →︎ $68,215", "Coin Metrics community data, Sept. 2010 to March 2026"],
+    ["Films passing the Bechdel test: 52% →︎ 66%", "BechdelTest.com (user-submitted), 7,000+ films"],
+    ["Solar panel price per watt: $106 →︎ $0.38", "Lafond et al. & IRENA, via Our World in Data"],
     ["Exoplanets discovered each year: 5,397 since 1995", "Open Exoplanet Catalogue"],
-    ["Mobile money accounts in Sub-Saharan Africa: 48M → 396M", "GSMA (2019), via Our World in Data"],
-    ["Developers on GitHub in the U.S.: 9.8M → 32.4M", "GitHub Innovation Graph, quarterly"]
+    ["Mobile money accounts in Sub-Saharan Africa: 48M →︎ 396M", "GSMA (2019), via Our World in Data"],
+    ["Developers on GitHub in the U.S.: 9.8M →︎ 32.4M", "GitHub Innovation Graph, quarterly"]
   ],
 
   /* Homestar Runner references */
