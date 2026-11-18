@@ -350,6 +350,7 @@ dialog .big img { position: absolute; inset: 0; width: 100%; height: 100%; objec
   .termwin { resize: none; height: 260px; }
   .folder a i { font-size: 28px; }
   .split, .panes, .view, .cols { grid-template-columns: 1fr; }
+  .page.svcpage .cols, .page.svcpage .split { grid-template-columns: 1fr; }
   .side { border-right: 0; border-bottom: 1.5px solid var(--line); }
   .view .go { grid-column: 1; }
   .gal { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 36vw; }
@@ -454,3 +455,76 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .thanks .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
 .thanks .ghost { display: inline-block; font: italic 400 clamp(20px, 1.9vw, 26px)/1 var(--serif); padding: .3em .5em; border: 1.5px solid var(--line); background: var(--win); color: var(--ink); }
 .thanks .ghost:hover, .thanks .ghost:focus-visible { background: var(--sel); color: var(--on-sel); }
+
+/* ===================== Phones ===================== */
+/* Parts that only exist on phones. Hidden everywhere else. */
+.menubtn, .msheet, .phome, .phdock, .tb .back { display: none; }
+
+@media (max-width: 700px) {
+  /* Menu bar: your name and a Menu button */
+  .bar { align-items: center; padding-block: 8px; }
+  .bar nav a:not(.me) { display: none; }
+  .bar .r { display: none; }
+  .menubtn { display: flex; align-items: center; gap: 7px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); font: italic 16px/1 var(--serif); padding: 6px 10px; cursor: pointer; }
+  .menubtn i { width: 14px; height: 10px; background: linear-gradient(currentColor, currentColor) 0 0 / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) 0 50% / 100% 1.5px no-repeat, linear-gradient(currentColor, currentColor) 0 100% / 100% 1.5px no-repeat; }
+  .menubtn[aria-expanded="true"] { background: var(--sel); color: var(--on-sel); border-color: var(--on-sel); }
+  .msheet { display: block; position: fixed; inset: 0; z-index: 80; background: rgba(17, 17, 17, .35); opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .msheet.on { opacity: 1; pointer-events: auto; }
+  .msheet .win { position: absolute; left: 12px; right: 12px; top: calc(56px + env(safe-area-inset-top, 0px)); transform: translateY(-12px); transition: transform .25s cubic-bezier(.2, .8, .2, 1); }
+  .msheet.on .win { transform: none; }
+  .msheet nav a { display: flex; justify-content: space-between; align-items: baseline; padding: 11px 14px; border-bottom: 1px solid var(--rule); font-size: 24px; }
+  .msheet nav a small { font-size: 13px; color: var(--mute); }
+  .msheet nav a[aria-current="page"] { background: var(--sel); color: var(--on-sel); }
+  .msheet nav a[aria-current="page"] small { color: var(--on-sel); }
+  .msheet .mfoot { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 8px 14px; border-top: 1.5px solid var(--line); margin-top: -1px; font-size: 15px; }
+  .msheet .mfoot button { border: 1px solid var(--mute); background: none; color: var(--ink); font: 15px/1 var(--serif); padding: 5px 10px; cursor: pointer; }
+  .msheet .mfoot span { display: flex; gap: 14px; }
+  .msheet .mfoot a { border-bottom: 1.5px solid var(--sel); }
+
+  /* Inner pages */
+  .page { padding: 18px var(--gut) 32px; }
+  .h { font-size: clamp(38px, 11vw, 52px); }
+  .body { padding: 16px 14px; }
+  .rows .inc { padding-left: 14px; }
+
+  /* Home: the desktop becomes a phone home screen */
+  body[data-page="home"] .desk { display: block; padding: 18px var(--gut) 120px; margin-bottom: 0; min-height: 0; }
+  body[data-page="home"] .taskbar { display: none; }
+  .hero h1 { font-size: clamp(54px, 17vw, 84px); }
+  .lead { font-size: 20px; }
+  .desk .win { display: none; }
+  .phome { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px 10px; margin-top: 26px; }
+  .phdock { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; position: fixed; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 30; padding: 12px 8px 10px; background: var(--win); border: 1.5px solid var(--line); box-shadow: 4px 4px 0 var(--shadow); }
+  .ic { border: 0; background: none; padding: 0; cursor: pointer; color: var(--ink); display: flex; flex-direction: column; align-items: center; gap: 6px; font: 13px/1.15 var(--serif); text-align: center; }
+  .ic > i { width: 58px; height: 58px; border: 1.5px solid var(--line); box-shadow: 3px 3px 0 var(--shadow); background: var(--win); color: var(--win-ink); display: grid; place-items: center; font: italic 26px/1 var(--serif); overflow: hidden; position: relative; transition: transform .12s; }
+  .ic:active > i { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--shadow); }
+  .ic:focus-visible { outline: 0; } .ic:focus-visible > i { outline: 2px solid var(--sel); outline-offset: 3px; }
+  .phdock .ic span { display: none; }
+  .ic > i img { width: 100%; height: 100%; object-fit: cover; }
+  .ic.i-card > i { background: #fff; } .ic.i-card > i img { object-fit: contain; padding: 3px; }
+  .ic.i-msg > i { background: var(--sel); color: var(--on-sel); font-size: 22px; }
+  .ic.i-term > i { background: #111111; color: var(--sel); font: 15px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-style: normal; }
+  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #35d4c4 25% 50%, #ff8fc0 50% 75%, #b79cff 75%); }
+  .ic.i-site > i::before { content: ""; width: 20px; height: 26px; border: 1.5px solid var(--win-ink); background: linear-gradient(225deg, var(--win-ink) 0 24%, transparent 24%); }
+  .ic.i-save > i { font: 600 16px/1 var(--serif); font-style: normal; letter-spacing: .06em; }
+
+  /* An opened window fills the screen like an app */
+  body.appopen { overflow: hidden; }
+  body .desk .win.app { display: flex; flex-direction: column; position: fixed; inset: 0; left: 0; top: 0; width: auto; z-index: 70; border: 0; box-shadow: none; overflow-y: auto; padding-bottom: env(safe-area-inset-bottom, 0px); animation: appin .22s cubic-bezier(.2, .8, .2, 1) both; }
+  .desk .win.app > .tb { position: sticky; top: 0; z-index: 2; background: var(--win); padding: calc(10px + env(safe-area-inset-top, 0px)) 10px 10px; font-size: 17px; gap: 12px; }
+  .desk .win.app > .tb::before { display: none; }
+  .desk .win.app > .tb .back { display: grid; place-items: center; order: -1; border: 1.5px solid var(--line); background: var(--win); color: var(--ink); width: 34px; height: 30px; font-size: 18px; cursor: pointer; padding: 0; }
+  .desk .win.app > .tb .x { width: 30px; height: 30px; font-size: 20px; }
+  .desk .win.app .photo { aspect-ratio: auto; flex: 1; min-height: 70vh; }
+  .desk .termwin.app { height: auto; resize: none; }
+  .desk .termwin.app .term { flex: 1; height: auto; font-size: 15px; }
+  .desk .win.app .hello { flex: 1; display: grid; place-items: center; font-size: 56px; }
+  .desk .win.app .files a { font-size: 26px; padding: 10px 14px; }
+  .desk .win.app .svc a { font-size: 22px; padding: 12px 14px; }
+  .desk .win.app .st { position: sticky; bottom: 0; background: var(--win); margin-top: auto; }
+  .desk .win.app .cardwrap { padding: 18px 14px; }
+  @keyframes appin { from { opacity: 0; transform: scale(.94); } }
+}
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  body .desk .win.app, .msheet, .msheet .win { animation: none; transition: none; }
+}

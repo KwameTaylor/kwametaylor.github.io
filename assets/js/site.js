@@ -131,6 +131,34 @@
     };
     document.addEventListener("fullscreenchange", fsSync); document.addEventListener("webkitfullscreenchange", fsSync);
   }
+  /* ===== Phones: a Menu button on every page ===== */
+  var phone = matchMedia("(max-width: 700px)");
+  var bar = $(".bar");
+  if (bar) {
+    var mb = document.createElement("button");
+    mb.className = "menubtn"; mb.type = "button"; mb.setAttribute("aria-expanded", "false"); mb.setAttribute("aria-controls", "msheet");
+    mb.innerHTML = "Menu <i aria-hidden=\"true\"></i>";
+    bar.appendChild(mb);
+    var here = page === "thanks" ? "contact" : page;
+    var links = [["index", "Home"], ["services", "Services"], ["projects", "Projects"], ["design", "Design work"], ["about", "About"], ["contact", "Contact"]];
+    var sh = document.createElement("div");
+    sh.className = "msheet"; sh.id = "msheet";
+    sh.innerHTML = '<div class="win" role="dialog" aria-label="Menu"><div class="tb">Kwame V. Taylor / Site</div><nav aria-label="Pages">' +
+      links.map(function (l) { var on = l[0] === here || (l[0] === "index" && here === "home"); return '<a href="' + (page === "404" ? "/" : "") + l[0] + '.html"' + (on ? ' aria-current="page"' : "") + "><span>" + l[1] + "</span><small>" + (on ? "You are here" : "") + "</small></a>"; }).join("") +
+      '</nav><div class="mfoot"><button type="button" class="mtheme"></button><span><a href="https://www.linkedin.com/in/kwame-v-taylor" target="_blank" rel="noopener">LinkedIn</a><a href="https://github.com/KwameTaylor" target="_blank" rel="noopener">GitHub</a></span></div></div>';
+    document.body.appendChild(sh);
+    var mt = $(".mtheme", sh);
+    var mtLabel = function () { mt.textContent = isDark() ? "Light mode" : "Dark mode"; };
+    var setSheet = function (on) {
+      sh.classList.toggle("on", on); mb.setAttribute("aria-expanded", on);
+      if (on) { mtLabel(); $("nav a", sh).focus(); }
+    };
+    mb.addEventListener("click", function () { setSheet(!sh.classList.contains("on")); });
+    sh.addEventListener("click", function (e) { if (e.target === sh) setSheet(false); });
+    mt.addEventListener("click", function () { if (themeBtn) themeBtn.click(); mtLabel(); });
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && sh.classList.contains("on")) { setSheet(false); mb.focus(); } });
+  }
+
   /* Start menu on the home taskbar */
   var sb = $("#startbtn"), sm = $("#startmenu");
   if (sb) {
@@ -277,6 +305,58 @@
     fitAll();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
 
+
+    /* ===== Phones: the desktop becomes a home screen; each window opens full screen like an app ===== */
+    var ICONS = {
+      "Portrait": ["i-photo", ""], "Services": ["", "S"], "Kwame V. Taylor / Site": ["i-site", ""], "Message": ["i-msg", "Hi"],
+      "Terminal": ["i-term", "&gt;_"], "Business card": ["i-card", ""], "Design work": ["", "Aa"], "Swatches": ["i-sw", ""], "Save file": ["i-save", "01"]
+    };
+    var DOCK = ["Kwame V. Taylor / Site", "Terminal", "Business card", "Message"];
+    var home = document.createElement("div"); home.className = "phome"; home.setAttribute("aria-label", "Apps");
+    var pdock = document.createElement("div"); pdock.className = "phdock"; pdock.setAttribute("aria-label", "Dock");
+    var stack = [];
+    var openApp = function (w) {
+      if (!w || w.classList.contains("app")) return;
+      w.classList.add("app"); w.style.zIndex = 70 + stack.length; stack.push(w);
+      document.body.classList.add("appopen");
+      try { history.pushState({ app: w.getAttribute("aria-label") }, ""); } catch (e) {}
+      var back = $(".tb .back", w); if (back) back.focus();
+    };
+    var closeTop = function () {
+      var w = stack.pop(); if (!w) return;
+      w.classList.remove("app"); w.style.zIndex = "";
+      if (!stack.length) document.body.classList.remove("appopen");
+      var ic = $('.ic[data-app="' + w.getAttribute("aria-label") + '"]'); if (ic) ic.focus();
+    };
+    addEventListener("popstate", function () { if (stack.length) closeTop(); });
+    var appBack = function () { if (history.state && history.state.app) history.back(); else closeTop(); };
+    var wireApp = function (w) {
+      var tb = $(".tb", w); if (!tb || $(".back", tb)) return;
+      var bk = document.createElement("button"); bk.type = "button"; bk.className = "back"; bk.setAttribute("aria-label", "Back to home screen"); bk.textContent = "←︎";
+      bk.addEventListener("click", appBack);
+      tb.insertBefore(bk, tb.firstChild);
+      var x = $(".x", w);
+      if (x) x.addEventListener("click", function (e) { if (!phone.matches) return; e.stopImmediatePropagation(); appBack(); }, true);
+    };
+    $$(".desk .win").forEach(function (w) {
+      wireApp(w);
+      var name = w.getAttribute("aria-label"), d = ICONS[name] || ["", name.charAt(0)];
+      var b = document.createElement("button"); b.type = "button"; b.className = "ic " + d[0]; b.setAttribute("data-app", name);
+      var label = name.replace("Kwame V. Taylor / ", "");
+      var inner = d[1];
+      if (d[0] === "i-photo") inner = S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K";
+      if (d[0] === "i-card") inner = '<img src="assets/img/card/front.png" alt="">';
+      b.innerHTML = '<i aria-hidden="true">' + inner + "</i><span>" + esc(label) + "</span>";
+      b.setAttribute("aria-label", "Open " + label);
+      b.addEventListener("click", function () { openApp(w); });
+      (DOCK.indexOf(name) > -1 ? pdock : home).appendChild(b);
+    });
+    DOCK.forEach(function (n) { var b = $('.ic[data-app="' + n + '"]', pdock); if (b) pdock.appendChild(b); });
+    $(".hero").insertAdjacentElement("afterend", home);
+    desk.appendChild(pdock);
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && stack.length && phone.matches) appBack(); });
+    phone.addEventListener && phone.addEventListener("change", function () { while (stack.length) closeTop(); });
+
     /* Double-click the Terminal's title bar to make it bigger; double-click again to put it back. */
     var tw = $('section[aria-label="Terminal"]');
     if (tw) $(".tb", tw).addEventListener("dblclick", function (e) {
@@ -299,6 +379,7 @@
 
     /* Hidden commands */
     var restore = function (title) {
+      if (phone.matches) { openApp($('.desk .win[aria-label="' + title + '"]')); return; }
       var t = $('#dock button[aria-label="Restore ' + title + '"]');
       if (t) t.click();
     };
@@ -330,6 +411,7 @@
       w.innerHTML = '<div class="tb"><span>never-gonna.mp4</span><button class="x" type="button" aria-label="Close video">×</button></div>' +
         '<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1" title="Never Gonna Give You Up" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
       desk.appendChild(w);
+      wireApp(w); if (phone.matches) openApp(w);
       dragify(w, $(".tb", w));
       $(".x", w).addEventListener("click", function () { w.remove(); });
       fit(w);
