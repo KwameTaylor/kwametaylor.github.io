@@ -420,13 +420,25 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .face.f, .face.b { padding: 0; display: block; overflow: hidden; background: #fff; }
 .face img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-/* Palette on the design page */
-.pal { display: grid; grid-template-columns: repeat(5, 1fr); height: 150px; }
-.pal button { border: 0; border-right: 1.5px solid var(--line); background: var(--c); color: var(--t); cursor: pointer; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: 8px 6px; font: 12px/1.2 ui-monospace, "SF Mono", Menlo, Consolas, monospace; transition: background .35s; }
-.pal button:last-child { border-right: 0; }
-.pal button i { font-style: normal; font-size: 13px; opacity: 0; transition: opacity .15s; }
-.pal button[aria-pressed="true"] i, .pal button:hover i { opacity: 1; }
-.pal button:focus-visible { outline: 2px solid var(--ink); outline-offset: -4px; }
-.shuffle { border: 1.5px solid var(--line); background: var(--sel); color: var(--on-sel); font: italic 16px/1 var(--serif); padding: 3px 10px; cursor: pointer; }
-.shuffle b { display: inline-block; font-weight: 400; transition: transform .3s; }
-.shuffle:hover b { transform: rotate(180deg); }
+/* Design page: Kern it and Sketchpad */
+.sbtn { border: 1.5px solid var(--line); background: var(--sel); color: var(--on-sel); font: italic 16px/1 var(--serif); padding: 4px 12px; cursor: pointer; }
+.sbtn.ghost { background: var(--win); color: var(--ink); }
+.sbtn:hover, .sbtn:focus-visible { background: var(--ink); color: var(--win); outline: 0; }
+.kern .st { justify-content: flex-start; gap: 8px; }
+.kstage { position: relative; height: 112px; overflow: hidden; touch-action: none; user-select: none; }
+.kmeasure { position: absolute; visibility: hidden; white-space: nowrap; font: 400 64px/1 var(--serif); font-kerning: normal; top: 22px; }
+.kmeasure i { font-style: normal; }
+.kl { position: absolute; top: 22px; font: 400 64px/1 var(--serif); }
+.kl { cursor: ew-resize; border-bottom: 2px solid var(--sel); }
+.kl.fixed { cursor: default; border-bottom-color: transparent; }
+.kern.checked .kl { transition: left .6s cubic-bezier(.2, .8, .2, 1); border-bottom-color: transparent; }
+.kl:not(.fixed):hover { color: var(--mute); }
+.kres { margin: 0; padding: 0 14px 10px; font-size: 15px; color: var(--mute); min-height: 1.4em; }
+.padwrap { position: relative; }
+#pad { display: block; width: 100%; height: 190px; touch-action: none; cursor: crosshair; background: var(--win); }
+.padhint { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; color: var(--mute); font-style: italic; pointer-events: none; }
+.padhint[hidden] { display: none; }
+.inks { display: flex; gap: 8px; align-items: center; }
+.inks button { width: 20px; height: 20px; border: 1.5px solid var(--line); cursor: pointer; padding: 0; }
+.inks button[aria-pressed="true"] { outline: 2px solid var(--ink); outline-offset: 2px; }
+.ink-k { background: #111111; } .ink-y { background: var(--sel); } .ink-r { background: #e8112d; }

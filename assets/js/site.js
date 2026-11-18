@@ -207,11 +207,15 @@
       var v = ti.value.trim(), w = v.toLowerCase().split(/\s+/); ti.value = "";
       if (!v) return;
       say("<b>kwame $</b> " + esc(v));
+      /* less, more, head, tail and bat read a file the same way cat does */
+      var reader = /^(less|more|head|tail|bat)$/.test(w[0]) ? w[0] : "cat";
+      if (reader !== "cat") { w = ["cat", w[w.length - 1] === w[0] ? "" : w[w.length - 1]]; }
       if (w[0] === "help") say("This is Kwame's desktop. Ask me about them in plain words, for example: what did Kwame do at GiveDirectly? What do they build? Commands: ls, open &lt;page&gt;, clear.");
       else if (w[0] === "ls" && (w[1] === "-a" || w[1] === "-la" || w[1] === "-al")) say(".  ..  .secrets  " + pages.map(function (p) { return p + ".html"; }).join("  "));
       else if (w[0] === "ls") say(pages.map(function (p) { return p + ".html"; }).join("  "));
+      else if (/^(nano|vim|vi|emacs|edit)$/.test(w[0])) say(esc(w[0]) + ": " + esc(w[1] || "file") + " is read-only. You can look, but you can't touch.");
       else if (w[0] === "cat" && w[1] === ".secrets") say("Things this terminal understands that help won't tell you:\n" + (S.secrets || []).join(", ") + "\n...and a few more.");
-      else if (w[0] === "cat") say("cat: " + esc(w[1] || "") + ": No such file. Try ls -a.");
+      else if (w[0] === "cat") say(reader + ": " + esc(w[1] || "") + ": No such file. Try ls -a.");
       else if (w[0] === "open" && pages.indexOf(w[1]) > -1) { say("Opening " + w[1] + "..."); location.href = w[1] + ".html"; }
       else if (w[0] === "open") say("No page called " + esc(w[1] || "") + ". Try ls.");
       else if (w[0] === "clear") tout.innerHTML = "";
@@ -332,7 +336,8 @@
 
     /* Suggest it once, on a computer, when the browser's own bars leave the desktop short of room. */
     var seen = null;
-    try { seen = localStorage.getItem("fsNudge"); } catch (e) {}
+    /* The tip is remembered for 30 days, then offered again on the next visit */
+    try { var t = +localStorage.getItem("fsNudgeAt"); seen = t && Date.now() - t < 30 * 864e5; localStorage.removeItem("fsNudge"); } catch (e) {}
     var cramped = innerHeight < 860 && (screen.height - innerHeight) > 90;
     if (fsEnter && !seen && innerWidth > 900 && cramped && !fsOn()) {
       var mac = /Mac/.test(navigator.platform || navigator.userAgent);
@@ -344,7 +349,7 @@
         "<small>To stay full screen on every page, use your browser's own: " + (mac ? "Control + Command + F" : "F11") + ". The button in the taskbar works too.</small></div>";
       desk.appendChild(nw);
       dragify(nw, $(".tb", nw)); fit(nw);
-      var closeNudge = function (val) { try { localStorage.setItem("fsNudge", val); } catch (e) {} if (nw.parentNode) nw.parentNode.removeChild(nw); };
+      var closeNudge = function () { try { localStorage.setItem("fsNudgeAt", String(Date.now())); } catch (e) {} if (nw.parentNode) nw.parentNode.removeChild(nw); };
       nw.addEventListener("click", function (e) {
         var b = e.target.closest("button"); if (!b) return;
         if (b.dataset.fs === "go") { fsToggle(); closeNudge("yes"); }
@@ -620,39 +625,83 @@
     dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
   }
 
-  /* Design page: a five-color palette. Shuffle with the button or the space bar; click a color to lock it. */
-  var pal = $("#pal");
-  if (pal) {
-    var hsl = function (h, s, l) {
-      s /= 100; l /= 100;
-      var f = function (n) { var k = (n + h / 30) % 12, a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))); };
-      return "#" + [f(0), f(8), f(4)].map(function (v) { return ("0" + v.toString(16)).slice(-2); }).join("");
-    };
-    var ink = function (hex) {
-      var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
-      return (r * 299 + g * 587 + b * 114) / 1000 > 140 ? "#111111" : "#ffffff";
-    };
-    var swatches = [];
-    for (var i = 0; i < 5; i++) {
-      var b = document.createElement("button"); b.type = "button"; b.setAttribute("aria-pressed", "false");
-      b.addEventListener("click", function () { this.setAttribute("aria-pressed", this.getAttribute("aria-pressed") !== "true"); this.querySelector("i").textContent = this.getAttribute("aria-pressed") === "true" ? "Locked" : "Lock"; });
-      pal.appendChild(b); swatches.push(b);
-    }
-    var shuffle = function () {
-      var base = Math.random() * 360, scheme = Math.floor(Math.random() * 3);
-      var hues = scheme === 0 ? [0, 25, 50, 180, 205] : scheme === 1 ? [0, 120, 240, 30, 150] : [0, 15, 30, 45, 200];
-      swatches.forEach(function (b, k) {
-        if (b.getAttribute("aria-pressed") === "true") return;
-        var c = hsl((base + hues[k]) % 360, 45 + Math.random() * 45, k === 0 ? 18 + Math.random() * 12 : k === 4 ? 85 + Math.random() * 8 : 45 + Math.random() * 25);
-        b.style.setProperty("--c", c); b.style.setProperty("--t", ink(c));
-        b.innerHTML = "<span>" + c.toUpperCase() + "</span><i>" + (b.getAttribute("aria-pressed") === "true" ? "Locked" : "Lock") + "</i>";
-        b.setAttribute("aria-label", c.toUpperCase());
+  /* Design page: Kern it. Drag the middle letters until the spacing looks even, then check. */
+  var kern = $("#kern");
+  if (kern) {
+    var words = ["KWAME", "TAYLOR", "WAVY", "AVATAR", "VOYAGE"], wi = 0, letters = [], ideal = [];
+    var stage = $(".kstage", kern), result = $("#kres");
+    var lay = function () {
+      var word = words[wi % words.length];
+      stage.innerHTML = '<span class="kmeasure">' + word.split("").map(function (c) { return "<i>" + c + "</i>"; }).join("") + "</span>";
+      var m = $(".kmeasure", stage), w = m.offsetWidth, left0 = (stage.clientWidth - w) / 2;
+      ideal = $$("i", m).map(function (i) { return left0 + i.offsetLeft; });
+      var widths = $$("i", m).map(function (i) { return i.offsetWidth; });
+      stage.innerHTML = "";
+      letters = word.split("").map(function (c, k) {
+        var el = document.createElement("span");
+        el.className = "kl" + (k === 0 || k === word.length - 1 ? " fixed" : "");
+        el.textContent = c; el.style.width = widths[k] + "px";
+        var jitter = k === 0 || k === word.length - 1 ? 0 : (Math.random() < .5 ? -1 : 1) * (5 + Math.random() * 9);
+        el.style.left = (ideal[k] + jitter) + "px";
+        stage.appendChild(el);
+        return el;
+      });
+      for (var k = 1; k < letters.length - 1; k++) {
+        var lo = parseFloat(letters[k - 1].style.left) + widths[k - 1] * .97, hi = ideal[k + 1] - widths[k] * .97;
+        letters[k].style.left = Math.max(lo, Math.min(hi, parseFloat(letters[k].style.left))) + "px";
+      }
+      result.textContent = "Drag the underlined letters until the spacing looks even.";
+      kern.classList.remove("checked");
+      letters.forEach(function (el, k) {
+        if (k === 0 || k === letters.length - 1) return;
+        var sx, ox, down = false;
+        el.addEventListener("pointerdown", function (e) { down = true; sx = e.clientX; ox = parseFloat(el.style.left); el.setPointerCapture(e.pointerId); kern.classList.remove("checked"); });
+        el.addEventListener("pointermove", function (e) {
+          if (!down) return;
+          var lo = parseFloat(letters[k - 1].style.left) + 2, hi = parseFloat(letters[k + 1].style.left) - 2;
+          el.style.left = Math.max(lo, Math.min(hi, ox + e.clientX - sx)) + "px";
+        });
+        el.addEventListener("pointerup", function () { down = false; });
       });
     };
-    shuffle();
-    $("#shuffle").addEventListener("click", shuffle);
-    addEventListener("keydown", function (e) {
-      if (e.key === " " && !e.target.closest("button, input, textarea, select, a")) { e.preventDefault(); shuffle(); }
+    lay();
+    $("#kcheck").addEventListener("click", function () {
+      var off = 0, n = 0;
+      letters.forEach(function (el, k) { if (k && k < letters.length - 1) { off += Math.abs(parseFloat(el.style.left) - ideal[k]); n++; } });
+      var score = Math.max(0, Math.round(100 - (off / n) * 4));
+      kern.classList.add("checked");
+      setTimeout(function () { letters.forEach(function (el, k) { el.style.left = ideal[k] + "px"; }); }, 450);
+      result.textContent = score + " / 100 · " + (score > 90 ? "Type designer energy." : score > 70 ? "Close. Here's the font's own spacing." : "Here's where they belong. Try another word.");
+    });
+    $("#knext").addEventListener("click", function () { wi++; lay(); });
+    addEventListener("resize", function () { lay(); });
+  }
+
+  /* Design page: Sketchpad */
+  var pad = $("#pad");
+  if (pad) {
+    var cx = pad.getContext("2d"), ink = "#111111", drawing = false, last = null;
+    var size = function () {
+      var r = pad.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+      var keep = pad.width ? cx.getImageData(0, 0, pad.width, pad.height) : null;
+      pad.width = r.width * dpr; pad.height = r.height * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      cx.lineCap = cx.lineJoin = "round"; cx.lineWidth = 3;
+      if (keep) cx.putImageData(keep, 0, 0);
+    };
+    size(); addEventListener("resize", size);
+    var at = function (e) { var r = pad.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
+    pad.addEventListener("pointerdown", function (e) { drawing = true; last = at(e); pad.setPointerCapture(e.pointerId); $("#padhint").hidden = true; });
+    pad.addEventListener("pointermove", function (e) {
+      if (!drawing) return;
+      var p = at(e); cx.strokeStyle = ink; cx.beginPath(); cx.moveTo(last[0], last[1]); cx.lineTo(p[0], p[1]); cx.stroke(); last = p;
+    });
+    var stop = function () { drawing = false; };
+    pad.addEventListener("pointerup", stop); pad.addEventListener("pointercancel", stop);
+    $("#inks").addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.clear) { cx.clearRect(0, 0, pad.width, pad.height); $("#padhint").hidden = false; return; }
+      ink = getComputedStyle(b).backgroundColor;
+      $$("button[data-ink]", this).forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
     });
   }
 

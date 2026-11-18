@@ -151,6 +151,7 @@ window.SITE = {
   /* One of these is shown in the terminal's welcome line, a different one each visit. */
   tips: [
     "Try: draw",
+    "Try: fig",
     "Some old cheat codes still work here.",
     "Ask me about Trogdor.",
     "Try: save",
@@ -158,8 +159,7 @@ window.SITE = {
     "Try: it's time to duel",
     "Try: xyzzy",
     "Real programmers try ls -a.",
-    "Never gonna give you up."
-
+    "Hint: Never gonna give you up."
   ],
 
   /* What "cat .secrets" prints. A few commands, never all of them. */
