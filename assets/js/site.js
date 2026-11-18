@@ -137,6 +137,11 @@
     addEventListener("keydown", function (e) { if (e.key === "Escape" && !sm.hidden) { setMenu(false); sb.focus(); } });
   }
 
+  /* Home: always start from the default layout. A browser can restore a page from memory when the
+     visitor comes back to it (Back button, reopened tab), which would bring back moved or minimized
+     windows, so reload it fresh instead. Light or dark mode is kept; it is stored separately. */
+  if (page === "home") addEventListener("pageshow", function (e) { if (e.persisted) location.reload(); });
+
   /* Home */
   if (page === "home") {
     var svc = $("#svc");
