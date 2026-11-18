@@ -4,7 +4,7 @@ window.SITE = {
 
   /* Portrait. Put the image in assets/img and write its path here, for example "assets/img/portrait.jpg".
      Leave it empty to show the drawn placeholder. */
-  portrait: "IMG_4286.jpeg",
+  portrait: "assets/img/portrait.jpg",
 
   /* Contact form endpoint from your form service, for example "https://formspree.io/f/abcdwxyz".
      Leave it empty until the form is set up. */
@@ -68,7 +68,7 @@ window.SITE = {
     { keys: ["who", "summary", "background", "introduce", "bio", "does", "about"],
       a: "Kwame is a PMP-certified technical program manager in Los Angeles with a data science background and 8+ years leading social impact programs." },
     { keys: ["current", "now", "nlacrc", "regional center", "job", "role", "position"],
-      a: "Since May 2025, Kwame is the Change Management Project Manager and Business Transformation Lead at NLACRC, a regional center in Los Angeles serving 40,000+ people with developmental disabilities. Kwame leads organization-wide process redesign and data-informed change." },
+      a: "Since May 2025, Kwame has been the Change Management Project Manager and Business Transformation Lead at NLACRC, a regional center in Los Angeles serving 40,000+ people with developmental disabilities. Kwame leads organization-wide process redesign and data-informed change." },
     { keys: ["nlacrc accomplish", "nlacrc achieve", "nlacrc impact", "transfer", "cycle time", "faster"],
       a: "At NLACRC Kwame designed, coded and shipped a smart form and validation checklist that cut median inter-office case transfer time from 13 to 8 business days." },
     { keys: ["sop", "process", "standard", "training", "rollout", "staff"],
@@ -77,24 +77,24 @@ window.SITE = {
       a: "Kwame built NLACRC's first end-to-end metrics framework for its 2027 to 2031 Strategic Plan, with baselines and success metrics for each objective." },
     { keys: ["performance", "evaluation", "review", "moscow", "benchmark"],
       a: "Kwame led the agency's directors and executive team through a redesign of its performance evaluation system: benchmarked 10 peer organizations, taught MoSCoW prioritization, and designed a model built on self-assessment and growth plans, now rolled out agency-wide." },
-    { keys: ["product", "prd", "ocr", "computer vision", "automation", "owned", "compliance", "IT", "engineer"],
-      a: "Kwame proposed and product-owned an automated OCR and computer-vision pre-check that flags unsigned forms before Kwame reach records staff, wrote the PRD, and planned a phased build with IT." },
+    { keys: ["product", "prd", "ocr", "computer vision", "automation", "owned", "compliance", "engineer"],
+      a: "Kwame proposed and product-owned an automated OCR and computer-vision pre-check that flags unsigned forms before they reach records staff, wrote the PRD, and planned a phased build with IT." },
     { keys: ["campaign", "communications", "languages", "translation", "community"],
       a: "Kwame led a multichannel awareness campaign in all 5 of the agency's threshold languages: email, text, social media, mailed flyers, and a landing page with an infographic." },
     { keys: ["ai", "prompt", "claude", "llm", "automation"],
       a: "Kwame built a reusable AI prompt library for change management deliverables: about 95 source files, house style rules, 12 tested prompts, and a blind test that led to 6 prompt fixes." },
     { keys: ["givedirectly", "give directly", "previous", "before", "technical program"],
       a: "From 2021 to 2023 Kwame was a Technical Program Manager at GiveDirectly, building the data models and payment systems behind a $60M+ cash transfer portfolio across 8 countries." },
-    { keys: ["payments", "fintech", "mobile money", "fraud", "payment", "QC"],
+    { keys: ["payments", "fintech", "mobile money", "fraud", "payment", "qc"],
       a: "At GiveDirectly Kwame ran mobile-money distributions of $300K to $500K per payment cycle, with multi-stage automated QC audits to catch fraud, delivered to a zero-error standard." },
     { keys: ["salesforce", "architecture", "systems", "field", "offline", "taroworks", "infrastructure"],
       a: "Kwame built program architecture on Salesforce, Python, Apex and TaroWorks so hundreds of field officers could register recipients and track payments offline in low-connectivity regions." },
     { keys: ["million", "households", "deduplication", "dedupe", "milestone", "data clean", "visualization"],
       a: "Kwame wrote the rule-based deduplication that isolated unique households across a 15-year, 8M+ record dataset, delivering GiveDirectly's 1 million households milestone and the data model behind its public visualization." },
-    { keys: ["data engineering", "legacy", "pandas", "schema", "dataset", "reconcile", "Python"],
+    { keys: ["data engineering", "legacy", "pandas", "schema", "dataset", "reconcile", "python"],
       a: "Kwame re-engineered an 8M+ record legacy dataset in Python and pandas: reconciling name variants, ages, birthdates, multi-format locations and currencies into one clean model." },
     { keys: ["morocco", "usaid", "liberia", "international", "countries"],
-      a: "His GiveDirectly work included a $12M USAID drought relief program in Morocco and a county-wide pilot in Maryland County, Liberia, built to lay groundwork for national rollout." },
+      a: "Their GiveDirectly work included a $12M USAID drought relief program in Morocco and a county-wide pilot in Maryland County, Liberia, built to lay groundwork for national rollout." },
     { keys: ["buildher", "nairobi", "kenya", "cash plus", "women"],
       a: "In Nairobi Kwame ran a cash-plus program pairing cash transfers with BuildHer's construction training for women entering the trade, from program design through payments." },
     { keys: ["inclusive", "accessibility", "disabled", "disability"],
@@ -109,24 +109,24 @@ window.SITE = {
       a: "Kwame has been a graphic designer since 2011: visual identities, logos, business cards, web graphics, and production-ready print files. See open design." },
     { keys: ["services", "hire", "freelance", "available", "work with"],
       a: "Kwame takes on freelance data and design work: spreadsheet cleanup, data consolidation, business cards with data viz, graphic design and visual identity. Type open services, or open contact to ask." },
-    { keys: ["skills", "stack", "languages", "python", "code", "programming", "technical", "git", "numpy", "HTML", "CSS", "NLP", "ETL", "data model", "dashboard"],
+    { keys: ["skills", "stack", "languages", "python", "code", "programming", "technical", "git", "numpy", "html", "css", "nlp", "etl", "data model", "dashboard"],
       a: "Python (pandas, NumPy, scikit-learn, NLTK), SQL, Apex, JavaScript, HTML, CSS, Git. Plus machine learning, NLP, ETL, data modeling and dashboards." },
     { keys: ["methods", "agile", "scrum", "change management", "adkar", "kotter"],
       a: "Agile, Scrum, Kanban and waterfall delivery; Prosci ADKAR and Kotter for change management; RAID logs, Gantt charts, RACI, root cause analysis, and pilot design." },
     { keys: ["tools", "jira", "tableau", "platforms"],
       a: "Salesforce, Jira, Confluence, Tableau, Asana, Notion, Microsoft 365, SharePoint, Miro, Lucidchart, and Adobe Illustrator, InDesign and Photoshop." },
-    { keys: ["pmp", "certification", "certified", "PMI", "project management", "exam"],
-      a: "Kwame earned his PMP in 2024, scoring Above Target in all three exam domains." },
+    { keys: ["pmp", "certification", "certified", "pmi", "project management", "exam"],
+      a: "Kwame earned their PMP in 2024, scoring Above Target in all three exam domains." },
     { keys: ["education", "school", "codeup", "nyu", "study", "studied"],
       a: "Data Science Certification from Codeup (2020 to 2021, 670+ hours). Before that Kwame studied at NYU Gallatin in New York and Accra, concentrating in Digital Media for Social Justice." },
     { keys: ["projects", "portfolio", "spotiscry", "bachelorette", "zillow", "classifier"],
       a: "Data projects include Queue Tip (scheduled and on-request Spotify playlist automation), SpotiScry (predicting Spotify popularity), a Bachelorette contestant predictor that halved baseline error, a GitHub language classifier, and a Zillow Zestimate error analysis. Type open projects." },
     { keys: ["duel magician", "duel links", "yugioh", "yu-gi-oh", "games", "hobby", "video game", "rom", "game dev"],
-      a: "He's building Duel Magician, a deckbuilding companion for Yu-Gi-Oh! Duel Links with a hand-verified card database and a model that suggests tags for new cards. Kwame also makes ROM hacks and games in RPG Maker and Unity." },
+      a: "They're building Duel Magician, a deckbuilding companion for Yu-Gi-Oh! Duel Links with a hand-verified card database and a model that suggests tags for new cards. Kwame also makes ROM hacks and games in RPG Maker and Unity." },
     { keys: ["contact", "email", "reach", "hello", "hi"],
-      a: "The best way to reach him is the contact form. Type open contact." },
+      a: "The best way to reach them is the contact form. Type open contact." },
     { keys: ["where", "location", "based", "los angeles"],
-      a: "He's based in Los Angeles, California." }
+      a: "They're based in Los Angeles, California." }
   ],
 
 
@@ -139,7 +139,7 @@ window.SITE = {
     "Try: kern",
     "Try: it's time to duel",
     "Try: xyzzy",
-    "Real programmers try ls -a."
+    "Real programmers try ls -a.",
     "Never gonna give you up."
 
   ],
@@ -173,8 +173,8 @@ window.SITE = {
     homestar: "Everybody! Everybody! Homestar Runner says hi, and says you should hire Kwame. He's not sure for what.",
     homsar: "DaAaAaAaAa! Welcome to the website, which is also a desktop, which is also a website.",
     trogdor: "TROGDOR! Burninating the countryside. Burninating the peasants. Burninating all the windows on this desktop.",
-    consummate: "Consummate V's. Kwame keeps one in his name.",
-    sbemail: "From: a visitor\nSubject: this desktop\n\"Dear Strong Bad, how do I get in touch with the guy who made this?\"\n\nStrong Bad: Ugh. Use the contact form, it's right there. Type open contact.\n\n{{DELETED}}",
+    consummate: "Consummate V's. Kwame keeps one in their name.",
+    sbemail: "From: a visitor\nSubject: this desktop\n\"Dear Strong Bad, how do I get in touch with the person who made this?\"\n\nStrong Bad: Ugh. Use the contact form, it's right there. Type open contact.\n\n{{DELETED}}",
     fhqwhgads: "Come on, fhqwhgads. Everybody, to the limit.",
     cheat: "The Cheat is not dead! The Cheat is, however, unavailable for freelance work."
   },

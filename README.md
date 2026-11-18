@@ -13,8 +13,8 @@ Plain HTML, CSS and JavaScript. There is no build step: edit a file, commit, pus
 | `about.html` | About text, work history and training, written directly in the page. |
 | `services.html`, `projects.html`, `design.html`, `contact.html` | Page frames. Their lists are filled from `content.js`. |
 | `404.html` | Shown for addresses that do not exist. |
-| `assets/css/site.css` | All styles. Colours and the typeface are the variables at the top. |
-| `assets/js/site.js` | Behaviour: dragging windows, arrow keys, the theme switch, the form. |
+| `assets/css/site.css` | All styles. Colors and the typeface are the variables at the top. |
+| `assets/js/site.js` | Behavior: dragging windows, arrow keys, the theme switch, the form. |
 | `assets/img/` | Images. |
 
 ## Common edits
@@ -71,7 +71,7 @@ This repository is public, including its history.
 
 ## Light and dark
 
-The site follows the visitor's device setting and has a switch in the menu bar. Both sets of colours are at the top of `assets/css/site.css`.
+The site follows the visitor's device setting and has a switch in the menu bar. Both sets of colors are at the top of `assets/css/site.css`.
 
 ## Previewing locally
 

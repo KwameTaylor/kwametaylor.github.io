@@ -1,4 +1,4 @@
-/* Behaviour for kwametaylor.github.io. Content comes from content.js. */
+/* Behavior for kwametaylor.github.io. Content comes from content.js. */
 (function () {
   "use strict";
   var S = window.SITE || {};
@@ -195,7 +195,7 @@
     sw.addEventListener("click", function (e) {
       var b = e.target.closest("button"); if (!b) return;
       document.documentElement.style.setProperty("--sel", b.dataset.c);
-      try { localStorage.setItem("accent", b.dataset.c); } catch (err) {}
+      try { sessionStorage.setItem("accent", b.dataset.c); } catch (err) {}
       $$("button", sw).forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
     });
 
@@ -207,7 +207,7 @@
       tout.appendChild(tp);
     }
     var say = function (t) { var p = document.createElement("p"); p.innerHTML = t; tout.appendChild(p); tout.scrollTop = 1e6; };
-    var stop = "a an the is are was were do does did i you he his him what whats who where when how which can could tell me about of in on at for to and or with has have kwame kwames s".split(" ");
+    var stop = "a an the is are was were do does did i you he his him they them their what whats who where when how which can could tell me about of in on at for to and or with has have kwame kwames s".split(" ");
     var words = function (t) { return t.toLowerCase().replace(/[^a-z0-9$+ ]/g, " ").split(/\s+/).filter(function (x) { return x && stop.indexOf(x) < 0; }); };
     var answer = function (q) {
       var qw = words(q), best = null, bestScore = 0;
@@ -216,14 +216,15 @@
         f.keys.forEach(function (k) { k.split(" ").every(function (p) { return qw.some(function (w) { return w === p || (p.length > 4 && w.indexOf(p) === 0); }); }) && (score += k.split(" ").length); });
         if (score > bestScore) { bestScore = score; best = f; }
       });
-      return best ? best.a : "I don't have that on file. Ask him yourself: type open contact.";
+      if (!qw.length && (S.facts || []).length) return S.facts[0].a;
+      return best ? best.a : "I don't have that on file. Ask them yourself: type open contact.";
     };
     $("#tf").addEventListener("submit", function (e) {
       e.preventDefault();
       var v = ti.value.trim(), w = v.toLowerCase().split(/\s+/); ti.value = "";
       if (!v) return;
       say("<b>kwame $</b> " + esc(v));
-      if (w[0] === "help") say("This is Kwame's desktop. Ask me about him in plain words, for example: what did he do at GiveDirectly? What does he build? Commands: ls, open &lt;page&gt;, clear.");
+      if (w[0] === "help") say("This is Kwame's desktop. Ask me about them in plain words, for example: what did Kwame do at GiveDirectly? What do they build? Commands: ls, open &lt;page&gt;, clear.");
       else if (w[0] === "ls" && (w[1] === "-a" || w[1] === "-la" || w[1] === "-al")) say(".  ..  .secrets  " + pages.map(function (p) { return p + ".html"; }).join("  "));
       else if (w[0] === "ls") say(pages.map(function (p) { return p + ".html"; }).join("  "));
       else if (w[0] === "cat" && w[1] === ".secrets") say("Things this terminal understands that help won't tell you:\n" + (S.secrets || []).join(", ") + "\n...and a few more.");
@@ -313,8 +314,8 @@
       var t = $('#dock button[aria-label="Restore ' + title + '"]');
       if (t) t.click();
     };
-    var loadSave = function () { try { return JSON.parse(localStorage.getItem("save2")) || null; } catch (e) { return null; } };
-    var storeSave = function (sv) { try { localStorage.setItem("save2", JSON.stringify(sv)); } catch (e) {} };
+    var loadSave = function () { try { return JSON.parse(sessionStorage.getItem("save2")) || null; } catch (e) { return null; } };
+    var storeSave = function (sv) { try { sessionStorage.setItem("save2", JSON.stringify(sv)); } catch (e) {} };
     var mins = function (sec) { var m = Math.floor(sec / 60), s = Math.round(sec % 60); return (m ? m + "m " : "") + s + "s"; };
     var started = Date.now();
     var drawSlot = function () {
@@ -453,7 +454,7 @@
       if (v === "serif") { document.documentElement.classList.remove("comic"); say("Order restored."); return true; }
       if (v === "save") { saveGame({}); restore("Save file"); say("Game saved to Slot 2."); return true; }
       if (v === "draw") { var cs = S.cards || []; say("You drew: " + esc(cs[Math.floor(Math.random() * cs.length)])); return true; }
-      if (v === "its time to duel") { say("Kwame draws Duel Magician, a deckbuilding companion for Yu-Gi-Oh! Duel Links. It's still in his hand: in progress. Type draw to play a card."); return true; }
+      if (v === "its time to duel") { say("Kwame draws Duel Magician, a deckbuilding companion for Yu-Gi-Oh! Duel Links. It's still in their hand: in progress. Type draw to play a card."); return true; }
       if (v === "fig" || v === "figure") { var fs = S.figures || [], n = Math.floor(Math.random() * fs.length); say("Fig. " + (n + 1) + " of 7 · " + esc(fs[n][0]) + "\nSource: " + esc(fs[n][1])); return true; }
       if (v === "rickroll" || v === "rick roll" || v === "rick astley") {
         var f1 = (S.figures || [])[0];
@@ -551,6 +552,11 @@
     var at = lis.findIndex(function (li) { return "#" + li.id === location.hash; });
     sl.go(at > -1 ? at : 0);
     if (at > -1) toggle(at, true);
+    /* Links to a service on this same page (from the side windows) open it too */
+    addEventListener("hashchange", function () {
+      var h = lis.findIndex(function (li) { return "#" + li.id === location.hash; });
+      if (h > -1) { sl.go(h); toggle(h, true); }
+    });
   }
 
   /* Projects */
