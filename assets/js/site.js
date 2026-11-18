@@ -652,35 +652,18 @@
     setWord(); upd();
   }
 
-  /* Design page: Fig. 8 of 7. The visitor's own numbers, drawn like the charts on the business card. */
-  var f8 = $("#f8chart");
-  if (f8) {
-    var draw8 = function () {
-      var nums = $("#f8n").value.split(/[,\s]+/).map(parseFloat).filter(function (n) { return isFinite(n) && n >= 0; }).slice(0, 40);
-      var title = $("#f8t").value.trim() || "Something worth counting";
-      if (nums.length < 2) { f8.innerHTML = '<p class="k">Add at least two numbers.</p>'; return; }
-      var max = Math.max.apply(null, nums) || 1, fmt = function (n) { return n % 1 ? n.toFixed(1) : String(n); };
-      var bars = nums.map(function (n) { return '<i style="height:' + (n / max * 100) + '%"></i>'; }).join("");
-      f8.innerHTML = '<div class="f8plot"><div class="f8y"><span>' + fmt(max) + '</span><span>0</span></div><div class="f8bars">' + bars + '</div></div>' +
-        '<div class="f8x"><span>' + esc($("#f8a").value) + '</span><span>' + esc($("#f8b").value) + '</span></div>' +
-        '<p class="f8cap"><b>' + esc(title) + ': ' + fmt(nums[0]) + ' → ' + fmt(nums[nums.length - 1]) + '</b><span>Source: you, ' + nums.length + ' data points</span></p>';
-      f8.setAttribute("aria-label", "Bar chart. " + title + ": " + nums.join(", ") + ".");
-    };
-    ["#f8t", "#f8n", "#f8a", "#f8b"].forEach(function (s) { $(s).addEventListener("input", draw8); });
-    draw8();
-  }
-
   /* Design page: Monogram. Initials set four ways. */
   var mg = $("#mgrid");
   if (mg) {
     var drawMono = function () {
       var t = ($("#minput").value || "KVT").replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 3) || "K";
-      var L = t.split(""), a = L[0], z = L[L.length - 1];
+      var L = t.split(""), n = L.length, first = L[0], rest = L.slice(1);
+      var span = function (c, cls) { return '<span class="' + (cls || "") + '">' + c + "</span>"; };
       mg.innerHTML = [
-        '<figure><div class="m m1">' + L.map(function (c) { return "<span>" + c + "</span>"; }).join("") + '</div><figcaption>Circle seal</figcaption></figure>',
-        '<figure><div class="m m2"><span>' + a + '</span><i>' + (L.length > 2 ? L[1] : "&amp;") + '</i><span>' + z + '</span></div><figcaption>Interlocked</figcaption></figure>',
-        '<figure><div class="m m3">' + L.join('<b>✦</b>') + '</div><figcaption>Spaced, with the card\'s star</figcaption></figure>',
-        '<figure><div class="m m4"><span>' + t + '</span></div><figcaption>Stamp</figcaption></figure>'
+        '<figure><div class="m m-over n' + n + '">' + L.map(function (c, k) { return span(c, k % 2 ? "it" : ""); }).join("") + '</div><figcaption>Overlap</figcaption></figure>',
+        '<figure><div class="m m-seal n' + n + '"><i></i>' + L.map(function (c) { return span(c); }).join("") + '</div><figcaption>Seal</figcaption></figure>',
+        '<figure><div class="m m-stack">' + L.map(function (c) { return span(c); }).join("") + '</div><figcaption>Stacked</figcaption></figure>',
+        '<figure><div class="m m-drop">' + span(first, "big") + (rest.length ? '<span class="sm">' + rest.join("") + "</span>" : "") + '</div><figcaption>Drop initial</figcaption></figure>'
       ].join("");
     };
     $("#minput").addEventListener("input", drawMono);

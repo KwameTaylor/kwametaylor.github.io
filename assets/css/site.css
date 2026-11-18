@@ -437,28 +437,31 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .trow input, .f8form input { flex: 1; min-width: 0; border: 1.5px solid var(--line); background: var(--win); color: var(--ink); padding: 4px 8px; font: 16px/1.2 var(--serif); }
 .trow input:focus-visible, .f8form input:focus-visible { outline: 2px solid var(--sel); outline-offset: 0; }
 
-/* Fig. 8 of 7 */
-.f8chart { border: 1px solid var(--rule); padding: 14px 16px 10px; display: flex; flex-direction: column; align-items: flex-end; text-align: right; background: #fff; color: #222; margin-bottom: 12px; }
-.f8plot { display: flex; gap: 6px; align-items: stretch; height: 64px; width: 72%; }
-.f8y { display: flex; flex-direction: column; justify-content: space-between; color: #777; font-size: 13px; line-height: 1; text-align: right; }
-.f8bars { flex: 1; display: flex; align-items: flex-end; gap: 2px; border-left: 1.5px solid #222; border-bottom: 1.5px solid #222; padding-left: 3px; }
-.f8bars i { flex: 1; background: #b38fd0; min-height: 1px; }
-.f8x { width: 72%; display: flex; justify-content: space-between; color: #777; font-size: 13px; padding-left: 26px; margin-top: 2px; }
-.f8cap { margin: 8px 0 0; font-size: 14px; line-height: 1.3; }
-.f8cap b { display: block; font-weight: 600; } .f8cap span { color: #777; }
-.f8form { display: grid; gap: 4px; } .f8form label { margin-top: 6px; }
-.f8two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; } .f8two span { display: grid; gap: 4px; }
-
 /* Monogram */
 .mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
 .mgrid figure { margin: 0; border: 1px solid var(--rule); padding: 14px 8px 8px; display: grid; justify-items: center; gap: 8px; }
 .mgrid figcaption { font-size: 13px; color: var(--mute); }
-.m { height: 84px; display: flex; align-items: center; justify-content: center; font-family: var(--serif); color: var(--ink); }
-.m1 { width: 84px; border: 2px solid var(--ink); border-radius: 50%; font-size: 30px; letter-spacing: -.02em; }
-.m1 span:nth-child(2) { font-style: italic; font-weight: 300; }
-.m2 { font-size: 56px; letter-spacing: -.12em; } .m2 i { font-weight: 300; color: var(--sel); -webkit-text-stroke: 1px var(--ink); margin: 0 -.02em; }
-.m3 { font-size: 26px; letter-spacing: .3em; text-transform: uppercase; } .m3 b { font-size: 12px; font-weight: 400; margin: 0 .2em 0 0; vertical-align: .35em; }
-.m4 span { background: var(--ink); color: var(--win); font-size: 28px; padding: 6px 12px; letter-spacing: .08em; font-weight: 600; box-shadow: 4px 4px 0 var(--sel); }
+.m { height: 96px; width: 100%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); color: var(--ink); position: relative; }
+.m span { display: block; }
+/* Overlap: letters share space; the highlight shows where they cross */
+.m-over { font-size: 76px; line-height: 1; font-weight: 400; }
+.m-over span { mix-blend-mode: multiply; }
+.m-over span + span { margin-left: -.24em; }
+.m-over span.it { font-style: italic; font-weight: 300; color: var(--sel); -webkit-text-stroke: 1px var(--ink); }
+.m-over.n3 { font-size: 64px; }
+/* Seal: a double ring with evenly spaced small caps */
+.m-seal { width: 92px; height: 92px; border: 1.5px solid var(--ink); border-radius: 50%; gap: .14em; font-size: 26px; letter-spacing: 0; }
+.m-seal i { position: absolute; inset: 5px; border: .75px solid var(--ink); border-radius: 50%; }
+.m-seal.n1 { font-size: 40px; } .m-seal.n3 { font-size: 22px; }
+.m-seal span:nth-of-type(2) { font-style: italic; }
+/* Stacked: one letter per line, hairline rules between */
+.m-stack { flex-direction: column; width: auto; height: 96px; font-size: 22px; line-height: 1; gap: 0; }
+.m-stack span { padding: 4px 10px; text-align: center; }
+.m-stack span + span { border-top: .75px solid var(--ink); }
+/* Drop initial: one large letter, the rest set small beside its baseline */
+.m-drop { align-items: flex-end; justify-content: center; padding-bottom: 8px; }
+.m-drop .big { font-size: 80px; line-height: .78; font-style: italic; font-weight: 300; }
+.m-drop .sm { font-size: 15px; letter-spacing: .32em; text-transform: uppercase; margin-left: .3em; padding-bottom: 2px; border-bottom: 1.5px solid var(--sel); }
 
 /* Business card: the redacted email */
 .redact { position: absolute; left: 30.1%; top: 74.2%; width: 22.6%; height: 7.6%; z-index: 2; }
