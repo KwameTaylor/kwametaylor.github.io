@@ -652,22 +652,10 @@
     setWord(); upd();
   }
 
-  /* Design page: Monogram. Initials set four ways. */
-  var mg = $("#mgrid");
-  if (mg) {
-    var drawMono = function () {
-      var t = ($("#minput").value || "KVT").replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 3) || "K";
-      var L = t.split(""), n = L.length, first = L[0], rest = L.slice(1);
-      var span = function (c, cls) { return '<span class="' + (cls || "") + '">' + c + "</span>"; };
-      mg.innerHTML = [
-        '<figure><div class="m m-over n' + n + '">' + L.map(function (c, k) { return span(c, k % 2 ? "it" : ""); }).join("") + '</div><figcaption>Overlap</figcaption></figure>',
-        '<figure><div class="m m-seal n' + n + '"><i></i>' + L.map(function (c) { return span(c); }).join("") + '</div><figcaption>Seal</figcaption></figure>',
-        '<figure><div class="m m-stack">' + L.map(function (c) { return span(c); }).join("") + '</div><figcaption>Stacked</figcaption></figure>',
-        '<figure><div class="m m-drop">' + span(first, "big") + (rest.length ? '<span class="sm">' + rest.join("") + "</span>" : "") + '</div><figcaption>Drop initial</figcaption></figure>'
-      ].join("");
-    };
-    $("#minput").addEventListener("input", drawMono);
-    drawMono();
+  /* Thank-you page: greet the sender by first name when the form passed one along */
+  if (page === "thanks") {
+    var nm = ""; try { nm = sessionStorage.getItem("sentName") || ""; } catch (e) {}
+    if (nm) $("#thx").innerHTML = 'Thanks<em>,</em><br>' + esc(nm) + ".";
   }
 
   /* About: organizations */
@@ -722,7 +710,10 @@
       fetch(S.formEndpoint, { method: "POST", body: new FormData(form), headers: { Accept: "application/json" } })
         .then(function (r) {
           if (!r.ok) throw new Error();
-          form.reset(); status.textContent = "Sent. Thank you. I will reply by email.";
+          var first = ($("#name").value || "").trim().split(/\s+/)[0].slice(0, 40);
+          try { sessionStorage.setItem("sentName", first); } catch (e) {}
+          form.reset(); status.textContent = "Sent. Thank you.";
+          location.href = "thanks.html";
         })
         .catch(function () { status.textContent = "That did not send. Please try again, or reach me on LinkedIn."; })
         .then(function () { send.disabled = false; });

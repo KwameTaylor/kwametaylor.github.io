@@ -437,32 +437,6 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .trow input, .f8form input { flex: 1; min-width: 0; border: 1.5px solid var(--line); background: var(--win); color: var(--ink); padding: 4px 8px; font: 16px/1.2 var(--serif); }
 .trow input:focus-visible, .f8form input:focus-visible { outline: 2px solid var(--sel); outline-offset: 0; }
 
-/* Monogram */
-.mgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
-.mgrid figure { margin: 0; border: 1px solid var(--rule); padding: 14px 8px 8px; display: grid; justify-items: center; gap: 8px; }
-.mgrid figcaption { font-size: 13px; color: var(--mute); }
-.m { height: 96px; width: 100%; display: flex; align-items: center; justify-content: center; font-family: var(--serif); color: var(--ink); position: relative; }
-.m span { display: block; }
-/* Overlap: letters share space; the highlight shows where they cross */
-.m-over { font-size: 76px; line-height: 1; font-weight: 400; }
-.m-over span { mix-blend-mode: multiply; }
-.m-over span + span { margin-left: -.24em; }
-.m-over span.it { font-style: italic; font-weight: 300; color: var(--sel); -webkit-text-stroke: 1px var(--ink); }
-.m-over.n3 { font-size: 64px; }
-/* Seal: a double ring with evenly spaced small caps */
-.m-seal { width: 92px; height: 92px; border: 1.5px solid var(--ink); border-radius: 50%; gap: .14em; font-size: 26px; letter-spacing: 0; }
-.m-seal i { position: absolute; inset: 5px; border: .75px solid var(--ink); border-radius: 50%; }
-.m-seal.n1 { font-size: 40px; } .m-seal.n3 { font-size: 22px; }
-.m-seal span:nth-of-type(2) { font-style: italic; }
-/* Stacked: one letter per line, hairline rules between */
-.m-stack { flex-direction: column; width: auto; height: 96px; font-size: 22px; line-height: 1; gap: 0; }
-.m-stack span { padding: 4px 10px; text-align: center; }
-.m-stack span + span { border-top: .75px solid var(--ink); }
-/* Drop initial: one large letter, the rest set small beside its baseline */
-.m-drop { align-items: flex-end; justify-content: center; padding-bottom: 8px; }
-.m-drop .big { font-size: 80px; line-height: .78; font-style: italic; font-weight: 300; }
-.m-drop .sm { font-size: 15px; letter-spacing: .32em; text-transform: uppercase; margin-left: .3em; padding-bottom: 2px; border-bottom: 1.5px solid var(--sel); }
-
 /* Business card: the redacted email */
 .redact { position: absolute; left: 30.1%; top: 74.2%; width: 22.6%; height: 7.6%; z-index: 2; }
 .redact em { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); white-space: nowrap; font: italic 13px/1 var(--serif); background: var(--ink); color: var(--win); padding: 5px 8px; opacity: 0; pointer-events: none; transition: opacity .15s; }
@@ -471,3 +445,12 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .cardnote { margin: 8px 0 0; font-size: 14px; color: var(--mute); }
 .cardnote a { color: var(--ink); border-bottom: 1.5px solid var(--sel); }
 .cardnote[hidden] { display: none; }
+
+/* Thank-you page */
+.thanks { max-width: 1100px; }
+.thanks h1 { font-weight: 400; font-size: clamp(72px, 15vw, 230px); line-height: .8; letter-spacing: -.055em; margin: .18em 0 0; overflow-wrap: anywhere; }
+.thanks h1 em { font-weight: 300; }
+.thanks .lead { font-size: clamp(20px, 2vw, 30px); line-height: 1.15; max-width: 26ch; margin: .6em 0 1.2em; }
+.thanks .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+.thanks .ghost { display: inline-block; font: italic 400 clamp(20px, 1.9vw, 26px)/1 var(--serif); padding: .3em .5em; border: 1.5px solid var(--line); background: var(--win); color: var(--ink); }
+.thanks .ghost:hover, .thanks .ghost:focus-visible { background: var(--sel); color: var(--on-sel); }
