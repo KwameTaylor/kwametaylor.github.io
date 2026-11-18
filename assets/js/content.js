@@ -11,7 +11,24 @@ window.SITE = {
   formEndpoint: "",
 
   /* The phrase that rotates after "I build" on the home page. */
-  phrases: ["data models.", "payment systems.", "tools.", "identities."],
+  phrases: [
+  "programs.",
+  "data models.",
+  "processes.",
+  "payment systems.",
+  "identities.",
+  "roadmaps.",
+  "tools.",
+  "dashboards.",
+  "prompt libraries.",
+  "metrics frameworks.",
+  "machine learning models.",
+  "infographics.",
+  "training programs.",
+  "web apps.",
+  "surveys.",
+  "logos."
+],
 
   services: [
     { name: "Spreadsheet cleanup", line: "Your file, tidied and made consistent.",
