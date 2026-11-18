@@ -306,56 +306,114 @@
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll);
 
 
-    /* ===== Phones: the desktop becomes a home screen; each window opens full screen like an app ===== */
-    var ICONS = {
-      "Portrait": ["i-photo", ""], "Services": ["", "S"], "Kwame V. Taylor / Site": ["i-site", ""], "Message": ["i-msg", "Hi"],
-      "Terminal": ["i-term", "&gt;_"], "Business card": ["i-card", ""], "Design work": ["", "Aa"], "Swatches": ["i-sw", ""], "Save file": ["i-save", "01"]
-    };
-    var DOCK = ["Kwame V. Taylor / Site", "Terminal", "Business card", "Message"];
-    var home = document.createElement("div"); home.className = "phome"; home.setAttribute("aria-label", "Apps");
-    var pdock = document.createElement("div"); pdock.className = "phdock"; pdock.setAttribute("aria-label", "Dock");
-    var stack = [];
-    var openApp = function (w) {
-      if (!w || w.classList.contains("app")) return;
-      w.classList.add("app"); w.style.zIndex = 70 + stack.length; stack.push(w);
-      document.body.classList.add("appopen");
-      try { history.pushState({ app: w.getAttribute("aria-label") }, ""); } catch (e) {}
-      var back = $(".tb .back", w); if (back) back.focus();
+    /* ===== Phones: a lock screen, then a widget home screen. Toys open as bottom sheets. ===== */
+    var sheets = [], dim = document.createElement("div");
+    dim.className = "phdim"; document.body.appendChild(dim);
+    var openSheet = function (w) {
+      if (!w || w.classList.contains("sheet")) return;
+      w.classList.remove("closing"); w.style.transform = "";
+      w.classList.add("sheet"); w.style.zIndex = 70 + sheets.length; sheets.push(w);
+      dim.classList.add("on"); document.body.classList.add("sheetopen");
+      try { history.pushState({ sheet: w.getAttribute("aria-label") }, ""); } catch (e) {}
+      var x = $(".tb .x", w); if (x) x.focus();
     };
     var closeTop = function () {
-      var w = stack.pop(); if (!w) return;
-      w.classList.remove("app"); w.style.zIndex = "";
-      if (!stack.length) document.body.classList.remove("appopen");
-      var ic = $('.ic[data-app="' + w.getAttribute("aria-label") + '"]'); if (ic) ic.focus();
+      var w = sheets.pop(); if (!w) return;
+      w.classList.add("closing");
+      setTimeout(function () { w.classList.remove("sheet", "closing"); w.style.zIndex = ""; w.style.transform = ""; }, reduce ? 0 : 200);
+      if (!sheets.length) { dim.classList.remove("on"); document.body.classList.remove("sheetopen"); }
     };
-    addEventListener("popstate", function () { if (stack.length) closeTop(); });
-    var appBack = function () { if (history.state && history.state.app) history.back(); else closeTop(); };
+    addEventListener("popstate", function () { if (sheets.length) closeTop(); });
+    var sheetBack = function () { if (history.state && history.state.sheet) history.back(); else closeTop(); };
+    dim.addEventListener("click", sheetBack);
     var wireApp = function (w) {
-      var tb = $(".tb", w); if (!tb || $(".back", tb)) return;
-      var bk = document.createElement("button"); bk.type = "button"; bk.className = "back"; bk.setAttribute("aria-label", "Back to home screen"); bk.textContent = "←︎";
-      bk.addEventListener("click", appBack);
-      tb.insertBefore(bk, tb.firstChild);
-      var x = $(".x", w);
-      if (x) x.addEventListener("click", function (e) { if (!phone.matches) return; e.stopImmediatePropagation(); appBack(); }, true);
+      if (w.hasAttribute("data-sheet")) return; w.setAttribute("data-sheet", "1");
+      var x = $(".tb .x", w), tb = $(".tb", w);
+      if (x) x.addEventListener("click", function (e) { if (!phone.matches) return; e.stopImmediatePropagation(); sheetBack(); }, true);
+      /* drag the title bar down to close */
+      var sy = null;
+      tb.addEventListener("pointerdown", function (e) { if (!phone.matches || !w.classList.contains("sheet") || e.target.closest("button")) return; sy = e.clientY; w.classList.add("dragging"); tb.setPointerCapture(e.pointerId); });
+      tb.addEventListener("pointermove", function (e) { if (sy === null) return; w.style.transform = "translateY(" + Math.max(0, e.clientY - sy) + "px)"; });
+      var end = function (e) { if (sy === null) return; var dy = e.clientY - sy; sy = null; w.classList.remove("dragging"); if (dy > 90) sheetBack(); else w.style.transform = ""; };
+      tb.addEventListener("pointerup", end); tb.addEventListener("pointercancel", end);
     };
-    $$(".desk .win").forEach(function (w) {
-      wireApp(w);
-      var name = w.getAttribute("aria-label"), d = ICONS[name] || ["", name.charAt(0)];
-      var b = document.createElement("button"); b.type = "button"; b.className = "ic " + d[0]; b.setAttribute("data-app", name);
-      var label = name.replace("Kwame V. Taylor / ", "");
-      var inner = d[1];
-      if (d[0] === "i-photo") inner = S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K";
-      if (d[0] === "i-card") inner = '<img src="assets/img/card/front.png" alt="">';
-      b.innerHTML = '<i aria-hidden="true">' + inner + "</i><span>" + esc(label) + "</span>";
-      b.setAttribute("aria-label", "Open " + label);
-      b.addEventListener("click", function () { openApp(w); });
-      (DOCK.indexOf(name) > -1 ? pdock : home).appendChild(b);
+    $$(".desk .win").forEach(wireApp);
+
+    /* Home screen */
+    var hero = $(".hero"), home = document.createElement("div");
+    home.className = "phome";
+    var P = S.projects || [], SV = S.services || [];
+    home.innerHTML =
+      '<a class="wdg w-photo" href="about.html">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="Portrait of Kwame V. Taylor">' : "") + "<span>About</span></a>" +
+      '<div class="wdg w-svc"><h3>Services</h3>' + SV.map(function (s) { return '<a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a>"; }).join("") + "</div>" +
+      '<a class="wdg w-proj" href="projects.html"><h3>Projects · ' + P.length + "</h3><p>" + P.slice(0, 3).map(function (p) { return esc(p.name); }).join(" · ") + " →︎</p></a>" +
+      '<span class="plabel">Toys</span>';
+    var TOYS = [["Terminal", "i-term", "&gt;_"], ["Business card", "i-card", '<img src="assets/img/card/front.png" alt="">'], ["Swatches", "i-sw", ""], ["Save file", "i-save", "01"]];
+    TOYS.forEach(function (t) {
+      var w = $('.desk .win[aria-label="' + t[0] + '"]'); if (!w) return;
+      var bt = document.createElement("button"); bt.type = "button"; bt.className = "ic " + t[1];
+      bt.innerHTML = '<i aria-hidden="true">' + t[2] + "</i><span>" + (t[0] === "Business card" ? "Card" : t[0]) + "</span>";
+      bt.setAttribute("aria-label", "Open " + t[0]);
+      bt.addEventListener("click", function () { openSheet(w); });
+      home.appendChild(bt);
     });
-    DOCK.forEach(function (n) { var b = $('.ic[data-app="' + n + '"]', pdock); if (b) pdock.appendChild(b); });
-    $(".hero").insertAdjacentElement("afterend", home);
-    desk.appendChild(pdock);
-    addEventListener("keydown", function (e) { if (e.key === "Escape" && stack.length && phone.matches) appBack(); });
-    phone.addEventListener && phone.addEventListener("change", function () { while (stack.length) closeTop(); });
+    hero.insertAdjacentElement("afterend", home);
+    var pd = document.createElement("nav"); pd.className = "phdock"; pd.setAttribute("aria-label", "Pages");
+    pd.innerHTML = [["services.html", "", "S", "Services"], ["projects.html", "i-file", "", "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-msg", "Hi", "Contact"]]
+      .map(function (d) { return '<a class="ic ' + d[1] + '" href="' + d[0] + '"><i aria-hidden="true">' + d[2] + "</i><span>" + d[3] + "</span></a>"; }).join("");
+    desk.appendChild(pd);
+
+    /* Lock screen: shown once per visit; swipe up (or tap) to unlock */
+    var lk = document.createElement("section");
+    lk.className = "lockscr"; lk.setAttribute("aria-label", "Lock screen");
+    var first = (S.phrases && S.phrases[0]) || "data models.";
+    lk.innerHTML =
+      '<div class="lk-time"><small id="lkdate"></small><b id="lktime"></b></div><div class="lk-notes">' +
+      '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer. I build " + esc(first) + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager, PMP, in Los Angeles. I build programs, data systems and tools, and I design logos and identities.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
+      '<button type="button" class="nt"><header><i>S</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + SV.map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
+      '<button type="button" class="nt"><header><i>P</i>Projects<em>' + P.length + "</em></header><b>" + esc((P[0] || {}).name || "Projects") + "</b><p>Plus " + Math.max(0, P.length - 1) + ' more.</p><div class="more"><div class="tb">Projects</div>' + P.slice(0, 4).map(function (p) { return '<a class="row" href="projects.html#' + slug(p.name) + '"><span>' + esc(p.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="projects.html">Open Projects →︎</a></div></button>' +
+      '<a class="nt" href="contact.html"><header><i style="background:#ffe24a">Hi</i>Message</header><b>Say hello</b><p>Tap to write to Kwame.</p></a>' +
+      '</div><div class="lk-foot"><button type="button" class="lk-circ" id="lkterm" aria-label="Unlock and open the terminal">&gt;_</button>' +
+      '<button type="button" class="lk-unlock" id="lkopen"><span>Swipe up to unlock</span></button>' +
+      '<button type="button" class="lk-circ dk" id="lkdark" aria-label="Switch light or dark mode"></button></div>';
+    document.body.appendChild(lk);
+    var tick2 = function () {
+      var now = new Date(), tz = { timeZone: "America/Los_Angeles" };
+      $("#lktime").textContent = now.toLocaleTimeString("en-US", { timeZone: tz.timeZone, hour: "numeric", minute: "2-digit" }).replace(/\s?[AP]M$/, "");
+      $("#lkdate").textContent = now.toLocaleDateString("en-US", { timeZone: tz.timeZone, weekday: "long", month: "long", day: "numeric" });
+    };
+    tick2(); setInterval(tick2, 15000);
+    var unlocked = false; try { unlocked = sessionStorage.getItem("unlocked") === "1"; } catch (e) {}
+    var unlock = function () {
+      try { sessionStorage.setItem("unlocked", "1"); } catch (e) {}
+      lk.style.transform = ""; document.body.classList.remove("locked");
+      lk.setAttribute("aria-hidden", "true"); lk.inert = true;
+    };
+    if (phone.matches && !unlocked) { document.body.classList.add("locked"); }
+    else { lk.setAttribute("aria-hidden", "true"); lk.inert = true; }
+    $$(".nt", lk).forEach(function (n) {
+      if (n.tagName === "A") { n.addEventListener("click", unlock); return; }
+      n.addEventListener("click", function (e) {
+        if (e.target.closest("a")) { unlock(); return; }
+        var was = n.classList.contains("open");
+        $$(".nt.open", lk).forEach(function (o) { o.classList.remove("open"); });
+        if (!was) n.classList.add("open");
+      });
+    });
+    $("#lkopen").addEventListener("click", unlock);
+    $("#lkterm").addEventListener("click", function () { unlock(); setTimeout(function () { openSheet($('.desk .win[aria-label="Terminal"]')); }, reduce ? 0 : 300); });
+    $("#lkdark").addEventListener("click", function () { if (themeBtn) themeBtn.click(); });
+    /* swipe up from the bottom of the lock screen */
+    var foot = $(".lk-foot", lk), ly = null;
+    foot.addEventListener("pointerdown", function (e) { if (e.target.closest(".lk-circ")) return; ly = e.clientY; lk.classList.add("dragging"); foot.setPointerCapture(e.pointerId); });
+    foot.addEventListener("pointermove", function (e) { if (ly === null) return; lk.style.transform = "translateY(" + Math.min(0, e.clientY - ly) + "px)"; });
+    var lend = function (e) {
+      if (ly === null) return; var dy = e.clientY - ly; ly = null; lk.classList.remove("dragging");
+      if (dy < -innerHeight * .18) unlock(); else lk.style.transform = "";
+    };
+    foot.addEventListener("pointerup", lend); foot.addEventListener("pointercancel", lend);
+    addEventListener("keydown", function (e) { if (e.key === "Escape" && sheets.length && phone.matches) sheetBack(); });
+    if (phone.addEventListener) phone.addEventListener("change", function () { while (sheets.length) closeTop(); if (!phone.matches) document.body.classList.remove("locked"); });
 
     /* Double-click the Terminal's title bar to make it bigger; double-click again to put it back. */
     var tw = $('section[aria-label="Terminal"]');
@@ -379,7 +437,7 @@
 
     /* Hidden commands */
     var restore = function (title) {
-      if (phone.matches) { openApp($('.desk .win[aria-label="' + title + '"]')); return; }
+      if (phone.matches) { openSheet($('.desk .win[aria-label="' + title + '"]')); return; }
       var t = $('#dock button[aria-label="Restore ' + title + '"]');
       if (t) t.click();
     };
@@ -411,7 +469,7 @@
       w.innerHTML = '<div class="tb"><span>never-gonna.mp4</span><button class="x" type="button" aria-label="Close video">×</button></div>' +
         '<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1" title="Never Gonna Give You Up" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
       desk.appendChild(w);
-      wireApp(w); if (phone.matches) openApp(w);
+      wireApp(w); if (phone.matches) openSheet(w);
       dragify(w, $(".tb", w));
       $(".x", w).addEventListener("click", function () { w.remove(); });
       fit(w);
