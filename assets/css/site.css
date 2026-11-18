@@ -1,5 +1,5 @@
 /* Styles for kwametaylor.github.io.
-   Order: colour and type tokens, shared parts (menu bar, windows), then one block per page. */
+   Order: color and type tokens, shared parts (menu bar, windows), then one block per page. */
 
 :root {
   --bg: #ffffff;        /* desktop */
@@ -14,7 +14,7 @@
   --chrome: #111111;    /* title bar box and stripes */
   --shadow: #111111;    /* hard window shadow */
   --rule: #d9d6cf;      /* hairlines inside windows */
-  --sel: #ffe24a;       /* the one highlight colour */
+  --sel: #ffe24a;       /* the one highlight color */
   --on-sel: #111111;    /* text on the highlight */
   --photo: #111111;     /* portrait placeholder fill */
   --photo-line: #ffffff;
