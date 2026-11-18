@@ -77,6 +77,8 @@ kbd { font: inherit; border: 1px solid; padding: 0 4px; margin-right: 3px; }
 .tb .x { order: 2; border: 1.5px solid var(--chrome); background: none; width: 18px; height: 18px; line-height: 1; padding: 0; cursor: pointer; font-size: 15px; display: grid; place-items: center; flex: none; }
 .tb .x:hover, .tb .x:focus-visible { background: var(--sel); color: var(--on-sel); }
 .win.min { display: none; }
+/* Windows that start in the taskbar stay hidden even if a script fails; restoring one removes data-start */
+.desk .win[data-start="min"] { display: none; }
 /* Taskbar on the home page: start menu, minimized windows, clock */
 body[data-page="home"] .foot { display: none; }
 body[data-page="home"] .desk { min-height: calc(100vh - 42px - 44px); margin-bottom: 44px; overflow: clip; }

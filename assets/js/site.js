@@ -156,8 +156,8 @@
     var bars = $("#bars");
     var figs = [
       ["Designing since 2011", "Years of practice, 2011 to " + year, Array.apply(null, Array(yrs)).map(function (_, i) { return (i + 1) / yrs * 100; })],
-      ["Items on this site", "Services, projects, design pieces, organizations", [S.services.length, S.projects.length, S.design.length, S.champions.length].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })],
-      ["Pages: 5", "Links in the Site window, by item count", [4, S.projects.length, S.design.length, 1, 1].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })]
+      ["Items on this site", "Services, projects, design pieces, organizations", [(S.services || []).length, (S.projects || []).length, (S.design || []).length, (S.champions || []).length].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })],
+      ["Pages: 5", "Links in the Site window, by item count", [4, (S.projects || []).length, (S.design || []).length, 1, 1].map(function (n, i, a) { return n / Math.max.apply(null, a) * 100; })]
     ];
     var f = 0;
     var fig = function () {
@@ -273,7 +273,7 @@
         var tab = document.createElement("button");
         tab.type = "button"; tab.innerHTML = "<i aria-hidden=\"true\">" + esc(title.charAt(0)) + "</i><span>" + esc(title.replace("Kwame V. Taylor / ", "")) + "</span>"; tab.setAttribute("aria-label", "Restore " + title);
         tab.addEventListener("click", function () {
-          w.classList.remove("min"); fit(w); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
+          w.classList.remove("min"); w.removeAttribute("data-start"); fit(w); w.style.zIndex = ++z; w.style.animation = "none"; void w.offsetWidth; w.style.animation = "";
           tab.remove();
           $(".x", w).focus();
         });
