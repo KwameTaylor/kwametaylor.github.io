@@ -125,6 +125,8 @@ window.SITE = {
       a: "At FIERCE! Kwame raised $32K net on a $0 budget using donated space, products and services." },
     { keys: ["design", "designer", "graphic", "logo", "branding", "print"],
       a: "Kwame is a graphic designer: visual identities, logos, business cards, web graphics, and production-ready print files. See open design." },
+    { keys: ["build", "builds", "built", "make", "makes", "create", "creates"],
+      a: "Kwame builds programs, data models, payment systems, dashboards, web apps, prompt libraries, training programs, logos and more. Type open projects to see some." },
     { keys: ["services", "hire", "freelance", "available", "work with"],
       a: "Kwame takes on freelance data and design work: spreadsheet cleanup, data consolidation, business cards with data viz, graphic design and visual identity. Type open services, or open contact to ask." },
     { keys: ["skills", "stack", "languages", "python", "code", "programming", "technical", "git", "numpy", "html", "css", "nlp", "etl", "data model", "dashboard"],

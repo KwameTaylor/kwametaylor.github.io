@@ -92,7 +92,8 @@
       img.alt = "Fig. " + (fi + 1) + " of 7 from the back of the card" + (F[fi] ? ": " + F[fi][0] + ". Source: " + F[fi][1] + "." : ".");
     };
     var showing = function () { return btn.getAttribute("aria-pressed") === "true"; };
-    var sync = function () { if (label) label.textContent = showing() ? "Fig. " + (fi + 1) + " of 7" : "Front"; };
+    var note = btn.parentNode.querySelector(".cardnote");
+    var sync = function () { if (label) label.textContent = showing() ? "Fig. " + (fi + 1) + " of 7" : "Front"; if (note) note.hidden = showing(); };
     draw();
     btn.addEventListener("click", function () {
       var back = showing();
@@ -336,8 +337,8 @@
 
     /* Suggest it once, on a computer, when the browser's own bars leave the desktop short of room. */
     var seen = null;
-    /* The tip is remembered for 30 days, then offered again on the next visit */
-    try { var t = +localStorage.getItem("fsNudgeAt"); seen = t && Date.now() - t < 30 * 864e5; localStorage.removeItem("fsNudge"); } catch (e) {}
+    /* The tip is remembered for 3 days, then offered again on the next visit */
+    try { var t = +localStorage.getItem("fsNudgeAt"); seen = t && Date.now() - t < 3 * 864e5; localStorage.removeItem("fsNudge"); } catch (e) {}
     var cramped = innerHeight < 860 && (screen.height - innerHeight) > 90;
     if (fsEnter && !seen && innerWidth > 900 && cramped && !fsOn()) {
       var mac = /Mac/.test(navigator.platform || navigator.userAgent);
@@ -449,7 +450,7 @@
         say("Fig. " + (n + 1) + " of 7 · " + esc(fs[n][0]) + "\nSource: " + esc(fs[n][1]) + "\nIt's on the back of Kwame's business card.");
         return true;
       }
-      if (v === "rickroll" || v === "rick roll" || v === "rick astley") {
+      if (/^(rick ?roll(ed)?|rick-roll(ed)?|rick astley|never gonna give you up)$/.test(v)) {
         var f1 = (S.figures || [])[0];
         restore("Business card"); if (cards[0]) cards[0].show(0);
         if (f1) say("Fig. 1 of 7 · " + esc(f1[0]) + "\nSource: " + esc(f1[1]) + "\nIt's on the back of Kwame's business card.");
@@ -625,84 +626,65 @@
     dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
   }
 
-  /* Design page: Kern it. Drag the middle letters until the spacing looks even, then check. */
-  var kern = $("#kern");
-  if (kern) {
-    var words = ["KWAME", "TAYLOR", "WAVY", "AVATAR", "VOYAGE"], wi = 0, letters = [], ideal = [];
-    var stage = $(".kstage", kern), result = $("#kres");
-    var lay = function () {
-      var word = words[wi % words.length];
-      stage.innerHTML = '<span class="kmeasure">' + word.split("").map(function (c) { return "<i>" + c + "</i>"; }).join("") + "</span>";
-      var m = $(".kmeasure", stage), w = m.offsetWidth, left0 = (stage.clientWidth - w) / 2;
-      ideal = $$("i", m).map(function (i) { return left0 + i.offsetLeft; });
-      var widths = $$("i", m).map(function (i) { return i.offsetWidth; });
-      stage.innerHTML = "";
-      letters = word.split("").map(function (c, k) {
-        var el = document.createElement("span");
-        el.className = "kl" + (k === 0 || k === word.length - 1 ? " fixed" : "");
-        el.textContent = c; el.style.width = widths[k] + "px";
-        var jitter = k === 0 || k === word.length - 1 ? 0 : (Math.random() < .5 ? -1 : 1) * (5 + Math.random() * 9);
-        el.style.left = (ideal[k] + jitter) + "px";
-        stage.appendChild(el);
-        return el;
-      });
-      for (var k = 1; k < letters.length - 1; k++) {
-        var lo = parseFloat(letters[k - 1].style.left) + widths[k - 1] * .97, hi = ideal[k + 1] - widths[k] * .97;
-        letters[k].style.left = Math.max(lo, Math.min(hi, parseFloat(letters[k].style.left))) + "px";
+  /* Design page: Tracking. One slider for letter spacing, with the mood each setting gives a word. */
+  var tw = $("#tword");
+  if (tw) {
+    var slide = $("#tslide"), mood = $("#tmood"), ghost = $("#tghost"), status = $("#tstatus"), target = null;
+    var moods = [[-0.06, "Fashion cover. Tight and loud."], [-0.015, "Headline. Confident."], [0.03, "Book text. The default."],
+      [0.12, "Labels and small caps. Calm."], [0.3, "Luxury brand. Expensive."], [9, "Movie poster. Epic."]];
+    var moodFor = function (v) { for (var i = 0; i < moods.length; i++) if (v < moods[i][0]) return moods[i][1]; };
+    var upd = function () {
+      var v = +slide.value; tw.style.letterSpacing = v + "em";
+      mood.textContent = (v >= 0 ? "+" : "") + Math.round(v * 1000) + " · " + moodFor(v);
+      if (target !== null) {
+        if (Math.abs(v - target) < .02) { status.textContent = "Matched. That's the " + moodFor(target).split(".")[0] + " look."; ghost.classList.add("hit"); target = null; }
+        else status.textContent = v < target ? "Looser..." : "Tighter...";
       }
-      result.textContent = "Drag the underlined letters until the spacing looks even.";
-      kern.classList.remove("checked");
-      letters.forEach(function (el, k) {
-        if (k === 0 || k === letters.length - 1) return;
-        var sx, ox, down = false;
-        el.addEventListener("pointerdown", function (e) { down = true; sx = e.clientX; ox = parseFloat(el.style.left); el.setPointerCapture(e.pointerId); kern.classList.remove("checked"); });
-        el.addEventListener("pointermove", function (e) {
-          if (!down) return;
-          var lo = parseFloat(letters[k - 1].style.left) + 2, hi = parseFloat(letters[k + 1].style.left) - 2;
-          el.style.left = Math.max(lo, Math.min(hi, ox + e.clientX - sx)) + "px";
-        });
-        el.addEventListener("pointerup", function () { down = false; });
-      });
     };
-    lay();
-    $("#kcheck").addEventListener("click", function () {
-      var off = 0, n = 0;
-      letters.forEach(function (el, k) { if (k && k < letters.length - 1) { off += Math.abs(parseFloat(el.style.left) - ideal[k]); n++; } });
-      var score = Math.max(0, Math.round(100 - (off / n) * 4));
-      kern.classList.add("checked");
-      setTimeout(function () { letters.forEach(function (el, k) { el.style.left = ideal[k] + "px"; }); }, 450);
-      result.textContent = score + " / 100 · " + (score > 90 ? "Type designer energy." : score > 70 ? "Close. Here's the font's own spacing." : "Here's where they belong. Try another word.");
+    var setWord = function () { var t = $("#tinput").value.trim() || "KWAME"; tw.textContent = t; ghost.textContent = t; };
+    slide.addEventListener("input", upd);
+    $("#tinput").addEventListener("input", setWord);
+    $("#tmatch").addEventListener("click", function () {
+      var picks = [-0.08, -0.03, 0.08, 0.2, 0.45]; target = picks[Math.floor(Math.random() * picks.length)];
+      ghost.style.letterSpacing = target + "em"; ghost.classList.remove("hit"); ghost.classList.add("on");
+      slide.value = 0.01; upd(); status.textContent = "Slide until your word sits on the outline.";
     });
-    $("#knext").addEventListener("click", function () { wi++; lay(); });
-    addEventListener("resize", function () { lay(); });
+    setWord(); upd();
   }
 
-  /* Design page: Sketchpad */
-  var pad = $("#pad");
-  if (pad) {
-    var cx = pad.getContext("2d"), ink = "#111111", drawing = false, last = null;
-    var size = function () {
-      var r = pad.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
-      var keep = pad.width ? cx.getImageData(0, 0, pad.width, pad.height) : null;
-      pad.width = r.width * dpr; pad.height = r.height * dpr; cx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      cx.lineCap = cx.lineJoin = "round"; cx.lineWidth = 3;
-      if (keep) cx.putImageData(keep, 0, 0);
+  /* Design page: Fig. 8 of 7. The visitor's own numbers, drawn like the charts on the business card. */
+  var f8 = $("#f8chart");
+  if (f8) {
+    var draw8 = function () {
+      var nums = $("#f8n").value.split(/[,\s]+/).map(parseFloat).filter(function (n) { return isFinite(n) && n >= 0; }).slice(0, 40);
+      var title = $("#f8t").value.trim() || "Something worth counting";
+      if (nums.length < 2) { f8.innerHTML = '<p class="k">Add at least two numbers.</p>'; return; }
+      var max = Math.max.apply(null, nums) || 1, fmt = function (n) { return n % 1 ? n.toFixed(1) : String(n); };
+      var bars = nums.map(function (n) { return '<i style="height:' + (n / max * 100) + '%"></i>'; }).join("");
+      f8.innerHTML = '<div class="f8plot"><div class="f8y"><span>' + fmt(max) + '</span><span>0</span></div><div class="f8bars">' + bars + '</div></div>' +
+        '<div class="f8x"><span>' + esc($("#f8a").value) + '</span><span>' + esc($("#f8b").value) + '</span></div>' +
+        '<p class="f8cap"><b>' + esc(title) + ': ' + fmt(nums[0]) + ' → ' + fmt(nums[nums.length - 1]) + '</b><span>Source: you, ' + nums.length + ' data points</span></p>';
+      f8.setAttribute("aria-label", "Bar chart. " + title + ": " + nums.join(", ") + ".");
     };
-    size(); addEventListener("resize", size);
-    var at = function (e) { var r = pad.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; };
-    pad.addEventListener("pointerdown", function (e) { drawing = true; last = at(e); pad.setPointerCapture(e.pointerId); $("#padhint").hidden = true; });
-    pad.addEventListener("pointermove", function (e) {
-      if (!drawing) return;
-      var p = at(e); cx.strokeStyle = ink; cx.beginPath(); cx.moveTo(last[0], last[1]); cx.lineTo(p[0], p[1]); cx.stroke(); last = p;
-    });
-    var stop = function () { drawing = false; };
-    pad.addEventListener("pointerup", stop); pad.addEventListener("pointercancel", stop);
-    $("#inks").addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
-      if (b.dataset.clear) { cx.clearRect(0, 0, pad.width, pad.height); $("#padhint").hidden = false; return; }
-      ink = getComputedStyle(b).backgroundColor;
-      $$("button[data-ink]", this).forEach(function (x) { x.setAttribute("aria-pressed", x === b); });
-    });
+    ["#f8t", "#f8n", "#f8a", "#f8b"].forEach(function (s) { $(s).addEventListener("input", draw8); });
+    draw8();
+  }
+
+  /* Design page: Monogram. Initials set four ways. */
+  var mg = $("#mgrid");
+  if (mg) {
+    var drawMono = function () {
+      var t = ($("#minput").value || "KVT").replace(/[^A-Za-z]/g, "").toUpperCase().slice(0, 3) || "K";
+      var L = t.split(""), a = L[0], z = L[L.length - 1];
+      mg.innerHTML = [
+        '<figure><div class="m m1">' + L.map(function (c) { return "<span>" + c + "</span>"; }).join("") + '</div><figcaption>Circle seal</figcaption></figure>',
+        '<figure><div class="m m2"><span>' + a + '</span><i>' + (L.length > 2 ? L[1] : "&amp;") + '</i><span>' + z + '</span></div><figcaption>Interlocked</figcaption></figure>',
+        '<figure><div class="m m3">' + L.join('<b>✦</b>') + '</div><figcaption>Spaced, with the card\'s star</figcaption></figure>',
+        '<figure><div class="m m4"><span>' + t + '</span></div><figcaption>Stamp</figcaption></figure>'
+      ].join("");
+    };
+    $("#minput").addEventListener("input", drawMono);
+    drawMono();
   }
 
   /* About: organizations */
