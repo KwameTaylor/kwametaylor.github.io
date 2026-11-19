@@ -503,7 +503,7 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .wdg:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--shadow); }
   .wdg h3 { margin: 0 0 6px; font: 600 11px/1 var(--serif); letter-spacing: .14em; text-transform: uppercase; color: var(--win-mute); }
   .w-photo { grid-column: span 2; aspect-ratio: 1 / .8; }
-  .w-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .w-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; display: block; }
   .w-photo span { position: absolute; left: 10px; bottom: 10px; background: var(--win); color: var(--win-ink); border: 1.5px solid var(--line); border-radius: 99px; font: 600 13px/1 var(--serif); padding: 5px 10px; }
   .w-svc { grid-column: span 2; aspect-ratio: 1 / .8; padding: 10px 12px 4px; display: flex; flex-direction: column; }
   .w-svc a { display: block; border-top: 1px solid var(--win-rule); padding: 4px 0; font-size: 13px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -516,7 +516,7 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .ic:focus-visible { outline: 0; } .ic:focus-visible > i { outline: 2px solid var(--sel); outline-offset: 3px; }
   .ic > i img { width: 100%; height: 100%; object-fit: contain; padding: 3px; background: #fff; }
   .ic.i-term > i { background: #111111; color: var(--sel); font: 16px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
-  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #c9b3ec 25% 50%, #a9c8ee 50% 75%, #f4a7b4 75%); }
+  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #c9b3ec 25% 50%, #a9c8ee 50% 75%, #e3cf9e 75%); }
   .ic.i-save > i { font: 600 17px/1 var(--serif); letter-spacing: .06em; }
   .ic.i-msg > i { background: var(--sel); color: var(--on-sel); }
   .ic.i-file > i::before { content: ""; width: 21px; height: 27px; border: 1.5px solid var(--win-ink); background: linear-gradient(225deg, var(--win-ink) 0 24%, transparent 24%); }
@@ -526,6 +526,16 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .phdock .ic { color: var(--win-ink); font-size: 12px; }
   .phdock .ic > i { width: 52px; height: 52px; border-radius: 14px; box-shadow: 2px 2px 0 var(--shadow); font-size: 22px; }
 
+  .hero { position: relative; }
+  .hero::after { content: "Los Angeles"; position: absolute; right: 14px; top: 14px; font: 600 10px/1 var(--serif); letter-spacing: .16em; text-transform: uppercase; color: var(--win-mute); padding-top: 22px; background: no-repeat 50% 0 / 16px 16px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23888' d='M8 0c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z'/%3E%3C/svg%3E"); }
+  .ic.i-list > i { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 5px; padding: 0 13px; }
+  .ic.i-list > i b { display: block; height: 2px; background: var(--win-ink); position: relative; margin-left: 7px; }
+  .ic.i-list > i b::before { content: ""; position: absolute; left: -7px; top: -1px; width: 4px; height: 4px; background: var(--win-ink); }
+  .ic.i-folder > i::before { content: ""; width: 26px; height: 19px; margin-top: 3px; border: 1.5px solid var(--win-ink); border-radius: 2px; background: linear-gradient(var(--win-ink), var(--win-ink)) 0 0 / 11px 1.5px no-repeat; position: relative; box-shadow: inset 0 3px 0 -1.5px var(--win); }
+  .ic.i-folder > i { position: relative; }
+  .ic.i-folder > i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 11px; height: 5px; margin: -12px 0 0 -13px; border: 1.5px solid var(--win-ink); border-bottom: 0; border-radius: 2px 2px 0 0; }
+  .lockscr.dk { background-color: #151515; background-image: radial-gradient(rgba(255, 255, 255, .12) 1px, transparent 1.2px); color: #ffe24a; }
+  .lockscr.dk .lk-unlock { color: #efede7; } .lockscr.dk .lk-unlock::after { background: #efede7; }
   .w-svc .wmore { color: var(--win-mute); font-style: italic; }
   /* while a sheet is open, nothing behind it can take taps */
   body.sheetopen .phdock, body.sheetopen .phome, body.sheetopen .hero { visibility: hidden; }

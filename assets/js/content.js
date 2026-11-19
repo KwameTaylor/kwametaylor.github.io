@@ -31,6 +31,9 @@ window.SITE = {
   "logos."
 ],
 
+  /* The four services shown on the home page (desktop window and phone widget), by name, in order. */
+  homeServices: ["Automation tools and workflows", "Custom AI prompt libraries", "Process mapping and SOPs", "Graphic design and visual identity"],
+
   services: [
   { 
     name: "Spreadsheet cleanup", 
@@ -271,6 +274,8 @@ window.SITE = {
   },
 
   champions: [
+    { name: "Algorithmic Justice League", url: "https://www.ajl.org/" },
+    { name: "Unsilenced", url: "https://unsilenced.org/" },
     { name: "Black Trans Media", url: "https://www.blacktransmedia.org/" },
     { name: "For the Gworls", url: "https://www.forthegworls.com/" }
   ]

@@ -83,6 +83,12 @@
     return { go: go, cur: function () { return cur; } };
   }
 
+  /* The services picked for the home page, falling back to the first four */
+  var homeSvc = (function () {
+    var all = S.services || [], pick = (S.homeServices || []).map(function (n) { return all.filter(function (s) { return s.name === n; })[0]; }).filter(Boolean);
+    return pick.length ? pick.slice(0, 4) : all.slice(0, 4);
+  })();
+
   /* Small widgets, on whichever page they appear */
   /* Business card: the front, then a different figure from the back on each flip */
   var cards = $$(".flip").map(function (btn) {
@@ -176,7 +182,7 @@
   /* Home */
   if (page === "home") {
     var svc = $("#svc");
-    if (svc && S.services) svc.innerHTML = S.services.slice(0, 4).map(function (s) {
+    if (svc && S.services) svc.innerHTML = homeSvc.map(function (s) {
       return '<li><a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a></li>";
     }).join("");
     if (S.projects) $("#pcount").textContent = S.projects.length + " items";
@@ -198,7 +204,7 @@
     }).join("");
 
     /* Swatches: the accent color, remembered */
-    var colors = [["#ffe24a", "Yellow"], ["#c9b3ec", "Lavender"], ["#a9c8ee", "Sky"], ["#f4a7b4", "Coral pink"], ["#e9a6dc", "Orchid"], ["#b6aee0", "Periwinkle"]];
+    var colors = [["#ffe24a", "Yellow"], ["#c9b3ec", "Lavender"], ["#a9c8ee", "Sky"], ["#e9a6dc", "Orchid"], ["#e3cf9e", "Sand"], ["#cfd3d8", "Silver"]];
     var current = (getComputedStyle(document.documentElement).getPropertyValue("--sel") || "").trim().toLowerCase();
     var sw = $("#sw");
     sw.innerHTML = colors.map(function (c) {
@@ -282,7 +288,7 @@
     };
     $$(".desk .win").forEach(function (w) {
       dragify(w, $(".tb", w));
-      w.addEventListener("pointerdown", function () { if (!w.classList.contains("termwin")) return; w.style.zIndex = ++z; });
+      w.addEventListener("pointerdown", function () { if (!w.classList.contains("termwin") || w.classList.contains("sheet")) return; w.style.zIndex = ++z; });
       var x = $(".x", w), title = $(".tb span", w).textContent;
       var minimize = function (focusTab) {
         w.classList.add("min");
@@ -308,7 +314,7 @@
 
     /* ===== Phones: a lock screen, then a widget home screen. Toys open as bottom sheets. ===== */
     var sheets = [], dim = document.createElement("div");
-    dim.className = "phdim"; document.body.appendChild(dim);
+    dim.className = "phdim"; desk.appendChild(dim);
     var openSheet = function (w) {
       if (!w || w.classList.contains("sheet")) return;
       w.classList.remove("closing"); w.style.transform = "";
@@ -325,7 +331,7 @@
     };
     addEventListener("popstate", function () { if (sheets.length) closeTop(); });
     var sheetBack = function () { if (history.state && history.state.sheet) history.back(); else closeTop(); };
-    dim.addEventListener("click", sheetBack);
+    dim.addEventListener("click", function (e) { if (e.target === dim) sheetBack(); });
     var wireApp = function (w) {
       if (w.hasAttribute("data-sheet")) return; w.setAttribute("data-sheet", "1");
       var x = $(".tb .x", w), tb = $(".tb", w);
@@ -345,9 +351,9 @@
     var P = S.projects || [], SV = S.services || [];
     home.innerHTML =
       '<a class="wdg w-photo" href="about.html">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="Portrait of Kwame V. Taylor">' : "") + "<span>About</span></a>" +
-      '<div class="wdg w-svc"><h3>Services</h3>' + SV.slice(0, 4).map(function (s) { return '<a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a>"; }).join("") + (SV.length > 4 ? '<a class="wmore" href="services.html">+ ' + (SV.length - 4) + " more</a>" : "") + "</div>" +
+      '<div class="wdg w-svc"><h3>Services</h3>' + homeSvc.map(function (s) { return '<a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a>"; }).join("") + (SV.length > 4 ? '<a class="wmore" href="services.html">+ ' + (SV.length - 4) + " more</a>" : "") + "</div>" +
       '<a class="wdg w-proj" href="projects.html"><h3>Projects · ' + P.length + "</h3><p>" + P.slice(0, 3).map(function (p) { return esc(p.name); }).join(" · ") + " →︎</p></a>" +
-      '<span class="plabel">Toys</span>';
+      '<span class="plabel">Extras</span>';
     var TOYS = [["Terminal", "i-term", "&gt;_"], ["Business card", "i-card", '<img src="assets/img/card/front.png" alt="">'], ["Swatches", "i-sw", ""], ["Save file", "i-save", "01"]];
     TOYS.forEach(function (t) {
       var w = $('.desk .win[aria-label="' + t[0] + '"]'); if (!w) return;
@@ -359,7 +365,7 @@
     });
     hero.insertAdjacentElement("afterend", home);
     var pd = document.createElement("nav"); pd.className = "phdock"; pd.setAttribute("aria-label", "Pages");
-    pd.innerHTML = [["services.html", "", "S", "Services"], ["projects.html", "i-file", "", "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-msg", "Hi", "Contact"]]
+    pd.innerHTML = [["services.html", "i-list", "<b></b><b></b><b></b>", "Services"], ["projects.html", "i-folder", "", "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-msg", "Hi", "Contact"]]
       .map(function (d) { return '<a class="ic ' + d[1] + '" href="' + d[0] + '"><i aria-hidden="true">' + d[2] + "</i><span>" + d[3] + "</span></a>"; }).join("");
     desk.appendChild(pd);
 
@@ -370,7 +376,7 @@
     lk.innerHTML =
       '<div class="lk-time"><small id="lkdate"></small><b id="lktime"></b></div><div class="lk-notes">' +
       '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer. I build " + esc(first) + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager, PMP, in Los Angeles. I build programs, data systems and tools, and I design logos and identities.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
-      '<button type="button" class="nt"><header><i>S</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + SV.slice(0, 3).map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + (SV.length > 3 ? ", and " + (SV.length - 3) + " more" : "") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
+      '<button type="button" class="nt"><header><i>S</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + homeSvc.slice(0, 3).map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + (SV.length > 3 ? ", and " + (SV.length - 3) + " more" : "") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
       '<button type="button" class="nt"><header><i>P</i>Projects<em>' + P.length + "</em></header><b>" + esc((P[0] || {}).name || "Projects") + "</b><p>Plus " + Math.max(0, P.length - 1) + ' more.</p><div class="more"><div class="tb">Projects</div>' + P.slice(0, 4).map(function (p) { return '<a class="row" href="projects.html#' + slug(p.name) + '"><span>' + esc(p.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="projects.html">Open Projects →︎</a></div></button>' +
       '<a class="nt" href="contact.html"><header><i style="background:#ffe24a">Hi</i>Message</header><b>Say hello</b><p>Tap to write to Kwame.</p></a>' +
       '</div><div class="lk-foot"><button type="button" class="lk-circ" id="lkterm" aria-label="Unlock and open the terminal">&gt;_</button>' +
@@ -402,7 +408,8 @@
     });
     $("#lkopen").addEventListener("click", unlock);
     $("#lkterm").addEventListener("click", function () { unlock(); setTimeout(function () { openSheet($('.desk .win[aria-label="Terminal"]')); }, reduce ? 0 : 300); });
-    $("#lkdark").addEventListener("click", function () { if (themeBtn) themeBtn.click(); });
+    $("#lkdark").addEventListener("click", function () { if (themeBtn) themeBtn.click(); lk.classList.toggle("dk", isDark()); });
+    lk.classList.toggle("dk", isDark());
     /* swipe up from the bottom of the lock screen */
     var foot = $(".lk-foot", lk), ly = null;
     foot.addEventListener("pointerdown", function (e) { if (e.target.closest(".lk-circ")) return; ly = e.clientY; lk.classList.add("dragging"); foot.setPointerCapture(e.pointerId); });
@@ -587,6 +594,7 @@
       if (v === "fig" || v === "figure") {
         var fs = S.figures || [], n = Math.floor(Math.random() * fs.length);
         restore("Business card"); if (cards[0]) cards[0].show(n);
+        if (n === 0) setTimeout(openVideo, 900);
         say("Fig. " + (n + 1) + " of 7 · " + esc(fs[n][0]) + "\nSource: " + esc(fs[n][1]) + "\nIt's on the back of Kwame's business card.");
         return true;
       }
@@ -640,6 +648,7 @@
       }
       if (v === "coffee" || v === "make coffee" || v === "brew coffee" || v === "brew") { say("Error 418: I'm a teapot."); return true; }
       if (/^(dysentery|oregon trail|ford the river|caulk the wagon)$/.test(v)) { say(v === "ford the river" ? "You attempt to ford the river. Kwame's résumé floats. Your oxen do not." : v === "caulk the wagon" ? "You caulk the wagon and float across. Kwame approves of this process improvement." : "You have died of dysentery.\n\nHere lies a visitor. Should have typed open contact."); return true; }
+      if (v === "fizzbuzz" || v === "fizz buzz") { var fb = []; for (var i = 1; i <= 15; i++) fb.push(i % 15 ? i % 5 ? i % 3 ? i : "Fizz" : "Buzz" : "FizzBuzz"); say(fb.join("\n") + "\n\nHired? Type open contact."); return true; }
       if (v === "exit" || v === "quit") { say("Bye."); setTimeout(function () { $('section[aria-label="Terminal"] .x').click(); }, 400); return true; }
       return false;
     };
