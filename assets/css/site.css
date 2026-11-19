@@ -527,12 +527,12 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .phdock .ic > i { width: 52px; height: 52px; border-radius: 14px; box-shadow: 2px 2px 0 var(--shadow); font-size: 22px; }
 
   .hero { position: relative; left: auto; top: auto; }
-  .hero::after { content: ""; position: absolute; right: 13%; top: 36%; width: 22px; height: 22px; background: no-repeat 50% 50% / 22px 22px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23aaa' d='M8 0c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z'/%3E%3C/svg%3E"); }
+  .hero::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 34%; height: auto; background: no-repeat 50% 50% / 26px 26px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23ffe24a' stroke='%23111' stroke-width='.8' d='M8 0c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z'/%3E%3C/svg%3E"); }
   .lockscr.dk { background-color: #151515; background-image: radial-gradient(rgba(255, 255, 255, .12) 1px, transparent 1.2px); color: #ffe24a; }
   .lockscr.dk .lk-unlock { color: #efede7; } .lockscr.dk .lk-unlock::after { background: #efede7; }
   html { overflow-x: clip; }
   html:has(body.sheetopen) { overflow: hidden; }
-  .lockbtn { display: grid; place-items: center; width: 36px; height: 31px; margin-left: auto; margin-right: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; padding: 0; }
+  .bar .lockbtn { display: grid; place-items: center; width: 36px; height: 31px; margin-left: auto; margin-right: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; padding: 0; }
   body:not([data-page="home"]) .lockbtn { display: none; }
   .ic > i { transform: translate(-1.5px, -1.5px); }
   .ic:active > i { transform: translate(.5px, .5px); }
@@ -560,6 +560,12 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .desk .win.sheet > :not(.tb) { overflow-y: auto; }
   .desk .termwin.sheet { height: 74dvh; resize: none; }
   .desk .termwin.sheet .term { flex: 1; height: auto; font-size: 15px; }
+  .desk .termwin.sheet .term input { font-size: 16px; }
+  body .desk .win.sheet { bottom: var(--kb, 0px); max-height: min(86dvh, calc(var(--vvh, 100dvh) - 8px)); }
+  .desk .termwin.sheet { height: min(74dvh, calc(var(--vvh, 100dvh) - 8px)); }
+  .desk .termwin.sheet #tout { overflow-y: auto; min-height: 0; }
+  .lk-notes .nt header i.svg { display: grid; place-items: center; }
+  .lk-notes .nt header i.svg svg { width: 70%; height: 70%; }
   .desk .win.sheet.dragging { animation: none; transition: none; }
   .desk .win.sheet.closing { transition: transform .2s ease-in; transform: translateY(100%); }
   @keyframes sheetin { from { transform: translateY(100%); } }

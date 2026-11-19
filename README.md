@@ -50,6 +50,36 @@ Only `name` and `text` are required. Without `link` the page says a link is comi
 
 **Add the portrait.** Put the photo in `assets/img/` and set `portrait: "assets/img/portrait.jpg"`. It appears on the home and About pages. A 4:5 crop at about 1000 by 1250 pixels works well.
 
+**Pick the four home-page services.** Edit `homeServices` with the exact names from `services`, in order. If a name doesn't match, the first four services show instead.
+
+**Change the swatch colors.** Edit `var colors` in `assets/js/site.js`. Each entry is `["#hexcode", "Name"]`.
+
+**Change the portrait.** Replace `assets/img/portrait.jpg` with a new photo of the same name, with location data removed. Then change the `?v=` code.
+
+**Add a terminal answer.** Add an entry to `facts`. When a visitor's question contains any of the `keys`, the terminal prints `a`:
+
+```js
+{ keys: ["hobby", "weekend"], a: "Kwame draws and bakes." },
+```
+
+**Add a terminal hint.** Edit `tips` (lines like "Try: fig") or `secrets` (what `cat .secrets` lists).
+
+**Add a terminal command.** New commands are code, in `assets/js/site.js`. Search for `if (v === "exit"` and add a line above it:
+
+```js
+if (v === "hello") { say("Hi there."); return true; }
+```
+
+`v` is what the visitor typed, in lowercase. Put `\n` in the text for a line break.
+
+### Every terminal command
+
+Built in: `help`, `ls`, `ls -a`, `clear`, `cat .secrets` (also `less`, `more`, `head`, `tail`, `bat`), `open` plus a page name (`open contact`), `nano`, `vim`, `exit`, `quit`. Any question that matches a `facts` key also works.
+
+Hidden: `fig` (or `figure`), `rickroll`, `draw`, `save`, `kern`, `comic sans` (then `y` or `n`; `serif` undoes it), `coffee` (also `brew`, `make coffee`), `check email`, `rm -rf /`, `sudo hire kwame`, `xyzzy`, `fizzbuzz`, `motherlode`, `rosebud`, `kaching`, `dysentery`, `oregon trail`, `ford the river`, `caulk the wagon`, `its time to duel`, `trogdor` (or `burninate`), `homestar`, `homsar`, `strong bad`, `sbemail`, `the cheat`, `fhqwhgads`, `everybody everybody`, `consummate v`, `afrofuturism`, `sun ra`, `octavia`, `parable`.
+
+Not typed: the Konami code (up up down down left right left right B A) anywhere on the page.
+
 ## Contact form
 
 GitHub Pages cannot receive form submissions, so the form posts to a form service. [Formspree](https://formspree.io) has a free tier and is what the form is written for.
