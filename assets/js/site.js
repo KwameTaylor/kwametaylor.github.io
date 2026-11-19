@@ -204,7 +204,7 @@
     }).join("");
 
     /* Swatches: the accent color, remembered */
-    var colors = [["#ffe24a", "Yellow"], ["#c9b3ec", "Lavender"], ["#a9c8ee", "Sky"], ["#e9a6dc", "Orchid"], ["#e3cf9e", "Sand"], ["#cfd3d8", "Silver"]];
+    var colors = [["#ffe24a", "Yellow"], ["#c9b3ec", "Lavender"], ["#a9c8ee", "Sky"], ["#f1c3e8", "Orchid"], ["#d99a6c", "Clay"], ["#cfd3d8", "Silver"]];
     var current = (getComputedStyle(document.documentElement).getPropertyValue("--sel") || "").trim().toLowerCase();
     var sw = $("#sw");
     sw.innerHTML = colors.map(function (c) {
@@ -323,8 +323,10 @@
       try { history.pushState({ sheet: w.getAttribute("aria-label") }, ""); } catch (e) {}
       var x = $(".tb .x", w); if (x) x.focus();
     };
+    var afterVideo = null;
     var closeTop = function () {
       var w = sheets.pop(); if (!w) return;
+      if (w.id === "rick" && afterVideo) { var go = afterVideo; afterVideo = null; setTimeout(go, 260); }
       w.classList.add("closing");
       setTimeout(function () { w.classList.remove("sheet", "closing"); w.style.zIndex = ""; w.style.transform = ""; }, reduce ? 0 : 200);
       if (!sheets.length) { dim.classList.remove("on"); document.body.classList.remove("sheetopen"); }
@@ -365,7 +367,7 @@
     });
     hero.insertAdjacentElement("afterend", home);
     var pd = document.createElement("nav"); pd.className = "phdock"; pd.setAttribute("aria-label", "Pages");
-    pd.innerHTML = [["services.html", "i-list", "<b></b><b></b><b></b>", "Services"], ["projects.html", "i-folder", "", "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-msg", "Hi", "Contact"]]
+    pd.innerHTML = [["services.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M10 8h12M10 14h12M10 20h12"/><rect x="5" y="7" width="2" height="2" fill="currentColor" stroke="none"/><rect x="5" y="13" width="2" height="2" fill="currentColor" stroke="none"/><rect x="5" y="19" width="2" height="2" fill="currentColor" stroke="none"/></svg>', "Services"], ["projects.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M4 8.5V21a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V10.5a1 1 0 0 0-1-1H13l-2-2.5H5a1 1 0 0 0-1 1z"/></svg>', "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-msg i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="4" y="7.5" width="20" height="14" rx="1"/><path d="M4.5 8l9.5 7.5L23.5 8"/></svg>', "Contact"]]
       .map(function (d) { return '<a class="ic ' + d[1] + '" href="' + d[0] + '"><i aria-hidden="true">' + d[2] + "</i><span>" + d[3] + "</span></a>"; }).join("");
     desk.appendChild(pd);
 
@@ -407,6 +409,17 @@
       });
     });
     $("#lkopen").addEventListener("click", unlock);
+    var lockAgain = function () {
+      while (sheets.length) closeTop();
+      $$(".nt.open", lk).forEach(function (o) { o.classList.remove("open"); });
+      lk.removeAttribute("aria-hidden"); lk.inert = false; lk.style.transform = "";
+      document.body.classList.add("locked");
+      try { sessionStorage.removeItem("unlocked"); } catch (e) {}
+    };
+    var lb = document.createElement("button"); lb.type = "button"; lb.className = "lockbtn"; lb.setAttribute("aria-label", "Lock the phone");
+    lb.innerHTML = '<svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="4" y="9" width="12" height="9" rx="1.5"/><path d="M7 9V6.5a3 3 0 0 1 6 0V9"/></svg>';
+    lb.addEventListener("click", lockAgain);
+    var mbtn = $(".bar .menubtn"); if (mbtn) mbtn.parentNode.insertBefore(lb, mbtn);
     $("#lkterm").addEventListener("click", function () { unlock(); setTimeout(function () { openSheet($('.desk .win[aria-label="Terminal"]')); }, reduce ? 0 : 300); });
     $("#lkdark").addEventListener("click", function () { if (themeBtn) themeBtn.click(); lk.classList.toggle("dk", isDark()); });
     lk.classList.toggle("dk", isDark());
@@ -474,7 +487,7 @@
       w.className = "win"; w.id = "rick"; w.setAttribute("aria-label", "never-gonna.mp4");
       w.style.cssText = "--x:36;--y:12;--w:30;--k:0;z-index:" + (++z);
       w.innerHTML = '<div class="tb"><span>never-gonna.mp4</span><button class="x" type="button" aria-label="Close video">×</button></div>' +
-        '<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1" title="Never Gonna Give You Up" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
+        '<div class="vid"><iframe src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ?autoplay=1&playsinline=1' + (phone.matches ? '&mute=1' : '') + '" title="Never Gonna Give You Up" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
       desk.appendChild(w);
       wireApp(w); if (phone.matches) openSheet(w);
       dragify(w, $(".tb", w));
@@ -573,7 +586,8 @@
       flash("burninate", 3100);
       if (reduce) return;
       burning = true; setTimeout(function () { burning = false; }, 3600);
-      var wins = $$(".desk .win:not(.min)");
+      var wins = phone.matches ? $$(".hero, .wdg, .phdock") : $$(".desk .win:not(.min)");
+      if (phone.matches && sheets.length) { document.body.classList.add("peek"); setTimeout(function () { document.body.classList.remove("peek"); }, 3300); }
       wins.forEach(flamesOn);
       sparks(wins.map(function (w) { return w.getBoundingClientRect(); }));
     };
@@ -600,7 +614,8 @@
       }
       if (/^(rick ?roll(ed)?|rick-roll(ed)?|rick astley|never gonna give you up)$/.test(v)) {
         var f1 = (S.figures || [])[0];
-        restore("Business card"); if (cards[0]) cards[0].show(0);
+        if (phone.matches) { afterVideo = function () { openSheet($('.desk .win[aria-label="Business card"]')); if (cards[0]) cards[0].show(0); }; }
+        else { restore("Business card"); if (cards[0]) cards[0].show(0); }
         if (f1) say("Fig. 1 of 7 · " + esc(f1[0]) + "\nSource: " + esc(f1[1]) + "\nIt's on the back of Kwame's business card.");
         say("Never gonna give you up.");
         openVideo();
@@ -649,6 +664,7 @@
       if (v === "coffee" || v === "make coffee" || v === "brew coffee" || v === "brew") { say("Error 418: I'm a teapot."); return true; }
       if (/^(dysentery|oregon trail|ford the river|caulk the wagon)$/.test(v)) { say(v === "ford the river" ? "You attempt to ford the river. Kwame's résumé floats. Your oxen do not." : v === "caulk the wagon" ? "You caulk the wagon and float across. Kwame approves of this process improvement." : "You have died of dysentery.\n\nHere lies a visitor. Should have typed open contact."); return true; }
       if (v === "fizzbuzz" || v === "fizz buzz") { var fb = []; for (var i = 1; i <= 15; i++) fb.push(i % 15 ? i % 5 ? i % 3 ? i : "Fizz" : "Buzz" : "FizzBuzz"); say(fb.join("\n") + "\n\nHired? Type open contact."); return true; }
+      if (v === "motherlode" || v === "rosebud" || v === "kaching") { say(v === "motherlode" ? "Cheat activated. §50,000 Simoleons added to your household funds.\nKwame's rates are unchanged." : "Cheat activated. §1,000 Simoleons added. Try motherlode."); return true; }
       if (v === "exit" || v === "quit") { say("Bye."); setTimeout(function () { $('section[aria-label="Terminal"] .x').click(); }, 400); return true; }
       return false;
     };

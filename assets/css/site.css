@@ -399,7 +399,7 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 .termwin .tb { cursor: grab; }
 
 /* Homestar Runner: a shout that runs across the desktop */
-.runner { position: absolute; left: 0; top: 46%; z-index: 46; pointer-events: none; white-space: nowrap; font: italic 400 clamp(48px, 7vw, 110px)/1 var(--serif); letter-spacing: -.03em; color: var(--ink); background: var(--sel); padding: .05em .3em; border: 1.5px solid var(--line); box-shadow: 5px 5px 0 var(--shadow); animation: run 2.6s cubic-bezier(.5, 0, .5, 1) forwards; }
+.runner { position: absolute; left: 0; top: 46%; z-index: 90; pointer-events: none; white-space: nowrap; font: italic 400 clamp(48px, 7vw, 110px)/1 var(--serif); letter-spacing: -.03em; color: var(--ink); background: var(--sel); padding: .05em .3em; border: 1.5px solid var(--line); box-shadow: 5px 5px 0 var(--shadow); animation: run 2.6s cubic-bezier(.5, 0, .5, 1) forwards; }
 @keyframes run { from { transform: translateX(-110%); } to { transform: translateX(110vw); } }
 
 /* Full screen: taskbar button and the one-time suggestion */
@@ -458,7 +458,7 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
 
 /* ===================== Phones ===================== */
 /* Parts that only exist on phones. Hidden everywhere else. */
-.menubtn, .msheet, .phome, .phdock, .phdim, .lockscr, .tb .back { display: none; }
+.menubtn, .msheet, .phome, .phdock, .phdim, .lockscr, .lockbtn, .tb .back { display: none; }
 
 @media (max-width: 700px) {
   /* Menu bar: your name and a Menu button */
@@ -516,7 +516,7 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .ic:focus-visible { outline: 0; } .ic:focus-visible > i { outline: 2px solid var(--sel); outline-offset: 3px; }
   .ic > i img { width: 100%; height: 100%; object-fit: contain; padding: 3px; background: #fff; }
   .ic.i-term > i { background: #111111; color: var(--sel); font: 16px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
-  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #c9b3ec 25% 50%, #a9c8ee 50% 75%, #e3cf9e 75%); }
+  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #c9b3ec 25% 50%, #a9c8ee 50% 75%, #d99a6c 75%); }
   .ic.i-save > i { font: 600 17px/1 var(--serif); letter-spacing: .06em; }
   .ic.i-msg > i { background: var(--sel); color: var(--on-sel); }
   .ic.i-file > i::before { content: ""; width: 21px; height: 27px; border: 1.5px solid var(--win-ink); background: linear-gradient(225deg, var(--win-ink) 0 24%, transparent 24%); }
@@ -526,16 +526,26 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .phdock .ic { color: var(--win-ink); font-size: 12px; }
   .phdock .ic > i { width: 52px; height: 52px; border-radius: 14px; box-shadow: 2px 2px 0 var(--shadow); font-size: 22px; }
 
-  .hero { position: relative; }
-  .hero::after { content: "Los Angeles"; position: absolute; right: 14px; top: 14px; font: 600 10px/1 var(--serif); letter-spacing: .16em; text-transform: uppercase; color: var(--win-mute); padding-top: 22px; background: no-repeat 50% 0 / 16px 16px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23888' d='M8 0c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z'/%3E%3C/svg%3E"); }
-  .ic.i-list > i { display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 5px; padding: 0 13px; }
-  .ic.i-list > i b { display: block; height: 2px; background: var(--win-ink); position: relative; margin-left: 7px; }
-  .ic.i-list > i b::before { content: ""; position: absolute; left: -7px; top: -1px; width: 4px; height: 4px; background: var(--win-ink); }
-  .ic.i-folder > i::before { content: ""; width: 26px; height: 19px; margin-top: 3px; border: 1.5px solid var(--win-ink); border-radius: 2px; background: linear-gradient(var(--win-ink), var(--win-ink)) 0 0 / 11px 1.5px no-repeat; position: relative; box-shadow: inset 0 3px 0 -1.5px var(--win); }
-  .ic.i-folder > i { position: relative; }
-  .ic.i-folder > i::after { content: ""; position: absolute; left: 50%; top: 50%; width: 11px; height: 5px; margin: -12px 0 0 -13px; border: 1.5px solid var(--win-ink); border-bottom: 0; border-radius: 2px 2px 0 0; }
+  .hero { position: relative; left: auto; top: auto; }
+  .hero::after { content: ""; position: absolute; right: 13%; top: 36%; width: 22px; height: 22px; background: no-repeat 50% 50% / 22px 22px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='%23aaa' d='M8 0c.6 4.6 3.4 7.4 8 8-4.6.6-7.4 3.4-8 8-.6-4.6-3.4-7.4-8-8 4.6-.6 7.4-3.4 8-8z'/%3E%3C/svg%3E"); }
   .lockscr.dk { background-color: #151515; background-image: radial-gradient(rgba(255, 255, 255, .12) 1px, transparent 1.2px); color: #ffe24a; }
   .lockscr.dk .lk-unlock { color: #efede7; } .lockscr.dk .lk-unlock::after { background: #efede7; }
+  html { overflow-x: clip; }
+  html:has(body.sheetopen) { overflow: hidden; }
+  .lockbtn { display: grid; place-items: center; width: 36px; height: 31px; margin-left: auto; margin-right: 8px; border: 1.5px solid var(--line); background: var(--bg); color: var(--ink); cursor: pointer; padding: 0; }
+  body:not([data-page="home"]) .lockbtn { display: none; }
+  .ic > i { transform: translate(-1.5px, -1.5px); }
+  .ic:active > i { transform: translate(.5px, .5px); }
+  .ic.i-svg > i svg { display: block; }
+  .ic.i-msg.i-svg > i { color: var(--on-sel); }
+  .cardwin.sheet .cardwrap, .cardwin.sheet .body.cardwrap { display: flex; flex-direction: column; }
+  .cardwin.sheet .cardnote { order: -1; margin: 0 0 10px; }
+  body.peek .desk .win.sheet { transform: translateY(105%); transition: transform .3s; }
+  body.peek .phdim { opacity: 0; }
+  body.peek .phdock, body.peek .phome, body.peek .hero { visibility: visible; }
+  .desk #rick.sheet { top: 16%; bottom: auto; left: 18px; right: 18px; border-bottom: 1.5px solid var(--line); border-radius: 16px; box-shadow: 5px 5px 0 var(--shadow); animation: none; }
+  .desk #rick.sheet::before { display: none; }
+  .desk #rick.sheet > .tb { border-top: 0; }
   .w-svc .wmore { color: var(--win-mute); font-style: italic; }
   /* while a sheet is open, nothing behind it can take taps */
   body.sheetopen .phdock, body.sheetopen .phome, body.sheetopen .hero { visibility: hidden; }
