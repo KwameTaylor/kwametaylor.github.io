@@ -198,7 +198,7 @@
     }).join("");
 
     /* Swatches: the accent color, remembered */
-    var colors = [["#ffe24a", "Yellow"], ["#35d4c4", "Turquoise"], ["#ff8fc0", "Pink"], ["#b79cff", "Purple"], ["#ff6b5e", "Red"], ["#8fb4ff", "Blue"]];
+    var colors = [["#ffe24a", "Yellow"], ["#c9b3ec", "Lavender"], ["#a9c8ee", "Sky"], ["#f4a7b4", "Coral pink"], ["#e9a6dc", "Orchid"], ["#b6aee0", "Periwinkle"]];
     var current = (getComputedStyle(document.documentElement).getPropertyValue("--sel") || "").trim().toLowerCase();
     var sw = $("#sw");
     sw.innerHTML = colors.map(function (c) {
@@ -345,7 +345,7 @@
     var P = S.projects || [], SV = S.services || [];
     home.innerHTML =
       '<a class="wdg w-photo" href="about.html">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="Portrait of Kwame V. Taylor">' : "") + "<span>About</span></a>" +
-      '<div class="wdg w-svc"><h3>Services</h3>' + SV.map(function (s) { return '<a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a>"; }).join("") + "</div>" +
+      '<div class="wdg w-svc"><h3>Services</h3>' + SV.slice(0, 4).map(function (s) { return '<a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a>"; }).join("") + (SV.length > 4 ? '<a class="wmore" href="services.html">+ ' + (SV.length - 4) + " more</a>" : "") + "</div>" +
       '<a class="wdg w-proj" href="projects.html"><h3>Projects · ' + P.length + "</h3><p>" + P.slice(0, 3).map(function (p) { return esc(p.name); }).join(" · ") + " →︎</p></a>" +
       '<span class="plabel">Toys</span>';
     var TOYS = [["Terminal", "i-term", "&gt;_"], ["Business card", "i-card", '<img src="assets/img/card/front.png" alt="">'], ["Swatches", "i-sw", ""], ["Save file", "i-save", "01"]];
@@ -370,7 +370,7 @@
     lk.innerHTML =
       '<div class="lk-time"><small id="lkdate"></small><b id="lktime"></b></div><div class="lk-notes">' +
       '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer. I build " + esc(first) + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager, PMP, in Los Angeles. I build programs, data systems and tools, and I design logos and identities.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
-      '<button type="button" class="nt"><header><i>S</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + SV.map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
+      '<button type="button" class="nt"><header><i>S</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + SV.slice(0, 3).map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + (SV.length > 3 ? ", and " + (SV.length - 3) + " more" : "") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
       '<button type="button" class="nt"><header><i>P</i>Projects<em>' + P.length + "</em></header><b>" + esc((P[0] || {}).name || "Projects") + "</b><p>Plus " + Math.max(0, P.length - 1) + ' more.</p><div class="more"><div class="tb">Projects</div>' + P.slice(0, 4).map(function (p) { return '<a class="row" href="projects.html#' + slug(p.name) + '"><span>' + esc(p.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="projects.html">Open Projects →︎</a></div></button>' +
       '<a class="nt" href="contact.html"><header><i style="background:#ffe24a">Hi</i>Message</header><b>Say hello</b><p>Tap to write to Kwame.</p></a>' +
       '</div><div class="lk-foot"><button type="button" class="lk-circ" id="lkterm" aria-label="Unlock and open the terminal">&gt;_</button>' +
@@ -639,6 +639,7 @@
         return true;
       }
       if (v === "coffee" || v === "make coffee" || v === "brew coffee" || v === "brew") { say("Error 418: I'm a teapot."); return true; }
+      if (/^(dysentery|oregon trail|ford the river|caulk the wagon)$/.test(v)) { say(v === "ford the river" ? "You attempt to ford the river. Kwame's résumé floats. Your oxen do not." : v === "caulk the wagon" ? "You caulk the wagon and float across. Kwame approves of this process improvement." : "You have died of dysentery.\n\nHere lies a visitor. Should have typed open contact."); return true; }
       if (v === "exit" || v === "quit") { say("Bye."); setTimeout(function () { $('section[aria-label="Terminal"] .x').click(); }, 400); return true; }
       return false;
     };
@@ -784,7 +785,7 @@
     var setWord = function () { var t = $("#tinput").value.trim() || "KWAME"; tw.textContent = t; ghost.textContent = t; };
     slide.addEventListener("input", upd);
     $("#tinput").addEventListener("input", setWord);
-    $("#tmatch").addEventListener("click", function () {
+    if ($("#tmatch")) $("#tmatch").addEventListener("click", function () {
       var picks = [-0.08, -0.03, 0.08, 0.2, 0.45]; target = picks[Math.floor(Math.random() * picks.length)];
       ghost.style.letterSpacing = target + "em"; ghost.classList.remove("hit"); ghost.classList.add("on");
       slide.value = 0.01; upd(); status.textContent = "Slide until your word sits on the outline.";

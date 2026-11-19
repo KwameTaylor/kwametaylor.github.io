@@ -516,7 +516,7 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .ic:focus-visible { outline: 0; } .ic:focus-visible > i { outline: 2px solid var(--sel); outline-offset: 3px; }
   .ic > i img { width: 100%; height: 100%; object-fit: contain; padding: 3px; background: #fff; }
   .ic.i-term > i { background: #111111; color: var(--sel); font: 16px/1 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
-  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #35d4c4 25% 50%, #ff8fc0 50% 75%, #b79cff 75%); }
+  .ic.i-sw > i { background: linear-gradient(90deg, #ffe24a 0 25%, #c9b3ec 25% 50%, #a9c8ee 50% 75%, #f4a7b4 75%); }
   .ic.i-save > i { font: 600 17px/1 var(--serif); letter-spacing: .06em; }
   .ic.i-msg > i { background: var(--sel); color: var(--on-sel); }
   .ic.i-file > i::before { content: ""; width: 21px; height: 27px; border: 1.5px solid var(--win-ink); background: linear-gradient(225deg, var(--win-ink) 0 24%, transparent 24%); }
@@ -526,6 +526,9 @@ body.consummate .hero h1 em { transform: scale(1.35) rotate(-8deg); color: var(-
   .phdock .ic { color: var(--win-ink); font-size: 12px; }
   .phdock .ic > i { width: 52px; height: 52px; border-radius: 14px; box-shadow: 2px 2px 0 var(--shadow); font-size: 22px; }
 
+  .w-svc .wmore { color: var(--win-mute); font-style: italic; }
+  /* while a sheet is open, nothing behind it can take taps */
+  body.sheetopen .phdock, body.sheetopen .phome, body.sheetopen .hero { visibility: hidden; }
   /* Toys open as a bottom sheet, keeping the window's title bar */
   .phdim { display: block; position: fixed; inset: 0; z-index: 60; background: rgba(17, 17, 17, .4); opacity: 0; pointer-events: none; transition: opacity .2s; }
   .phdim.on { opacity: 1; pointer-events: auto; }
