@@ -32,17 +32,79 @@ window.SITE = {
 ],
 
   services: [
-    { name: "Automation tools and workflows", line: "Repetitive tasks handled in the background so you don't have to.",
-      includes: ["Custom connections between your existing apps", "Automated data entry, alerts, and handoffs", "Documentation and walkthrough for your team"] },
-    { name: "Spreadsheet cleanup", line: "Your file, tidied and made consistent.",
-      includes: ["One file, any size", "A change log", "One round of cleaning"] },
-    { name: "Data consolidation", line: "Scattered data brought into one place you can easily use.",
-      includes: ["Sources combined", "Clear column names", "Aggregate fields"] },
-    { name: "Business cards with data viz", line: "A card that shows your quantified success.",
-      includes: ["Front and back design", "Charts and graphs from your own data", "Print-ready files or full-service print management"] },
-    { name: "Graphic design and visual identity", line: "A cohesive set of logo, color palette, and typography.",
-      includes: ["A variety of directions to choose from", "Informed color and font choices", "Files for web and print"] }
-  ],
+  { 
+    name: "Spreadsheet cleanup", 
+    line: "Your file, tidied and made consistent.",
+    includes: [
+      "One file, any size", 
+      "A change log", 
+      "One round of cleaning"
+    ] 
+  },
+  { 
+    name: "Data consolidation", 
+    line: "Scattered data brought into one place you can easily use.",
+    includes: [
+      "Sources combined", 
+      "Clear column names", 
+      "Aggregate fields"
+    ] 
+  },
+  { 
+    name: "Business cards with data viz", 
+    line: "A card that shows your quantified success.",
+    includes: [
+      "Front and back design", 
+      "Charts and graphs from your own data", 
+      "Print-ready files or full-service print management"
+    ] 
+  },
+  { 
+    name: "Graphic design and visual identity", 
+    line: "A cohesive set of logo, color palette, and typography.",
+    includes: [
+      "A variety of directions to choose from", 
+      "Informed color and font choices", 
+      "Files for web and print"
+    ] 
+  },
+  { 
+    name: "Automation tools and workflows", 
+    line: "Repetitive tasks handled in the background so you don't have to.",
+    includes: [
+      "Custom connections between your existing apps", 
+      "Automated data entry, alerts, and handoffs", 
+      "Documentation and walkthrough for your team"
+    ] 
+  },
+  { 
+    name: "Custom AI prompt libraries", 
+    line: "Tailored AI workspaces trained on your organization's voice and templates.",
+    includes: [
+      "Audit of your existing documents and style rules", 
+      "Tested, reusable prompts for recurring deliverables", 
+      "Setup and team training guide"
+    ] 
+  },
+  { 
+    name: "Record deduplication and matching", 
+    line: "Years of duplicate, mismatched entries reconciled into one reliable list.",
+    includes: [
+      "Custom matching rules for names, dates, and locations", 
+      "Standardized formatting across legacy exports", 
+      "Change log and clean, import-ready files"
+    ] 
+  },
+  { 
+    name: "Process mapping and SOPs", 
+    line: "Messy daily operations turned into clear, repeatable playbooks.",
+    includes: [
+      "Current- and future-state workflow diagrams", 
+      "Plain-English Standard Operating Procedures", 
+      "Bottleneck and risk audit"
+    ] 
+  }
+],
 
   /* status, year and stack are optional. link is optional; without one the page says a link is coming.
      linkLabel is optional: the button text for the link. Without it the button names the site, e.g. "View on GitHub".
