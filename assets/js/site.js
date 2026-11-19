@@ -356,7 +356,7 @@
       '<div class="wdg w-svc"><h3>Services</h3>' + homeSvc.map(function (s) { return '<a href="services.html#' + slug(s.name) + '">' + esc(s.name) + "</a>"; }).join("") + (SV.length > 4 ? '<a class="wmore" href="services.html">+ ' + (SV.length - 4) + " more</a>" : "") + "</div>" +
       '<a class="wdg w-proj" href="projects.html"><h3>Projects · ' + P.length + "</h3><p>" + P.slice(0, 3).map(function (p) { return esc(p.name); }).join(" · ") + " →︎</p></a>" +
       '<span class="plabel">Extras</span>';
-    var TOYS = [["Terminal", "i-term", "&gt;_"], ["Business card", "i-card", '<img src="assets/img/card/front.png" alt="">'], ["Swatches", "i-sw", ""], ["Save file", "i-save", "01"]];
+    var TOYS = [["Terminal", "i-term", "&gt;_"], ["Business card", "i-card", '<img src="assets/img/card/front.png" alt="">'], ["Swatches", "i-sw", ""], ["Save file", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h15l3 3v15H5z"/><path d="M9 5v6h9V5"/><rect x="8.5" y="15" width="11" height="8"/></svg>']];
     TOYS.forEach(function (t) {
       var w = $('.desk .win[aria-label="' + t[0] + '"]'); if (!w) return;
       var bt = document.createElement("button"); bt.type = "button"; bt.className = "ic " + t[1];
@@ -367,7 +367,7 @@
     });
     hero.insertAdjacentElement("afterend", home);
     var pd = document.createElement("nav"); pd.className = "phdock"; pd.setAttribute("aria-label", "Pages");
-    var dockIcons = [["services.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M10 8h12M10 14h12M10 20h12"/><rect x="5" y="7" width="2" height="2" fill="currentColor" stroke="none"/><rect x="5" y="13" width="2" height="2" fill="currentColor" stroke="none"/><rect x="5" y="19" width="2" height="2" fill="currentColor" stroke="none"/></svg>', "Services"], ["projects.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M4 8.5V21a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V10.5a1 1 0 0 0-1-1H13l-2-2.5H5a1 1 0 0 0-1 1z"/></svg>', "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-msg i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="4" y="7.5" width="20" height="14" rx="1"/><path d="M4.5 8l9.5 7.5L23.5 8"/></svg>', "Contact"]];
+    var dockIcons = [["services.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M10 8h12M10 14h12M10 20h12"/><rect x="5" y="7" width="2" height="2" fill="currentColor" stroke="none"/><rect x="5" y="13" width="2" height="2" fill="currentColor" stroke="none"/><rect x="5" y="19" width="2" height="2" fill="currentColor" stroke="none"/></svg>', "Services"], ["projects.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><path d="M4 8.5V21a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V10.5a1 1 0 0 0-1-1H13l-2-2.5H5a1 1 0 0 0-1 1z"/></svg>', "Projects"], ["design.html", "", "Aa", "Design"], ["contact.html", "i-svg", '<svg viewBox="0 0 28 28" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true"><rect x="4" y="7.5" width="20" height="14" rx="1"/><path d="M4.5 8l9.5 7.5L23.5 8"/></svg>', "Contact"]];
     pd.innerHTML = dockIcons
       .map(function (d) { return '<a class="ic ' + d[1] + '" href="' + d[0] + '"><i aria-hidden="true">' + d[2] + "</i><span>" + d[3] + "</span></a>"; }).join("");
     desk.appendChild(pd);
@@ -381,16 +381,26 @@
       };
       vv.addEventListener("resize", fitKb); vv.addEventListener("scroll", fitKb); fitKb();
     }
+    /* Name card star: centered between the longest line of the tagline and the card's right edge */
+    var heroEl = $(".hero"), leadEl = $(".hero .lead");
+    var placeStar = function () {
+      if (!heroEl || !leadEl || !phone.matches) return;
+      var rg = document.createRange(); rg.selectNodeContents(leadEl);
+      var right = 0; [].forEach.call(rg.getClientRects(), function (q) { right = Math.max(right, q.right); });
+      var h = heroEl.getBoundingClientRect(), inner = h.right - parseFloat(getComputedStyle(heroEl).borderRightWidth);
+      heroEl.style.setProperty("--sx", ((right + inner) / 2 - h.left) + "px");
+    };
+    placeStar(); addEventListener("resize", placeStar); if (document.fonts) document.fonts.ready.then(placeStar);
     /* Lock screen: shown once per visit; swipe up (or tap) to unlock */
     var lk = document.createElement("section");
     lk.className = "lockscr"; lk.setAttribute("aria-label", "Lock screen");
     var first = (S.phrases && S.phrases[0]) || "data models.";
     lk.innerHTML =
       '<div class="lk-time"><small id="lkdate"></small><b id="lktime"></b></div><div class="lk-notes">' +
-      '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer." + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager and designer, PMP, in Los Angeles.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
+      '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer." + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager, PMP, in Los Angeles. I build programs, data systems and tools, and I design logos and identities.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
       '<button type="button" class="nt"><header><i class="svg">' + dockIcons[0][2] + '</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + homeSvc.slice(0, 3).map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + (SV.length > 3 ? ", and " + (SV.length - 3) + " more" : "") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
       '<button type="button" class="nt"><header><i class="svg">' + dockIcons[1][2] + '</i>Projects<em>' + P.length + "</em></header><b>" + esc((P[0] || {}).name || "Projects") + "</b><p>Plus " + Math.max(0, P.length - 1) + ' more.</p><div class="more"><div class="tb">Projects</div>' + P.slice(0, 4).map(function (p) { return '<a class="row" href="projects.html#' + slug(p.name) + '"><span>' + esc(p.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="projects.html">Open Projects →︎</a></div></button>' +
-      '<a class="nt" href="contact.html"><header><i class="svg" style="background:#ffe24a;color:#111">' + dockIcons[3][2] + '</i>Message</header><b>Say hello</b><p>Tap to write to Kwame.</p></a>' +
+      '<a class="nt" href="contact.html"><header><i class="svg">' + dockIcons[3][2] + '</i>Message</header><b>Say hello</b><p>Tap to write to Kwame.</p></a>' +
       '</div><div class="lk-foot"><button type="button" class="lk-circ" id="lkterm" aria-label="Unlock and open the terminal">&gt;_</button>' +
       '<button type="button" class="lk-unlock" id="lkopen"><span>Swipe up to unlock</span></button>' +
       '<button type="button" class="lk-circ dk" id="lkdark" aria-label="Switch light or dark mode"></button></div>';
