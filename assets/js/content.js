@@ -1,5 +1,5 @@
 /* Everything you are likely to edit lives in this file.
-   README.md explains how to add a service, a project, a design piece or an organization. */
+   README.md explains how to add a service, a project, a design piece, or an organization. */
 window.SITE = {
 
   /* Portrait. Put the image in assets/img and write its path here, for example "assets/img/portrait.jpg".
@@ -109,7 +109,7 @@ window.SITE = {
   }
 ],
 
-  /* status, year and stack are optional. link is optional; without one the page says a link is coming.
+  /* status, year, and stack are optional. link is optional; without one the page says a link is coming.
      linkLabel is optional: the button text for the link. Without it the button names the site, e.g. "View on GitHub".
      image is optional: a screenshot path such as "assets/img/queue-tip.png". */
   projects: [
@@ -156,7 +156,7 @@ window.SITE = {
     { keys: ["current", "now", "nlacrc", "regional center", "job", "role", "position"],
       a: "Since May 2025, Kwame has been the Change Management Project Manager and Business Transformation Lead at NLACRC, a regional center in Los Angeles serving 40,000+ people with developmental disabilities. Kwame leads organization-wide process redesign and data-informed change." },
     { keys: ["nlacrc accomplish", "nlacrc achieve", "nlacrc impact", "transfer", "cycle time", "faster"],
-      a: "At NLACRC Kwame designed, coded and shipped a smart form and validation checklist that cut median inter-office case transfer time from 13 to 8 business days." },
+      a: "At NLACRC Kwame designed, coded, and shipped a smart form and validation checklist that cut median inter-office case transfer time from 13 to 8 business days." },
     { keys: ["sop", "process", "standard", "training", "rollout", "staff"],
       a: "Kwame leads process redesigns end to end: staff interviews, participatory design workgroups, process mapping, pilots, the agency's first SOPs, and a train-the-trainer rollout to 800+ case management staff across 3 offices." },
     { keys: ["metrics", "kpi", "strategic plan", "governance", "measure"],
@@ -174,11 +174,11 @@ window.SITE = {
     { keys: ["payments", "fintech", "mobile money", "fraud", "payment", "qc"],
       a: "At GiveDirectly Kwame ran mobile-money distributions of $300K to $500K per payment cycle, with multi-stage automated QC audits to catch fraud, delivered to a zero-error standard." },
     { keys: ["salesforce", "architecture", "systems", "field", "offline", "taroworks", "infrastructure"],
-      a: "Kwame built program architecture on Salesforce, Python, Apex and TaroWorks so hundreds of field officers could register recipients and track payments offline in low-connectivity regions." },
+      a: "Kwame built program architecture on Salesforce, Python, Apex, and TaroWorks so hundreds of field officers could register recipients and track payments offline in low-connectivity regions." },
     { keys: ["million", "households", "deduplication", "dedupe", "milestone", "data clean", "visualization"],
       a: "Kwame wrote the rule-based deduplication that isolated unique households across a 15-year, 8M+ record dataset, delivering GiveDirectly's 1 million households milestone and the data model behind its public visualization." },
     { keys: ["data engineering", "legacy", "pandas", "schema", "dataset", "reconcile", "python"],
-      a: "Kwame re-engineered an 8M+ record legacy dataset in Python and pandas: reconciling name variants, ages, birthdates, multi-format locations and currencies into one clean model." },
+      a: "Kwame re-engineered an 8M+ record legacy dataset in Python and pandas: reconciling name variants, ages, birthdates, multi-format locations, and currencies into one clean model." },
     { keys: ["morocco", "usaid", "liberia", "international", "countries"],
       a: "Their GiveDirectly work included a $12M USAID drought relief program in Morocco and a county-wide pilot in Maryland County, Liberia, built to lay groundwork for national rollout." },
     { keys: ["buildher", "nairobi", "kenya", "cash plus", "women"],
@@ -190,19 +190,19 @@ window.SITE = {
     { keys: ["fierce", "audre lorde", "nonprofit", "organizing", "2012"],
       a: "From 2012 to 2016 Kwame was Program Manager at FIERCE! and the Audre Lorde Project (sister orgs) in New York, running education programs, Know Your Rights trainings, and campaigns that won a mobile HIV testing unit for the Christopher Street community." },
     { keys: ["fundraising", "raised", "money"],
-      a: "At FIERCE! Kwame raised $32K net on a $0 budget using donated space, products and services." },
+      a: "At FIERCE! Kwame raised $32K net on a $0 budget using donated space, products, and services." },
     { keys: ["design", "designer", "graphic", "logo", "branding", "print"],
       a: "Kwame is a graphic designer: visual identities, logos, business cards, web graphics, and production-ready print files. See open design." },
     { keys: ["build", "builds", "built", "make", "makes", "create", "creates"],
-      a: "Kwame builds programs, data models, payment systems, dashboards, web apps, prompt libraries, training programs, logos and more. Type open projects to see some." },
+      a: "Kwame builds programs, data models, payment systems, dashboards, web apps, prompt libraries, training programs, logos, and more. Type open projects to see some." },
     { keys: ["services", "hire", "freelance", "available", "work with"],
-      a: "Kwame takes on freelance data and design work: spreadsheet cleanup, data consolidation, business cards with data viz, graphic design and visual identity. Type open services, or open contact to ask." },
+      a: "Kwame takes on freelance data and design work: spreadsheet cleanup, data consolidation, business cards with data viz, and graphic design and visual identity. Type open services, or open contact to ask." },
     { keys: ["skills", "stack", "languages", "python", "code", "programming", "technical", "git", "numpy", "html", "css", "nlp", "etl", "data model", "dashboard"],
-      a: "Python (pandas, NumPy, scikit-learn, NLTK), SQL, Apex, JavaScript, HTML, CSS, Git. Plus machine learning, NLP, ETL, data modeling and dashboards." },
+      a: "Python (pandas, NumPy, scikit-learn, NLTK), SQL, Apex, JavaScript, HTML, CSS, Git. Plus machine learning, NLP, ETL, data modeling, and dashboards." },
     { keys: ["methods", "agile", "scrum", "change management", "adkar", "kotter"],
-      a: "Agile, Scrum, Kanban and waterfall delivery; Prosci ADKAR and Kotter for change management; RAID logs, Gantt charts, RACI, root cause analysis, and pilot design." },
+      a: "Agile, Scrum, Kanban, and waterfall delivery; Prosci ADKAR and Kotter for change management; RAID logs, Gantt charts, RACI, root cause analysis, and pilot design." },
     { keys: ["tools", "jira", "tableau", "platforms"],
-      a: "Salesforce, Jira, Confluence, Tableau, Asana, Notion, Microsoft 365, SharePoint, Miro, Lucidchart, and Adobe Illustrator, InDesign and Photoshop." },
+      a: "Salesforce, Jira, Confluence, Tableau, Asana, Notion, Microsoft 365, SharePoint, Miro, Lucidchart, and Adobe Illustrator, InDesign, and Photoshop." },
     { keys: ["pmp", "certification", "certified", "pmi", "project management", "exam"],
       a: "Kwame earned their PMP in 2024, scoring Above Target in all three exam domains." },
     { keys: ["education", "school", "codeup", "nyu", "study", "studied"],
@@ -268,7 +268,7 @@ window.SITE = {
   },
 
   afrofuturism: {
-    intro: "Afrofuturism: Black futures imagined through art, music, fiction and technology. It shapes how Kwame thinks about design. Try: sun ra, octavia.",
+    intro: "Afrofuturism: Black futures imagined through art, music, fiction, and technology. It shapes how Kwame thinks about design. Try: sun ra, octavia.",
     sunra: "Space is the place. · Sun Ra",
     octavia: "All that you touch / You Change. / All that you Change / Changes you. · Octavia E. Butler, Parable of the Sower"
   },

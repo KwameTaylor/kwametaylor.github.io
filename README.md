@@ -2,15 +2,15 @@
 
 Personal site for Kwame V. Taylor, PMP. Live at https://kwametaylor.github.io.
 
-Plain HTML, CSS and JavaScript. There is no build step: edit a file, commit, push, and GitHub Pages serves it.
+Plain HTML, CSS, and JavaScript. There is no build step: edit a file, commit, push, and GitHub Pages serves it.
 
 ## Repo structure
 
 | File | Content |
 |---|---|
-| `assets/js/content.js` | Services, projects, design pieces, organizations, the rotating phrases, the portrait path and the contact form address. Most edits happen here. |
-| `index.html` | Home page: the name, tagline and the desktop windows. Each window is a `<section class="win">`; its position is the `--x`, `--y` and `--w` values on it. |
-| `about.html` | About text, work history and training, written directly in the page. |
+| `assets/js/content.js` | Services, projects, design pieces, organizations, the rotating phrases, the portrait path, and the contact form address. Most edits happen here. |
+| `index.html` | Home page: the name, tagline, and the desktop windows. Each window is a `<section class="win">`; its position is the `--x`, `--y`, and `--w` values on it. |
+| `about.html` | About text, work history, and training, written directly in the page. |
 | `services.html`, `projects.html`, `design.html`, `contact.html` | Page frames. Their lists are filled from `content.js`. |
 | `404.html` | Shown for addresses that do not exist. |
 | `assets/css/site.css` | All styles. Colors and the typeface are the variables at the top. |
@@ -36,7 +36,7 @@ Only `name` and `text` are required. Without `link` the page says a link is comi
 { title: "Client or piece name", type: "Logos", shape: "square", image: "assets/img/piece.jpg" },
 ```
 
-`type` is the filter the piece appears under; a new type creates a new filter button. `shape` is `square`, `wide` or `tall`. Entries without `image` show a glyph as a stand-in.
+`type` is the filter the piece appears under; a new type creates a new filter button. `shape` is `square`, `wide`, or `tall`. Entries without `image` show a glyph as a stand-in.
 
 **Add an organization.** Add an entry to `champions`:
 
@@ -91,12 +91,22 @@ GitHub Pages cannot receive form submissions, so the form posts to a form servic
 
 The form address is safe to publish. It does not reveal the email address behind it. The form includes a hidden field that catches most automated spam.
 
+## Writing style
+
+These apply to everything on the site and in this repository, including commit messages.
+
+- US spelling: color, behavior, organization.
+- Oxford comma in every list of three or more: "programs, data, and design."
+- No em dashes and no emojis in site copy.
+- Refer to Kwame by name or with they/them.
+- After an arrow such as →, ↗, or ↓, add `&#xFE0E;` so phones don't show it as an emoji.
+
 ## Before committing
 
 This repository is public, including its history.
 
-- Do not put an email address, phone number or home address anywhere in it.
-- Do not commit keys, tokens or passwords.
+- Do not put an email address, phone number, or home address anywhere in it.
+- Do not commit keys, tokens, or passwords.
 - Remove location and device data from photos before adding them. On most phones, sharing a photo with location turned off does this; `exiftool -all= photo.jpg` does it on a computer.
 
 ## Light and dark

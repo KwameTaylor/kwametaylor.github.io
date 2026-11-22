@@ -242,7 +242,7 @@
       var v = ti.value.trim(), w = v.toLowerCase().split(/\s+/); ti.value = "";
       if (!v) return;
       say("<b>kwame $</b> " + esc(v));
-      /* less, more, head, tail and bat read a file the same way cat does */
+      /* less, more, head, tail, and bat read a file the same way cat does */
       var reader = /^(less|more|head|tail|bat)$/.test(w[0]) ? w[0] : "cat";
       if (reader !== "cat") { w = ["cat", w[w.length - 1] === w[0] ? "" : w[w.length - 1]]; }
       if (w[0] === "help") say("This is Kwame's desktop. Ask me about them in plain words, for example: what did Kwame do at GiveDirectly? What do they build? Commands: ls, open &lt;page&gt;, clear.");
@@ -397,7 +397,7 @@
     var first = (S.phrases && S.phrases[0]) || "data models.";
     lk.innerHTML =
       '<div class="lk-time"><small id="lkdate"></small><b id="lktime"></b></div><div class="lk-notes">' +
-      '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer." + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager, PMP, in Los Angeles. I build programs, data systems and tools, and I design logos and identities.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
+      '<button type="button" class="nt"><header><i>' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "K") + "</i>Kwame V. Taylor<em>now</em></header><b>Hi, I'm Kwame.</b><p>Technical program manager and designer." + '</p><div class="more"><div class="tb">About</div><div class="bio">' + (S.portrait ? '<img src="' + esc(S.portrait) + '" alt="">' : "") + "<span>Technical program manager, PMP, in Los Angeles. I build programs, data systems, and tools, and I design logos and identities.</span></div><a class=\"go\" href=\"about.html\">About Kwame →︎</a></div></button>" +
       '<button type="button" class="nt"><header><i class="svg">' + dockIcons[0][2] + '</i>Services<em>' + SV.length + "</em></header><b>Freelance data and design work</b><p>" + homeSvc.slice(0, 3).map(function (s, i) { return esc(i ? s.name.charAt(0).toLowerCase() + s.name.slice(1) : s.name); }).join(", ") + (SV.length > 3 ? ", and " + (SV.length - 3) + " more" : "") + '.</p><div class="more"><div class="tb">Services</div>' + SV.map(function (s) { return '<a class="row" href="services.html#' + slug(s.name) + '"><span>' + esc(s.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="services.html">Open Services →︎</a></div></button>' +
       '<button type="button" class="nt"><header><i class="svg">' + dockIcons[1][2] + '</i>Projects<em>' + P.length + "</em></header><b>" + esc((P[0] || {}).name || "Projects") + "</b><p>Plus " + Math.max(0, P.length - 1) + ' more.</p><div class="more"><div class="tb">Projects</div>' + P.slice(0, 4).map(function (p) { return '<a class="row" href="projects.html#' + slug(p.name) + '"><span>' + esc(p.name) + "</span><span>→︎</span></a>"; }).join("") + '<a class="go" href="projects.html">Open Projects →︎</a></div></button>' +
       '<a class="nt" href="contact.html"><header><i class="svg">' + dockIcons[3][2] + '</i>Message</header><b>Say hello</b><p>Tap to write to Kwame.</p></a>' +
